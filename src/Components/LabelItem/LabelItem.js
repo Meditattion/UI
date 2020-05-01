@@ -12,7 +12,7 @@ const LabelItem = (props) => {
     return (
         <div className="main-labels-item" style={{backgroundColor:props.bgColor}}>
             <div className="main-labels-item-blank" >&nbsp;</div>
-            <div style={{ display: "flex", flexDirection: "column" }}>
+            <div style={{ display: "flex", flexDirection: "row" }}>
                 <span>{props.text}</span>
                 <img alt="" src={process.env.PUBLIC_URL + "Images/trashS.svg"}
                     onClick={() => dispatch(actions.deleteLabel(props.serial))}></img>

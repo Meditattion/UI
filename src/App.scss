@@ -220,13 +220,28 @@ $end-direction: right !default;
     span {
       padding-#{$start-direction}: 5px;
       mix-blend-mode: hard-light;
+      margin-#{$end-direction}:auto;
+    }
+
+    input{
+      padding-#{$start-direction}: 5px;
+      margin-#{$end-direction}:auto;
+      width:65%;
+      height:60%;
+      border-radius: 5px;
+      border:0;
+
     }
 
     img {
       width: 20px;
-      position: absolute;
-      #{$end-direction}: 7px;
+      height: 20px;
+      margin:0 7px;
+      // position: absolute;
+      // #{$end-direction}: 7px;
     }
+
+
 
     &-blank {
       height: 100%;

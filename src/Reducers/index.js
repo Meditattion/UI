@@ -5,5 +5,5 @@ import LabelsCounterID from './LabelsCounterID'
 // import visibilityFilter from './visibilityFilter'
 
 export default combineReducers({
-  Labels,LabelsCounterID,Toggles
+ Labels,LabelsCounterID,Toggles
 })
