@@ -21,7 +21,7 @@ const Labels = (state = initState, action) => {
                 dummyNewLabel: false
             });
         case 'DELETE_LABEL':
-            let labelPosition = state.container.findIndex((label) => label.key == action.payload);
+            let labelPosition = state.container.findIndex((label) => label.key === action.payload);
             let leftLabelContainer = state.container.slice(0, labelPosition);
             let rightLabelContainer = state.container.slice(labelPosition + 1);
 
