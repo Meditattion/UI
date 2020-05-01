@@ -7,7 +7,7 @@ import LabelsContainer from '../LabelsContainer/LabelsContainer'
 import AddLabelBtn from '../AddLabelBtn/AddLabelBtn'
 import LabelItem from '../LabelItem/LabelItem'
 import LabelDummyItem from '../LabelDummyItem/LabelDummyItem'
-import actions from '../../Actions'
+// import actions from '../../Actions'
 
 
 
