@@ -20,7 +20,7 @@ const Labels = (props) => {
     const newDummyLabelIsVisible=useSelector(state=>state.Labels.dummyNewLabel);
     // console.log("labelsContainer",labelsContainer);
     const labelsToDisplay = [
-        <LabelDummyItem key="-1"></LabelDummyItem>
+        
     ];
 
 
@@ -31,6 +31,10 @@ const Labels = (props) => {
                             bgColor={label.bgColor} ></LabelItem>
         )
     });
+
+    labelsToDisplay.unshift(
+        <LabelDummyItem key="-1"></LabelDummyItem>
+    );
 
     return (
         <div className={labelsIsVisible ? 'main-labels' : 'main-labels hide'}>
