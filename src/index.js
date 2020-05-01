@@ -7,7 +7,7 @@ import App from './App';
 import rootReducer from './Reducers'
 const store = createStore(rootReducer,
   {
-    Labels: { container: [{ text: "dummy item",key:0 }] }
+    Labels: { container: [{ text: "dummy item",key:0}] }
   }
 )
 
