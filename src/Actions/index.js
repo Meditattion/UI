@@ -1,26 +1,30 @@
-import {ADD_LABEL,DELETE_LABEL,TOGGLE_MENU} from '../Constatns/index'
+import { ADD_LABEL, DELETE_LABEL, TOGGLE_MENU } from '../Constatns/index'
 
 
-const actions={
-  toggleMenu : menu => ({
+const actions = {
+  toggleMenu: menu => ({
     type: TOGGLE_MENU,
     menu
   }),
-  addDummyLabel:()=>({
-    type:'ADD_NEW_DUMMY_LABEL'
+  addDummyLabel: () => ({
+    type: 'ADD_NEW_DUMMY_LABEL'
   }),
-  closeDummyLabel:()=>({
-    type:'CLOSE_DUMMY_LABEL'
+  closeDummyLabel: () => ({
+    type: 'CLOSE_DUMMY_LABEL'
   })
   ,
-  addLabel:label=>({
-    type:ADD_LABEL,
-    payload:label
+  addLabel: label => ({
+    type: ADD_LABEL,
+    payload: label
   }),
-  deleteLabel:labelKey=>({
-    type:DELETE_LABEL,
-    payload:labelKey
+  deleteLabel: labelKey => ({
+    type: DELETE_LABEL,
+    payload: labelKey
+  }),
+  searchLabel: query => ({
+    type: 'SEARCH_LABEL',
+    payload: query
   })
 }
 
-  export default actions;
+export default actions;
