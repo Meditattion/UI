@@ -1,5 +1,5 @@
 const initState = {
-    container:[{text:"first item"}]
+    container:[{text:"first item",key:0}]
 };
 
 
