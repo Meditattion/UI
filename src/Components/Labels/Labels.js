@@ -17,7 +17,7 @@ const Labels = (props) => {
     // console.log("redux state:",overAllState);
     const labelsIsVisible = useSelector(state => state.Toggles.labelsVisible);
     const labelsContainer = useSelector(state => state.Labels.container);
-    const newDummyLabelIsVisible=useSelector(state=>state.Labels.dummyNewLabel);
+    const searchQuery = useSelector(state => state.Labels.searchQuery);
     // console.log("labelsContainer",labelsContainer);
     const labelsToDisplay = [
         
@@ -26,10 +26,13 @@ const Labels = (props) => {
 
 
     labelsContainer.forEach(label => {
-        labelsToDisplay.unshift(
-            <LabelItem key={label.key} serial={label.key} text={label.text}
-                            bgColor={label.bgColor} ></LabelItem>
-        )
+        if(label.text.indexOf(searchQuery)>=0){
+            labelsToDisplay.unshift(
+                <LabelItem key={label.key} serial={label.key} text={label.text}
+                                bgColor={label.bgColor} ></LabelItem>
+            )
+        }
+
     });
 
     labelsToDisplay.unshift(

@@ -1,5 +1,6 @@
 const initState = {
     container: [{ text: "first item", key: 0 }],
+    searchQuery: '',
     dummyNewLabel: false
 };
 
@@ -25,7 +26,13 @@ const Labels = (state = initState, action) => {
             let rightLabelContainer = state.container.slice(labelPosition + 1);
 
             return Object.assign({}, {
-                container: leftLabelContainer.concat(rightLabelContainer)
+                container: leftLabelContainer.concat(rightLabelContainer),
+                searchQuery: '',
+                dummyNewLabel: state.dummyNewLabel
+            });
+        case 'SEARCH_LABEL':
+            return Object.assign({}, state, {
+                searchQuery: action.payload
             });
         default:
             return state
