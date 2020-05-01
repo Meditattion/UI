@@ -1,4 +1,4 @@
-import {ADD_LABEL,TOGGLE_MENU} from '../Constatns/index'
+import {ADD_LABEL,DELETE_LABEL,TOGGLE_MENU} from '../Constatns/index'
 
 
 const actions={
@@ -9,6 +9,10 @@ const actions={
   addLabel:label=>({
     type:ADD_LABEL,
     payload:label
+  }),
+  deleteLabel:labelKey=>({
+    type:DELETE_LABEL,
+    payload:labelKey
   })
 }
 

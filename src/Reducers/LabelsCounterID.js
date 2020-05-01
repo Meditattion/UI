@@ -1,8 +1,8 @@
 
-  const LabelsCounterID = (state=0, action) => {
+  const LabelsCounterID = (state=1, action) => {
     switch (action.type) {
         case "ADD_LABEL":
-            return state++;
+            return state+1;
         default:
             return state;
     }

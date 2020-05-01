@@ -219,6 +219,7 @@ $end-direction: right !default;
 
     span {
       padding-#{$start-direction}: 5px;
+      mix-blend-mode: hard-light;
     }
 
     img {
