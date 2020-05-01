@@ -20,10 +20,12 @@ const AddLabelBtn = (props) => {
     return (
         <div className="main-labels-add-btn" onClick={() => {
 
-            dispatch(actions.addLabel([{
-                text: 'first real', key: currentLabelCountID,
-                bgColor: getRandomColor()
-            }]))
+            dispatch(actions.addDummyLabel())
+
+            // dispatch(actions.addLabel([{
+            //     text: 'first real', key: currentLabelCountID,
+            //     bgColor: getRandomColor()
+            // }]))
         }
 
         }>

@@ -6,6 +6,13 @@ const actions={
     type: TOGGLE_MENU,
     menu
   }),
+  addDummyLabel:()=>({
+    type:'ADD_NEW_DUMMY_LABEL'
+  }),
+  closeDummyLabel:()=>({
+    type:'CLOSE_DUMMY_LABEL'
+  })
+  ,
   addLabel:label=>({
     type:ADD_LABEL,
     payload:label
