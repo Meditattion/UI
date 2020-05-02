@@ -22,6 +22,11 @@ img {
   transform: scaleX(-1);
 }
 
+.selectorIsClicked{
+  background-color: var(--turqu) !important;
+  border:2px solid var(--silver) !important;
+}
+
 /* Responsive Variables */
 $break1: "(max-width:767px)";
 $break2: "(min-width:768px) and (max-width:1023px)";
@@ -142,11 +147,6 @@ $end-direction: right !default;
 }
 
 
-
-.main-canvas {
-  // grid-area: canvas;
-}
-
 .main-toolbar {
   display: flex;
   flex-direction: row;
@@ -220,23 +220,23 @@ $end-direction: right !default;
     span {
       padding-#{$start-direction}: 5px;
       mix-blend-mode: hard-light;
-      margin-#{$end-direction}:auto;
+      margin-#{$end-direction}: auto;
     }
 
-    input{
+    input {
       padding-#{$start-direction}: 5px;
-      margin-#{$end-direction}:auto;
-      width:65%;
-      height:60%;
+      margin-#{$end-direction}: auto;
+      width: 65%;
+      height: 60%;
       border-radius: 5px;
-      border:0;
+      border: 0;
 
     }
 
     img {
       width: 20px;
       height: 20px;
-      margin:0 7px;
+      margin: 0 7px;
       // position: absolute;
       // #{$end-direction}: 7px;
     }
@@ -300,23 +300,56 @@ $end-direction: right !default;
 
   }
 
+  &-dropZone {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    padding: 20px;
+    // border-width: 2px;
+    border-color: var(--darkTurqu);
+    // border-style: dashed;
+    border-bottom: 2px solid var(--silver);
+    background-color: var(--darkSilver);
+    color: var(--silver);
+    outline: none;
+    transition: border .24s ease-in-out;
+    cursor: pointer;
+    z-index: 10;
+
+    img {
+      width: 25px;
+      padding-#{$start-direction}:2%;
+      // display: inline;
+    }
+  }
+
   &-item {
     display: flex;
+    flex-direction: column;
     position: relative;
     padding: 35px 27px;
     justify-content: center;
     align-content: center;
     cursor: pointer;
 
-    &:hover{
+    &:hover {
       background-color: var(--darkSilver);
+      color:var(--silver);
     }
 
     img {
       max-width: 174px;
       border: 3px solid var(--turqu);
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      align-self: center;
     }
+
 
     img[completed="false"] {
       margin-#{$end-direction}: 18px;

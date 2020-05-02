@@ -24,6 +24,11 @@ const actions = {
   searchLabel: query => ({
     type: 'SEARCH_LABEL',
     payload: query
+  }),
+  selectorChange:(oldSelector,newSelector)=>({
+    type:'SELECTOR_CHANGE',
+    oldSelector,
+    newSelector
   })
 }
 
