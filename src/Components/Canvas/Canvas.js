@@ -24,7 +24,7 @@ const Canvas = () => {
                     <ToolBarItem flip="true" type="redo.svg" ></ToolBarItem>
                     <ToolBarItem type="redo.svg"></ToolBarItem>
                     <ToolBarItem type="zoomIn.svg"></ToolBarItem>
-                    <ToolBarItem type="zoomOut.svg"></ToolBarItem>
+                    <ToolBarItem flip="true" type="zoomOut.svg"></ToolBarItem>
                     <ToolBarItem type="hand.svg"></ToolBarItem>
                     <ToolBarItem type="cursor.svg"></ToolBarItem>
                     <Selectors>
