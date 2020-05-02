@@ -323,9 +323,9 @@ $end-direction: right !default;
     z-index: 10;
 
     img {
-      width: 20px;
+      width: 25px;
       padding-#{$start-direction}:2%;
-      display: inline;
+      // display: inline;
     }
   }
 

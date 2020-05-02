@@ -7,9 +7,13 @@ const ImagesContainer = (props) => {
     const { getRootProps, getInputProps } = useDropzone({
         accept: 'image/*',
         onDrop: acceptedFiles => {
-            setFiles(acceptedFiles.map(file => Object.assign(file, {
-                preview: URL.createObjectURL(file)
-            })));
+
+            setFiles(files.concat(
+                acceptedFiles.map(file => Object.assign(file, {
+                    preview: URL.createObjectURL(file)
+                }))
+            )
+            );
         }
     });
 
