@@ -29,6 +29,10 @@ const actions = {
     type:'SELECTOR_CHANGE',
     oldSelector,
     newSelector
+  }),
+  loadFiles:(files)=>({
+    type:'LOAD_FILES',
+    files
   })
 }
 

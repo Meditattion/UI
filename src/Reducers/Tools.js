@@ -22,8 +22,14 @@ const Tools = (state = initialState, action) => {
         case "SELECTOR_CHANGE":
             return Object.assign({}, state, {
                 currentSelector: action.newSelector,
-                [action.newSelector]: Object.assign({},state[action.newSelector],{isSelected:true}),
-                [action.oldSelector]: Object.assign({},state[action.oldSelector],{isSelected:false})
+                [action.newSelector]: Object.assign({}, state[action.newSelector], { isSelected: true }),
+                [action.oldSelector]: Object.assign({}, state[action.oldSelector], { isSelected: false })
+            });
+
+        case "LOAD_FILES":
+            return Object.assign({}, state, {
+                [action.selector]: Object.assign({}, state[state.currentSelector],
+                     {files: state[state.currentSelector].files.concat(action.files)})
             });
         default:
             return state

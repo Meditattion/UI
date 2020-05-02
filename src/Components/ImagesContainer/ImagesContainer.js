@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react'
+import {useDispatch} from 'react-redux'
 import ImageItem from '../ImageItem/ImageItem'
 import { useDropzone } from 'react-dropzone';
+import actions from '../../Actions'
 
 const ImagesContainer = (props) => {
+    let dispatch=useDispatch();
     const [files, setFiles] = useState([]);
     const { getRootProps, getInputProps } = useDropzone({
         accept: 'image/*',
         onDrop: acceptedFiles => {
-
             setFiles(files.concat(
                 acceptedFiles.map(file => Object.assign(file, {
                     preview: URL.createObjectURL(file)
-                }))
-            )
-            );
+                }))));
         }
     });
 
@@ -23,9 +23,11 @@ const ImagesContainer = (props) => {
 
     useEffect(() => () => {
         // Make sure to revoke the data uris to avoid memory leaks
-        console.log("the files:", files)
+        console.log("the files:", files);
         files.forEach(file => URL.revokeObjectURL(file.preview));
-    }, [files]);
+        dispatch(actions.loadFiles(files));
+        
+    }, [files,dispatch]);
     return (
         <div className="main-images-container">
             <div {...getRootProps({ className: 'main-images-dropZone' })}>
