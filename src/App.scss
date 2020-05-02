@@ -22,6 +22,11 @@ img {
   transform: scaleX(-1);
 }
 
+.selectorIsClicked{
+  background-color: var(--turqu) !important;
+  border:2px solid var(--silver) !important;
+}
+
 /* Responsive Variables */
 $break1: "(max-width:767px)";
 $break2: "(min-width:768px) and (max-width:1023px)";
