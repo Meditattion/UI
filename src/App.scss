@@ -306,6 +306,11 @@ $end-direction: right !default;
     padding: 35px 27px;
     justify-content: center;
     align-content: center;
+    cursor: pointer;
+
+    &:hover{
+      background-color: var(--darkSilver);
+    }
 
     img {
       max-width: 174px;
