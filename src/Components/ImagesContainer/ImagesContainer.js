@@ -14,7 +14,7 @@ const ImagesContainer = (props) => {
     });
 
     const thumbs = files.map(file => (
-        <ImageItem key={file.name} source={file.preview} completed="false"></ImageItem>
+        <ImageItem key={file.name} name={file.name} source={file.preview} completed="false"></ImageItem>
     ));
 
     useEffect(() => () => {

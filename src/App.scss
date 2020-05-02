@@ -340,13 +340,16 @@ $end-direction: right !default;
 
     &:hover {
       background-color: var(--darkSilver);
+      color:var(--silver);
     }
 
     img {
       max-width: 174px;
       border: 3px solid var(--turqu);
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      align-self: center;
     }
+
 
     img[completed="false"] {
       margin-#{$end-direction}: 18px;

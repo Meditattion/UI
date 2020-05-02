@@ -5,7 +5,7 @@ const ImageItem = (props) => {
     return (
         <div className="main-images-item">
             <img completed={props.completed} alt="" src={process.env.PUBLIC_URL + props.source}></img>
-            <div>file name</div>
+            <div style={{alignSelf:"center",marginTop:"2px"}}>{props.name}</div>
             {props.completed==="true" && <Completed></Completed>}
         </div>
     )
