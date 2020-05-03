@@ -1,49 +1,45 @@
 import React, { useState, useEffect } from 'react'
-import {useDispatch} from 'react-redux'
+import { useSelector,useDispatch } from 'react-redux'
 import ImageItem from '../ImageItem/ImageItem'
 import { useDropzone } from 'react-dropzone';
 import actions from '../../Actions'
+import AddFileBtn from '../AddFileBtn/AddFileBtn'
 
 const ImagesContainer = (props) => {
-    let dispatch=useDispatch();
-    const [files, setFiles] = useState([]);
-    const { getRootProps, getInputProps } = useDropzone({
-        accept: 'image/*',
-        onDrop: acceptedFiles => {
-            setFiles(files.concat(
-                acceptedFiles.map(file => Object.assign(file, {
-                    preview: URL.createObjectURL(file)
-                }))));
-        }
-    });
+    let dispatch = useDispatch();
+    const currentSelector=useSelector(state=>state.Tools.currentSelector);
+    const loadedFiles=useSelector(state=>state.Tools[currentSelector].files);
+    const [files, setFiles] = useState(loadedFiles);
+    console.log("loaded files:",loadedFiles);
+    // const [labels, setLabels] = useState([]);
+    // const { getRootProps, getInputProps } = useDropzone({
+    //     accept: 'image/*',
+    //     onDrop: acceptedFiles => {
 
-    const thumbs = files.map(file => (
-        <ImageItem key={file.name} name={file.name} source={file.preview} completed="false"></ImageItem>
-    ));
+    //         setFiles(files.concat(
+    //             acceptedFiles.map(file => Object.assign(file, {
+    //                 preview: URL.createObjectURL(file)
+    //             }))));
+    //     }
+    // });
+
+
+    // const thumbs = files.filter(file => file.type.indexOf("image") >= 0).map(file => (
+    //     <ImageItem key={file.name} name={file.name} source={file.preview} completed="false"></ImageItem>
+    // ));
 
     useEffect(() => () => {
         // Make sure to revoke the data uris to avoid memory leaks
         console.log("the files:", files);
         files.forEach(file => URL.revokeObjectURL(file.preview));
-        dispatch(actions.loadFiles(files));
-        
-    }, [files,dispatch]);
+    }, [files,loadedFiles, dispatch]);
     return (
         <div className="main-images-container">
-            <div {...getRootProps({ className: 'main-images-dropZone' })}>
-                <input {...getInputProps()} />
-                {/* <p>Drag 'n' drop some files here, or click to select files</p> */}
-                <span>Add new image/json</span>
-                <img alt="" src={process.env.PUBLIC_URL + "Images/addPhotoS.svg"}></img>
-
-            </div>
+            <AddFileBtn></AddFileBtn>
+{/* 
             <div>
                 {thumbs}
-            </div>
-            {/* <ImageItem source="Images/bounding boxes/9691.png" completed="true"></ImageItem>
-        <ImageItem source="Images/bounding boxes/9941.png" completed="true"></ImageItem>
-        <ImageItem source="Images/bounding boxes/11387.png" completed="false"></ImageItem>
-        <ImageItem source="Images/bounding boxes/34967.png" completed="false"></ImageItem> */}
+            </div> */}
 
         </div>
     )

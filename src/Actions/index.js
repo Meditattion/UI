@@ -25,14 +25,18 @@ const actions = {
     type: 'SEARCH_LABEL',
     payload: query
   }),
-  selectorChange:(oldSelector,newSelector)=>({
-    type:'SELECTOR_CHANGE',
+  selectorChange: (oldSelector, newSelector) => ({
+    type: 'SELECTOR_CHANGE',
     oldSelector,
     newSelector
   }),
-  loadFiles:(files)=>({
-    type:'LOAD_FILES',
+  loadFiles: (files) => ({
+    type: 'LOAD_FILES',
     files
+  }),
+  loadLabels: (labels) => ({
+    type: 'LOAD_LABELS',
+    labels
   })
 }
 

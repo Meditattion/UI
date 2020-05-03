@@ -29,7 +29,12 @@ const Tools = (state = initialState, action) => {
         case "LOAD_FILES":
             return Object.assign({}, state, {
                 [action.selector]: Object.assign({}, state[state.currentSelector],
-                     {files: state[state.currentSelector].files.concat(action.files)})
+                    { files: state[state.currentSelector].files.concat(action.files) })
+            });
+        case "LOAD_LABELS":
+            return Object.assign({}, state, {
+                [action.selector]: Object.assign({}, state[state.currentSelector],
+                    { labels: state[state.currentSelector].labels.concat(action.labels) })
             });
         default:
             return state
