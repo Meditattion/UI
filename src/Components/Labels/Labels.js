@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import CommonHeader from '../CommonHeader/CommonHeader'
 import CommonTitle from '../CommonTitle/CommonTitle'
@@ -15,31 +15,37 @@ const Labels = (props) => {
     let dispatch = useDispatch();
     // const overAllState=useSelector(state=>state);
     // console.log("redux state:",overAllState);
-    const [labels,setLabels]=useState({});
+    const [labels, setLabels] = useState({});
     const labelsIsVisible = useSelector(state => state.Toggles.labelsVisible);
-    const labelsContainer = useSelector(state => state.Labels.container);
+    // const labelsContainer = useSelector(state => state.Labels.container);
     const currentSelector = useSelector(state => state.Tools.currentSelector);
+    console.log("currentSelector", currentSelector);
     const currentImage = useSelector(state => state.Tools[currentSelector].currentImage);
+    console.log("currentImage", currentImage);
     const searchQuery = useSelector(state => state.Labels.searchQuery);
     const loadedLabels = useSelector(state => state.Tools[currentSelector].labels);
-    let selectorLabels=[];
-    if (loadedLabels.length > 0) {
-        fetch(loadedLabels[0].preview)
-            .then(res => res.json())
-            .then(
-                result => { setLabels(Object.assign({},labels,result)); console.log("selectorLabels:", labels) }
-            );
-    }
+    console.log("loadedLabels",loadedLabels);
+
+    useEffect(() => {
+        if (loadedLabels.length > 0) {
+            fetch(loadedLabels[0].preview)
+                .then(res => res.json())
+                .then(
+                    result => { setLabels(Object.assign({}, labels, result)); console.log("selectorLabels:", labels) }
+                );
+        }
+    })
+
     // console.log("")
     // console.log("labelsContainer",labelsContainer);
     const labelsToDisplay = [
 
     ];
-    
 
-    if (currentImage!='' && selectorLabels.length>0 && selectorLabels[currentImage]) {
-        selectorLabels[currentImage].forEach(label => {
-            console.log("label:",label)
+
+    if (currentImage != '' && Object.keys(labels).length > 0 && labels[currentImage]) {
+        labels[currentImage].forEach(label => {
+            console.log("label:", label);
             if (label.indexOf(searchQuery) >= 0) {
                 labelsToDisplay.unshift(
                     <LabelItem key={label} serial={label} text={label}
