@@ -15,7 +15,7 @@ const ImagesContainer = (props) => {
         fetch(loadedLabels[0].preview)
             .then(res => res.json())
             .then(
-                result => { selectorLabels = result;console.log("selectorLabels:",selectorLabels) }
+                result => { selectorLabels = result; console.log("selectorLabels:", selectorLabels) }
             );
     }
     console.log("loaded Files", loadedFiles);
@@ -39,8 +39,11 @@ const ImagesContainer = (props) => {
     // }, [files, dispatch]);
     return (
         <div className="main-images-container">
-            <AddFileBtn accept="image/*" text="Add new image"></AddFileBtn>
-            <AddFileBtn accept=".json" text="Add new json"></AddFileBtn>
+            <div style={{position:"sticky",top:0,backgroundColor:"white",zIndex:10}}>
+            <AddFileBtn index="0" accept="image/*" text="Add new image"></AddFileBtn>
+            <AddFileBtn index="1" accept=".json" text="Add new json"></AddFileBtn>
+            </div>
+
             <div>
                 {thumbs}
             </div>

@@ -29,7 +29,7 @@ const AddFileBtn = (props) => {
 
 
     return (
-        <div {...getRootProps({ className: 'main-images-dropZone' })}>
+        <div {...getRootProps({ className: 'main-images-dropZone' })} style={{top:props.index*50}}>
             <input {...getInputProps()} />
             {/* <p>Drag 'n' drop some files here, or click to select files</p> */}
             <span>{props.text}</span>

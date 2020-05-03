@@ -16,6 +16,7 @@ const Labels = (props) => {
     // const overAllState=useSelector(state=>state);
     // console.log("redux state:",overAllState);
     const [labels, setLabels] = useState({});
+    const [loaded, setLoaded] = useState(false);
     const labelsIsVisible = useSelector(state => state.Toggles.labelsVisible);
     // const labelsContainer = useSelector(state => state.Labels.container);
     const currentSelector = useSelector(state => state.Tools.currentSelector);
@@ -24,17 +25,28 @@ const Labels = (props) => {
     console.log("currentImage", currentImage);
     const searchQuery = useSelector(state => state.Labels.searchQuery);
     const loadedLabels = useSelector(state => state.Tools[currentSelector].labels);
-    console.log("loadedLabels",loadedLabels);
+    console.log("loadedLabels", loadedLabels);
 
-    useEffect(() => {
-        if (loadedLabels.length > 0) {
-            fetch(loadedLabels[0].preview)
-                .then(res => res.json())
-                .then(
-                    result => { setLabels(Object.assign({}, labels, result)); console.log("selectorLabels:", labels) }
-                );
-        }
-    })
+
+    if (loadedLabels.length > 0 && !loaded) {
+        fetch(loadedLabels[0].preview)
+            .then(res => res.json())
+            .then(
+                result => { setLabels(Object.assign({}, labels, result));setLoaded(true); console.log("selectorLabels:", labels) }
+            );
+    }
+
+    // useEffect(() => {
+    //     if (loadedLabels.length > 0) {
+    //         fetch(loadedLabels[0].preview)
+    //             .then(res => res.json())
+    //             .then(
+    //                 result => { setLabels(Object.assign({}, labels, result)); console.log("selectorLabels:", labels) }
+    //             );
+    //     }else{
+    //         setRendered(!rendered);
+    //     }
+    // },[rendered]);
 
     // console.log("")
     // console.log("labelsContainer",labelsContainer);
