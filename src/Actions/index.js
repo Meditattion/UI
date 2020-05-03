@@ -37,6 +37,10 @@ const actions = {
   loadLabels: (labels) => ({
     type: 'LOAD_LABELS',
     labels
+  }),
+  imageChange: (imageName) => ({
+    type: 'IMAGE_CHANGE',
+    imageName
   })
 }
 

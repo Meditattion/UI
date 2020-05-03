@@ -12,27 +12,27 @@ const AddFileBtn = (props) => {
     const [files, setFiles] = useState([]);
     const dispatch = useDispatch();
     const { getRootProps, getInputProps } = useDropzone({
-        accept: 'image/*',
+        accept: props.accept,
         onDrop: acceptedFiles => {
-
-            setFiles(files.concat(
+            acceptedFiles = files.concat(
                 acceptedFiles.map(file => Object.assign(file, {
                     preview: URL.createObjectURL(file)
-                }))));
+                })));
+            // dispatch(actions.loadFiles(files));
+            if (props.accept.indexOf("json") >= 0)
+                dispatch(actions.loadLabels(acceptedFiles));
+            else 
+                dispatch(actions.loadFiles(acceptedFiles));
+            // setFiles(acceptedFiles);
         }
     });
 
-    useEffect(() => () => {
-        // Make sure to revoke the data uris to avoid memory leaks
-        files.forEach(file => URL.revokeObjectURL(file.preview));
-        dispatch(actions.loadFiles(files));
-        console.log("the files:", files);
-    }, [files, dispatch]);
+
     return (
         <div {...getRootProps({ className: 'main-images-dropZone' })}>
             <input {...getInputProps()} />
             {/* <p>Drag 'n' drop some files here, or click to select files</p> */}
-            <span>Add new image</span>
+            <span>{props.text}</span>
             <img alt="" src={process.env.PUBLIC_URL + "Images/addPhotoS.svg"}></img>
 
         </div>

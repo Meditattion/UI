@@ -12,16 +12,19 @@ const store = createStore(rootReducer,
       currentSelector:"classification",
       boundingBox: {
         isSelected: false,
+        currentImage:"",
         files: [],
         labels: []
       },
       polygon: {
         isSelected: false,
+        currentImage:"",
         files: [],
         labels: []
       },
       classification: {
         isSelected: true,
+        currentImage:"",
         files: [],
         labels: []
       }
