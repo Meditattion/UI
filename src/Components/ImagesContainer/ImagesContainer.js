@@ -1,48 +1,52 @@
 import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import ImageItem from '../ImageItem/ImageItem'
 import { useDropzone } from 'react-dropzone';
+import actions from '../../Actions'
+import AddFileBtn from '../AddFileBtn/AddFileBtn'
 
 const ImagesContainer = (props) => {
-    const [files, setFiles] = useState([]);
-    const { getRootProps, getInputProps } = useDropzone({
-        accept: 'image/*',
-        onDrop: acceptedFiles => {
-
-            setFiles(files.concat(
-                acceptedFiles.map(file => Object.assign(file, {
-                    preview: URL.createObjectURL(file)
-                }))
-            )
+    let dispatch = useDispatch();
+    const currentSelector = useSelector(state => state.Tools.currentSelector);
+    const loadedFiles = useSelector(state => state.Tools[currentSelector].files);
+    const loadedLabels = useSelector(state => state.Tools[currentSelector].labels);
+    let selectorLabels;
+    if (loadedLabels.length > 0) {
+        fetch(loadedLabels[0].preview)
+            .then(res => res.json())
+            .then(
+                result => { selectorLabels = result; console.log("selectorLabels:", selectorLabels) }
             );
-        }
-    });
+    }
+    console.log("loaded Files", loadedFiles);
+    console.log("loaded Labels", loadedLabels);
 
-    const thumbs = files.map(file => (
+
+
+    // const [files,setFiles]=useState(useSelector(state=>state.Tools[currentSelector].files));
+
+    // const getFiles=()=>useSelector(state => state.Tools[currentSelector].files,[]);
+
+
+    const thumbs = loadedFiles.filter(file => file.type.indexOf("image") >= 0).map(file => (
         <ImageItem key={file.name} name={file.name} source={file.preview} completed="false"></ImageItem>
     ));
 
-    useEffect(() => () => {
-        // Make sure to revoke the data uris to avoid memory leaks
-        console.log("the files:", files)
-        files.forEach(file => URL.revokeObjectURL(file.preview));
-    }, [files]);
+    // useEffect(() => () => {
+    //     // Make sure to revoke the data uris to avoid memory leaks
+    //     console.log("the files:", files);
+    //     files.forEach(file => URL.revokeObjectURL(file.preview));
+    // }, [files, dispatch]);
     return (
         <div className="main-images-container">
-            <div {...getRootProps({ className: 'main-images-dropZone' })}>
-                <input {...getInputProps()} />
-                {/* <p>Drag 'n' drop some files here, or click to select files</p> */}
-                <span>Add new image/json</span>
-                <img alt="" src={process.env.PUBLIC_URL + "Images/addPhotoS.svg"}></img>
-
+            <div style={{position:"sticky",top:0,backgroundColor:"white",zIndex:10}}>
+            <AddFileBtn index="0" accept="image/*" text="Add new image"></AddFileBtn>
+            <AddFileBtn index="1" accept=".json" text="Add new json"></AddFileBtn>
             </div>
+
             <div>
                 {thumbs}
             </div>
-            {/* <ImageItem source="Images/bounding boxes/9691.png" completed="true"></ImageItem>
-        <ImageItem source="Images/bounding boxes/9941.png" completed="true"></ImageItem>
-        <ImageItem source="Images/bounding boxes/11387.png" completed="false"></ImageItem>
-        <ImageItem source="Images/bounding boxes/34967.png" completed="false"></ImageItem> */}
-
         </div>
     )
 }
