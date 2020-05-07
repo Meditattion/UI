@@ -433,6 +433,7 @@ $end-direction: right !default;
 @mixin toggleMenu($position) {
   display: flex;
   position: absolute;
+  top:60px;
   #{$position}: 0;
   height: 100px;
   width: 16px;
@@ -440,7 +441,7 @@ $end-direction: right !default;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 2;
+  z-index: 10;
 }
 
 
