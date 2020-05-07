@@ -9,7 +9,14 @@ import LabelItem from '../LabelItem/LabelItem'
 import LabelDummyItem from '../LabelDummyItem/LabelDummyItem'
 // import actions from '../../Actions'
 
-
+const getRandomColor = () => {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+};
 
 const Labels = (props) => {
     let dispatch = useDispatch();
@@ -61,7 +68,7 @@ const Labels = (props) => {
             if (label.indexOf(searchQuery) >= 0) {
                 labelsToDisplay.unshift(
                     <LabelItem key={label} serial={label} text={label}
-                        bgColor={label.bgColor} ></LabelItem>
+                               bgColor={getRandomColor()} ></LabelItem>
                 )
             }
 
