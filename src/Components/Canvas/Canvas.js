@@ -43,6 +43,8 @@ const Canvas = () => {
   //     dispatch(toggleMenu(user))
   //   }, [])
 
+
+  const [newLabelCurds,setNewLabelCurds]=useState({top:60,left:0}) ;
   const [labels, setLabels] = useState(labelsDataDefault);
   const [annotationType, setAnnotationType] = useState(LABEL_TYPE.RECTANGLE);
   const [isImageDrag, toggleDragMode] = useReducer((p) => !p, false);
@@ -91,16 +93,24 @@ const Canvas = () => {
           </Selectors>
         </div>
       </CommonHeader>
+
       {imageFile && (
         <ReactCanvasAnnotation
           zoom={zoom}
           imageFile={imageFile}
           labels={labels}
-          onChange={setLabels}
+          onChange={(data)=>{
+              console.log("data",data);
+              setNewLabelCurds({left:2.5*(data.labelRects[data.labelRects.length-1].rect.x),top:2.5*(data.labelRects[data.labelRects.length-1].rect.y +60)});
+          }}
           annotationType={annotationType}
           isImageDrag={isImageDrag}
         />
       )}
+
+      <div style={{position:"absolute",top:newLabelCurds.top,left:newLabelCurds.left,zIndex:"100",width:"100px",height:"100px",backgroundColor:"white"}}>
+          NEW LABEL
+      </div>
       <button
         className={
           labelsIsVisible ? "toggle-labels flipHorizontal" : "toggle-labels "
