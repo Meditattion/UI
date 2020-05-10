@@ -105,8 +105,9 @@ const Canvas = () => {
           labels={labels}
           onChange={(data)=>{
               console.log("data",data);
+              dispatch(actions.setCanvasLabelCurds(data.labelRects[data.labelRects.length-1].rect.x,
+                  data.labelRects[data.labelRects.length-1].rect.y));
               dispatch(actions.addCanvasLabel());
-              // setNewLabelCurds({left:(data.labelRects[data.labelRects.length-1].rect.x),top:(data.labelRects[data.labelRects.length-1].rect.y +60)});
           }}
           annotationType={annotationType}
           isImageDrag={isImageDrag}

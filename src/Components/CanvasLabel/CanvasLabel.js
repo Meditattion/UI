@@ -18,6 +18,7 @@ const CanvasLabel = (props) => {
     let dispatch = useDispatch();
     const currentLabelCountID = useSelector(state => state.LabelsCounterID);
     const newCanvasLabelIsVisible = useSelector(state => state.Labels.newCanvasLabel);
+    const newCanvasCurds=useSelector(state=>state.Labels.canvasLabelCurds);
 
     return (
         <div className="main-labels-item shadowCenter" style={{
@@ -26,7 +27,8 @@ const CanvasLabel = (props) => {
             borderRadius:"5px",
             borderBottom:"none",
             zIndex:"100",
-            top:"60px",
+            top:newCanvasCurds.top,
+            left:newCanvasCurds.left,
             display: newCanvasLabelIsVisible ? 'grid' : 'none'
         }}>
             <div className="main-labels-item-blank" >&nbsp;</div>

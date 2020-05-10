@@ -2,7 +2,8 @@ const initState = {
     container: [{ text: "first item", key: 0 }],
     searchQuery: '',
     dummyNewLabel: false,
-    newCanvasLabel:false
+    newCanvasLabel:false,
+    canvasLabelCurds:{top:60,left:0}
 };
 
 
@@ -44,6 +45,8 @@ const Labels = (state = initState, action) => {
             return Object.assign({}, state, {
                 searchQuery: action.payload
             });
+        case 'CANVAS_LABELS_CURDS':
+            return Object.assign({},state,{canvasLabelCurds:{top:action.top,left:action.left}})
         default:
             return state
     }

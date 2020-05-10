@@ -50,6 +50,11 @@ const actions = {
   imageChange: (imageName) => ({
     type: 'IMAGE_CHANGE',
     imageName
+  }),
+  setCanvasLabelCurds:(top,left)=>({
+    type:'CANVAS_LABELS_CURDS',
+    top,
+    left
   })
 }
 
