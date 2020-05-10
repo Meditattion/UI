@@ -30,9 +30,13 @@ const Canvas = () => {
   );
   const currentSelector = useSelector((state) => state.Tools.currentSelector);
 
-  const imageFile = useSelector(
-    (state) => state.Tools.classification?.files?.[0]
-  );
+  // const imageFile = useSelector(
+  //   (state) => state.Tools.classification?.files?.[0]
+  // );
+
+    const imageFile = useSelector(
+        (state) => state.Images.container?.[0]
+    );
 
   console.log("currentSelector:", currentSelector);
   console.log("bound is sel", boundingBoxIsSelected);
