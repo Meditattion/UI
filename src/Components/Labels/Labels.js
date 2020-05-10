@@ -94,15 +94,12 @@ const Labels = (props) => {
             <CommonHeader></CommonHeader>
             <CommonTitle text="Labels"></CommonTitle>
             <CommonSearch></CommonSearch>
-            <LabelsContainer></LabelsContainer>
             <AddLabelBtn></AddLabelBtn>
             <LabelsContainer>
                 {labelsToDisplay}
             </LabelsContainer>
         </div>
     )
-
-
 
     // <div className="main-labels">
 

@@ -6,7 +6,7 @@ import CommonHeader from "../CommonHeader/CommonHeader";
 import SelectorItem from "../SelectorItem/SelectorItem";
 import Selectors from "../Selectors/Selectors";
 import ToolBarItem from "../ToolBarItem/ToolBarItem";
-
+import CanvasLabel from "../CanvasLabel/CanvasLabel"
 const labelsDataDefault = {
   labelRects: [],
   labelPolygons: [],
@@ -47,6 +47,8 @@ const Canvas = () => {
   //     dispatch(toggleMenu(user))
   //   }, [])
 
+
+  const [newLabelCurds,setNewLabelCurds]=useState({top:60,left:0}) ;
   const [labels, setLabels] = useState(labelsDataDefault);
   const [annotationType, setAnnotationType] = useState(LABEL_TYPE.RECTANGLE);
   const [isImageDrag, toggleDragMode] = useReducer((p) => !p, false);
@@ -95,16 +97,25 @@ const Canvas = () => {
           </Selectors>
         </div>
       </CommonHeader>
+
       {imageFile && (
         <ReactCanvasAnnotation
           zoom={zoom}
           imageFile={imageFile}
           labels={labels}
-          onChange={setLabels}
+          onChange={(data)=>{
+              console.log("data",data);
+              dispatch(actions.setCanvasLabelCurds(data.labelRects[data.labelRects.length-1].rect.x,
+                  data.labelRects[data.labelRects.length-1].rect.y));
+              dispatch(actions.addCanvasLabel());
+          }}
           annotationType={annotationType}
           isImageDrag={isImageDrag}
         />
       )}
+
+          <CanvasLabel/>
+
       <button
         className={
           labelsIsVisible ? "toggle-labels flipHorizontal" : "toggle-labels "
