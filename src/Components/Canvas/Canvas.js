@@ -6,7 +6,7 @@ import CommonHeader from "../CommonHeader/CommonHeader";
 import SelectorItem from "../SelectorItem/SelectorItem";
 import Selectors from "../Selectors/Selectors";
 import ToolBarItem from "../ToolBarItem/ToolBarItem";
-
+import CanvasLabel from "../CanvasLabel/CanvasLabel"
 const labelsDataDefault = {
   labelRects: [],
   labelPolygons: [],
@@ -105,16 +105,16 @@ const Canvas = () => {
           labels={labels}
           onChange={(data)=>{
               console.log("data",data);
-              setNewLabelCurds({left:2.5*(data.labelRects[data.labelRects.length-1].rect.x),top:2.5*(data.labelRects[data.labelRects.length-1].rect.y +60)});
+              dispatch(actions.addCanvasLabel());
+              // setNewLabelCurds({left:(data.labelRects[data.labelRects.length-1].rect.x),top:(data.labelRects[data.labelRects.length-1].rect.y +60)});
           }}
           annotationType={annotationType}
           isImageDrag={isImageDrag}
         />
       )}
 
-      <div style={{position:"absolute",top:newLabelCurds.top,left:newLabelCurds.left,zIndex:"100",width:"100px",height:"100px",backgroundColor:"white"}}>
-          NEW LABEL
-      </div>
+          <CanvasLabel/>
+
       <button
         className={
           labelsIsVisible ? "toggle-labels flipHorizontal" : "toggle-labels "

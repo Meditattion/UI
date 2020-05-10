@@ -1,7 +1,8 @@
 const initState = {
     container: [{ text: "first item", key: 0 }],
     searchQuery: '',
-    dummyNewLabel: false
+    dummyNewLabel: false,
+    newCanvasLabel:false
 };
 
 
@@ -15,10 +16,19 @@ const Labels = (state = initState, action) => {
             return Object.assign({}, state, {
                 dummyNewLabel: false
             });
+
+        case 'ADD_NEW_CANVAS_LABEL':
+            return Object.assign({}, state, {
+                newCanvasLabel: true
+            });
+        case 'CLOSE_CANVAS_LABEL':
+            return Object.assign({}, state, {
+                newCanvasLabel: false
+            });
         case 'ADD_LABEL':
             return Object.assign({}, state, {
                 container: state.container.concat(action.payload),
-                dummyNewLabel: false
+                [action.source]: false
             });
         case 'DELETE_LABEL':
             let labelPosition = state.container.findIndex((label) => label.key === action.payload);

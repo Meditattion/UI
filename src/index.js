@@ -8,7 +8,7 @@ import rootReducer from './Reducers'
 const store = createStore(rootReducer,
   {
     Images:{container: [],currentImage: ""},
-    Labels: { container: [], searchQuery: '', dummyNewLabel: true },
+    Labels: { container: [], searchQuery: '', dummyNewLabel: true,newCanvasLabel:false },
     Tools: {
       currentSelector:"classification",
       boundingBox: {

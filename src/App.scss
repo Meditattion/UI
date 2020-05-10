@@ -27,6 +27,13 @@ img {
   border:2px solid var(--silver) !important;
 }
 
+.shadowCenter{
+  -webkit-box-shadow: 0px 0px 19px 0px rgba(0,0,0,0.50);
+  -moz-box-shadow: 0px 0px 19px 0px rgba(0,0,0,0.50);
+  box-shadow: 0px 0px 19px 0px rgba(0,0,0,0.50);
+}
+
+
 /* Responsive Variables */
 $break1: "(max-width:767px)";
 $break2: "(min-width:768px) and (max-width:1023px)";

@@ -12,17 +12,22 @@ const getRandomColor = () => {
 };
 
 
-const LabelDummyItem = (props) => {
+const CanvasLabel = (props) => {
     const [newLabelName, setNewLabelName] = useState('');
     const [bgColor, setbgColor] = useState(getRandomColor);
     let dispatch = useDispatch();
     const currentLabelCountID = useSelector(state => state.LabelsCounterID);
-    const newDummyLabelIsVisible = useSelector(state => state.Labels.dummyNewLabel);
+    const newCanvasLabelIsVisible = useSelector(state => state.Labels.newCanvasLabel);
 
     return (
-        <div className="main-labels-item" style={{
+        <div className="main-labels-item shadowCenter" style={{
+            position:"absolute",
             backgroundColor: bgColor,
-            display: newDummyLabelIsVisible ? 'grid' : 'none'
+            borderRadius:"5px",
+            borderBottom:"none",
+            zIndex:"100",
+            top:"60px",
+            display: newCanvasLabelIsVisible ? 'grid' : 'none'
         }}>
             <div className="main-labels-item-blank" >&nbsp;</div>
             <div style={{ display: "flex", flexDirection: "row", paddingLeft: "5px", alignItems: "center", height: "100%" }}>
@@ -32,14 +37,14 @@ const LabelDummyItem = (props) => {
                 <img alt="" src={process.env.PUBLIC_URL + "/Images/complete.png"}
                     style={{ cursor: "pointer" }}
                     onClick={() => {
-                        dispatch(actions.addLabel({ text: newLabelName, key: currentLabelCountID, bgColor: bgColor },"dummyNewLabel"))
+                        dispatch(actions.addLabel({ text: newLabelName, key: currentLabelCountID, bgColor: bgColor },"newCanvasLabel"))
                         setNewLabelName('');
                         setbgColor(getRandomColor);
                     }}></img>
 
                 <img alt="" src={process.env.PUBLIC_URL + "Images/trashS.svg"}
                     onClick={() => {
-                        dispatch(actions.closeDummyLabel());
+                        dispatch(actions.closeCanvasLabel());
                         setNewLabelName('');
                         setbgColor(getRandomColor);
                     }}></img>
@@ -48,4 +53,4 @@ const LabelDummyItem = (props) => {
     )
 }
 
-export default LabelDummyItem;
+export default CanvasLabel;

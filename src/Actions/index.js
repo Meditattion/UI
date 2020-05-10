@@ -13,9 +13,18 @@ const actions = {
     type: 'CLOSE_DUMMY_LABEL'
   })
   ,
-  addLabel: label => ({
+  addCanvasLabel: () => ({
+    type: 'ADD_NEW_CANVAS_LABEL'
+  }),
+  closeCanvasLabel: () => ({
+    type: 'CLOSE_CANVAS_LABEL'
+  })
+  ,
+  addLabel: (label,source) => ({
     type: ADD_LABEL,
-    payload: label
+    payload: label,
+    source
+
   }),
   deleteLabel: labelKey => ({
     type: DELETE_LABEL,
@@ -29,10 +38,6 @@ const actions = {
     type: 'SELECTOR_CHANGE',
     oldSelector,
     newSelector
-  }),
-  loadFiles: (files) => ({
-    type: 'LOAD_FILES',
-    files
   }),
   loadImages: (images) => ({
     type: 'LOAD_IMAGES',
