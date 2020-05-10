@@ -7,20 +7,32 @@ import AddFileBtn from '../AddFileBtn/AddFileBtn'
 
 const ImagesContainer = (props) => {
     let dispatch = useDispatch();
-    const currentSelector = useSelector(state => state.Tools.currentSelector);
-    // const loadedFiles = useSelector(state => state.Tools[currentSelector].files);
-    const loadedImages = useSelector(state => state.Images.container);
-    const loadedLabels = useSelector(state => state.Tools[currentSelector].labels);
+    let currentSelector = useSelector(state => state.Tools.currentSelector);
+    let loadedImages = useSelector(state => state.Images.container);
+    let loadedLabels = useSelector(state => state.Tools[currentSelector].labels);
     let selectorLabels;
-    if (loadedLabels.length > 0) {
-        fetch(loadedLabels[0].preview)
-            .then(res => res.json())
-            .then(
-                result => { selectorLabels = result; console.log("selectorLabels:", selectorLabels) }
-            );
-    }
-    console.log("loaded Images", loadedImages);
-    console.log("loaded Labels", loadedLabels);
+
+
+    const [images,setImages]=useState(loadedImages?loadedImages:null);
+    useEffect(()=>{
+        console.log("loaded Images", loadedImages);
+        setImages(loadedImages);
+    },[loadedImages]);
+
+    const [labels,setLabels]=useState(loadedLabels?loadedLabels:null);
+    useEffect(()=>{
+        console.log("loaded Labels", loadedLabels);
+        if (loadedLabels.length > 0) {
+            fetch(loadedLabels[0].preview)
+                .then(res => res.json())
+                .then(
+                    result => { selectorLabels = result; console.log("selectorLabels:", selectorLabels) }
+                );
+        }
+        setLabels(loadedLabels);
+    },[loadedLabels]);
+
+
 
 
 
@@ -29,15 +41,10 @@ const ImagesContainer = (props) => {
     // const getFiles=()=>useSelector(state => state.Tools[currentSelector].files,[]);
 
 
-    const thumbs = loadedImages.filter(file => file.type.indexOf("image") >= 0).map(file => (
-        <ImageItem key={file.name} name={file.name} source={file.preview} completed="false"></ImageItem>
+    const thumbs = images.filter(image => image.type.indexOf("image") >= 0).map((image,imageIndex) => (
+        <ImageItem key={imageIndex+image.name} name={image.name} source={image.preview} completed="false"></ImageItem>
     ));
 
-    // useEffect(() => () => {
-    //     // Make sure to revoke the data uris to avoid memory leaks
-    //     console.log("the files:", files);
-    //     files.forEach(file => URL.revokeObjectURL(file.preview));
-    // }, [files, dispatch]);
     return (
         <div className="main-images-container">
             <div style={{position:"sticky",top:0,backgroundColor:"white",zIndex:10}}>
