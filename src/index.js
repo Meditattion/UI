@@ -7,6 +7,7 @@ import App from './App';
 import rootReducer from './Reducers'
 const store = createStore(rootReducer,
   {
+    Images:{container: []},
     Labels: { container: [], searchQuery: '', dummyNewLabel: true },
     Tools: {
       currentSelector:"classification",

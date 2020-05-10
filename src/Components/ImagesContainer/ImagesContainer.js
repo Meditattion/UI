@@ -8,7 +8,8 @@ import AddFileBtn from '../AddFileBtn/AddFileBtn'
 const ImagesContainer = (props) => {
     let dispatch = useDispatch();
     const currentSelector = useSelector(state => state.Tools.currentSelector);
-    const loadedFiles = useSelector(state => state.Tools[currentSelector].files);
+    // const loadedFiles = useSelector(state => state.Tools[currentSelector].files);
+    const loadedImages = useSelector(state => state.Images.container);
     const loadedLabels = useSelector(state => state.Tools[currentSelector].labels);
     let selectorLabels;
     if (loadedLabels.length > 0) {
@@ -18,7 +19,7 @@ const ImagesContainer = (props) => {
                 result => { selectorLabels = result; console.log("selectorLabels:", selectorLabels) }
             );
     }
-    console.log("loaded Files", loadedFiles);
+    console.log("loaded Images", loadedImages);
     console.log("loaded Labels", loadedLabels);
 
 
@@ -28,7 +29,7 @@ const ImagesContainer = (props) => {
     // const getFiles=()=>useSelector(state => state.Tools[currentSelector].files,[]);
 
 
-    const thumbs = loadedFiles.filter(file => file.type.indexOf("image") >= 0).map(file => (
+    const thumbs = loadedImages.filter(file => file.type.indexOf("image") >= 0).map(file => (
         <ImageItem key={file.name} name={file.name} source={file.preview} completed="false"></ImageItem>
     ));
 
@@ -43,7 +44,6 @@ const ImagesContainer = (props) => {
             <AddFileBtn index="0" accept="image/*" text="Add new image"></AddFileBtn>
             <AddFileBtn index="1" accept=".json" text="Add new json"></AddFileBtn>
             </div>
-
             <div>
                 {thumbs}
             </div>
