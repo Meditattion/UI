@@ -34,6 +34,10 @@ const actions = {
     type: 'LOAD_FILES',
     files
   }),
+  loadImages: (images) => ({
+    type: 'LOAD_IMAGES',
+    images
+  }),
   loadLabels: (labels) => ({
     type: 'LOAD_LABELS',
     labels

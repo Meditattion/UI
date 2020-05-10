@@ -22,7 +22,7 @@ const AddFileBtn = (props) => {
             if (props.accept.indexOf("json") >= 0)
                 dispatch(actions.loadLabels(acceptedFiles));
             else 
-                dispatch(actions.loadFiles(acceptedFiles));
+                dispatch(actions.loadImages(acceptedFiles));
             // setFiles(acceptedFiles);
         }
     });

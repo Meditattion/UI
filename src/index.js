@@ -7,25 +7,20 @@ import App from './App';
 import rootReducer from './Reducers'
 const store = createStore(rootReducer,
   {
+    Images:{container: [],currentImage: ""},
     Labels: { container: [], searchQuery: '', dummyNewLabel: true },
     Tools: {
       currentSelector:"classification",
       boundingBox: {
         isSelected: false,
-        currentImage:"",
-        files: [],
         labels: []
       },
       polygon: {
         isSelected: false,
-        currentImage:"",
-        files: [],
         labels: []
       },
       classification: {
         isSelected: true,
-        currentImage:"",
-        files: [],
         labels: []
       }
     }
