@@ -46,6 +46,37 @@ const Canvas = () => {
         (state) => state.Images.container?.[0]
     );
 
+    let selectedImage;
+    let canvasDOM;
+    let canvasWidth;
+    let canvasHeight;
+    let imageWidthFactor;
+    let imageHeightFactor;
+    useEffect(()=>{
+        if(imageFile){
+            selectedImage=new Image();
+            selectedImage.src=imageFile.preview;
+            selectedImage.onload=()=>{
+                console.log(`img width:${selectedImage.width},img height:${selectedImage.height}`);
+                canvasDOM=document.getElementsByClassName("main-canvas")[0];
+                canvasWidth=canvasDOM.offsetWidth;
+                canvasHeight=canvasDOM.offsetHeight;
+                imageWidthFactor=canvasWidth/selectedImage.width;
+                imageHeightFactor=canvasHeight/selectedImage.height;
+                console.log(`canvas DOM:${canvasDOM}`);
+                console.log(`canvas w:${canvasWidth},canvas h:${canvasHeight}`);
+                console.log(`image w factor:${imageWidthFactor},image h factor:${imageHeightFactor}`);
+            }
+
+        }
+
+
+    },imageFile);
+
+
+
+
+
   console.log("currentSelector:", currentSelector);
   console.log("bound is sel", boundingBoxIsSelected);
   console.log("pol is sel", polygonIsSelected);
@@ -128,9 +159,9 @@ const Canvas = () => {
           labels={labels}
           onChange={(data)=>{
               console.log("data",data);
-              // dispatch(actions.setCanvasLabelCurds(data.labelRects[data.labelRects.length-1].rect.x,
-              //     data.labelRects[data.labelRects.length-1].rect.y));
-              // dispatch(actions.addCanvasLabel());
+              dispatch(actions.setCanvasLabelCurds(imageHeightFactor*data.labelRects[data.labelRects.length-1].rect.y,
+                  0.9*imageWidthFactor*data.labelRects[data.labelRects.length-1].rect.x));
+              dispatch(actions.addCanvasLabel());
           }}
           annotationType={annotationType}
           isImageDrag={isImageDrag}
