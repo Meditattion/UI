@@ -1,5 +1,4 @@
 import React, {useEffect, useMemo, useReducer, useState} from "react";
-import ReactTooltip from "react-tooltip";
 import { LABEL_TYPE, ReactCanvasAnnotation } from "react-canvas-annotation";
 import { useDispatch, useSelector } from "react-redux";
 import actions from "../../Actions/index";
@@ -93,41 +92,31 @@ const Canvas = () => {
     <div className="main-canvas">
       <CommonHeader>
         <div className="main-toolbar">
-          <ToolBarItem flip="true" type="redo.svg"></ToolBarItem>
-          <ToolBarItem type="redo.svg"></ToolBarItem>
-          <ToolBarItem type="zoomIn.svg"></ToolBarItem>
-          <ToolBarItem flip="true" type="zoomOut.svg"></ToolBarItem>
-          <ToolBarItem type="hand.svg"></ToolBarItem>
-          <ToolBarItem type="cursor.svg"></ToolBarItem>
+          <ToolBarItem tool="redo" flip="true" type="redo.svg" tooltip="Undo"></ToolBarItem>
+          <ToolBarItem tool="undo" type="redo.svg" tooltip="Redo"></ToolBarItem>
+          <ToolBarItem tool="zoomin" type="zoomIn.svg" tooltip="Zoom In"></ToolBarItem>
+          <ToolBarItem tool="zoomout" flip="true" type="zoomOut.svg" tooltip="Zoom Out"></ToolBarItem>
+          <ToolBarItem tool="move" type="hand.svg" tooltip="Move"></ToolBarItem>
+          <ToolBarItem tool="pointer" type="cursor.svg" tooltip="Pointer"></ToolBarItem>
           <Selectors>
-
-
                   <SelectorItem
                       selector="boundingBox"
                       isSelected={boundingBoxIsSelected}
                       type="bounding-box.svg"
+                      tooltip="Bounding Box"
                   ></SelectorItem>
-
-              <ReactTooltip id='boundingBox' type='light' effect='solid' place="bottom">
-                  <span><b>Bounding Box</b></span>
-              </ReactTooltip>
-
             <SelectorItem
               selector="polygon"
               isSelected={polygonIsSelected}
               type="polygon.svg"
+              tooltip="Segmentation"
             ></SelectorItem>
-              <ReactTooltip id='polygon' type='light' effect='solid' place="bottom">
-                  <span><b>Segmentation</b></span>
-              </ReactTooltip>
             <SelectorItem
               selector="classification"
               isSelected={classificationIsSelected}
               type="pin.svg"
+              tooltip="Classification"
             ></SelectorItem>
-              <ReactTooltip id='classification' type='light' effect='solid' place="bottom">
-                  <span><b>Classification</b></span>
-              </ReactTooltip>
           </Selectors>
         </div>
       </CommonHeader>
