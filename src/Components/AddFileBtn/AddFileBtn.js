@@ -21,6 +21,10 @@ const AddFileBtn = (props) => {
             // dispatch(actions.loadFiles(files));
             if (props.accept.indexOf("json") >= 0)
                 dispatch(actions.loadLabels(acceptedFiles));
+            else if(props.accept.indexOf("svg") >= 0){
+
+            }
+
             else 
                 dispatch(actions.loadImages(acceptedFiles));
             // setFiles(acceptedFiles);
