@@ -282,6 +282,25 @@ $end-direction: right !default;
 
 .main-canvas {
   position: relative;
+  &-suggestion {
+    height: 40px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: 1px solid var(--silver);
+    position: relative;
+    color: var(--silver);
+
+
+    img {
+      width: 20px;
+      height: 20px;
+      margin: 0 7px;
+      // position: absolute;
+      // #{$end-direction}: 7px;
+    }
+
+  }
 
 }
 

@@ -6,7 +6,8 @@ import CommonHeader from "../CommonHeader/CommonHeader";
 import SelectorItem from "../SelectorItem/SelectorItem";
 import Selectors from "../Selectors/Selectors";
 import ToolBarItem from "../ToolBarItem/ToolBarItem";
-import CanvasLabel from "../CanvasLabel/CanvasLabel"
+import CanvasLabel from "../CanvasLabel/CanvasLabel";
+import CanvasSuggestion from "../CanvasSuggestion/CanvasSuggestion";
 const labelsDataDefault = {
   labelRects: [],
   labelPolygons: [],
@@ -57,20 +58,13 @@ const Canvas = () => {
             selectedImage=new Image();
             selectedImage.src=imageFile.preview;
             selectedImage.onload=()=>{
-                console.log(`img width:${selectedImage.width},img height:${selectedImage.height}`);
                 canvasDOM=document.getElementsByClassName("main-canvas")[0];
                 canvasWidth=canvasDOM.offsetWidth;
                 canvasHeight=canvasDOM.offsetHeight;
                 imageWidthFactor=canvasWidth/selectedImage.width;
                 imageHeightFactor=canvasHeight/selectedImage.height;
-                console.log(`canvas DOM:${canvasDOM}`);
-                console.log(`canvas w:${canvasWidth},canvas h:${canvasHeight}`);
-                console.log(`image w factor:${imageWidthFactor},image h factor:${imageHeightFactor}`);
             }
-
         }
-
-
     },imageFile);
 
 
@@ -82,9 +76,6 @@ const Canvas = () => {
   console.log("pol is sel", polygonIsSelected);
   console.log("classification is sel", classificationIsSelected);
 
-  // useEffect(() => {
-  //     dispatch(toggleMenu(user))
-  //   }, [])
 
     let defaultSelector=LABEL_TYPE.RECTANGLE;
     useEffect(()=>{
@@ -169,6 +160,8 @@ const Canvas = () => {
       )}
 
           <CanvasLabel/>
+
+          <CanvasSuggestion/>
 
       <button
         className={
