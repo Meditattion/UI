@@ -199,23 +199,41 @@ const Canvas = () => {
 
       <CanvasLabel />
 
-      <CanvasSuggestion />
+      {/*<CanvasSuggestion />*/}
 
       <button
         className={
-          labelsIsVisible ? "toggle-labels flipHorizontal" : "toggle-labels "
+          labelsIsVisible ? "toggle-labels flipHorizontal rotate90" : "toggle-labels rotate90 labelsPad  "
         }
         onClick={() => dispatch(actions.toggleMenu("labels"))}
       >
-        &#9658;
+        {labelsIsVisible &&
+        <span>&#9660;</span>
+        }
+        {!labelsIsVisible &&
+            <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
+              <div>&#9650;</div>
+              <div style={{fontSize:"1.2em"}}>Labels</div>
+            </div>
+
+        }
       </button>
       <button
         className={
-          imagesIsVisible ? "toggle-images " : "toggle-images flipHorizontal"
+          imagesIsVisible ? "toggle-images rotate270 " : "toggle-images rotate270"
         }
         onClick={() => dispatch(actions.toggleMenu("images"))}
       >
-        &#9658;
+        {imagesIsVisible &&
+        <span>&#9650;</span>
+        }
+        {!imagesIsVisible &&
+        <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
+          <div>&#9660;</div>
+          <div style={{fontSize:"1.2em"}}>Images</div>
+        </div>
+
+        }
       </button>
     </div>
   );

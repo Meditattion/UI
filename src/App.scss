@@ -461,8 +461,8 @@ $end-direction: right !default;
   position: absolute;
   top:60px;
   #{$position}: 0;
-  height: 100px;
-  width: 16px;
+  width: 100px;
+  min-height: 16px;
   background-color: var(--turqu);
   align-items: center;
   justify-content: center;
@@ -470,12 +470,33 @@ $end-direction: right !default;
   z-index: 10;
 }
 
+.rotate90{
+  transform: rotate(90deg) !important;
+}
+
+.rotate270{
+  transform: rotate(270deg) !important;
+}
+.labelsPad{
+  transform-origin: 16px 16px !important;
+  #{$start-direction}: unset !important;
+}
+
+.imagesPad{
+  transform-origin: 16px 16px !important;
+  #{$end-direction}: unset !important;
+}
 
 
 .toggle-labels {
   @include toggleMenu($start-direction);
+  transform-origin: 0 0;
+  #{$start-direction}:16px;
+
 }
 
 .toggle-images {
   @include toggleMenu($end-direction);
+  transform-origin: right ;
+  #{$end-direction}:16px;
 }
