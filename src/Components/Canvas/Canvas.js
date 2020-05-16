@@ -1,25 +1,45 @@
-import React, {useEffect, useMemo, useReducer, useState} from "react";
+import React, { useEffect, useMemo, useReducer, useState } from "react";
 import { LABEL_TYPE, ReactCanvasAnnotation } from "react-canvas-annotation";
 import { useDispatch, useSelector } from "react-redux";
 import actions from "../../Actions/index";
+import CanvasLabel from "../CanvasLabel/CanvasLabel";
+import CanvasSuggestion from "../CanvasSuggestion/CanvasSuggestion";
 import CommonHeader from "../CommonHeader/CommonHeader";
 import SelectorItem from "../SelectorItem/SelectorItem";
 import Selectors from "../Selectors/Selectors";
 import ToolBarItem from "../ToolBarItem/ToolBarItem";
-import CanvasLabel from "../CanvasLabel/CanvasLabel";
-import CanvasSuggestion from "../CanvasSuggestion/CanvasSuggestion";
+
 const labelsDataDefault = {
   labelRects: [],
   labelPolygons: [],
 };
 
-// const labelsDataDefault = {
-//     labelRects: [{id:"333",rect:{height: 84.29882044560944,width: 187.4705111402359,x: 53.40323711910222,y: 65.4259501965924}}],
-//     labelPolygons: [{id:"222",
-//         vertices:[{'x': 318.0, 'y': 115.99803921568628}, {'x': 317.9980392156863, 'y': 89.0}, {'x': 311.9980392156863, 'y': 81.0}, {'x': 310.9980392156863, 'y': 75.0}, {'x': 292.9980392156863, 'y': 51.0}, {'x': 283.9980392156863, 'y': 43.0}, {'x': 279.0, 'y': 35.001960784313724}, {'x': 267.0, 'y': 28.001960784313727}, {'x': 255.0, 'y': 18.001960784313727}, {'x': 247.0, 'y': 17.001960784313727}, {'x': 238.0, 'y': 20.001960784313727}, {'x': 234.00196078431372, 'y': 24.0}, {'x': 229.00196078431372, 'y': 35.0}, {'x': 225.00196078431372, 'y': 62.0}, {'x': 229.00196078431372, 'y': 79.0}, {'x': 236.00196078431372, 'y': 95.0}, {'x': 249.0, 'y': 108.99803921568628}, {'x': 257.0, 'y': 114.99803921568628}, {'x': 259.0, 'y': 114.99803921568628}, {'x': 260.0, 'y': 116.99803921568628}, {'x': 292.0, 'y': 131.99803921568628}, {'x': 293.0, 'y': 133.99803921568628}, {'x': 312.0, 'y': 141.99803921568628}, {'x': 316.0, 'y': 141.99803921568628}, {'x': 317.9980392156863, 'y': 140.0}, {'x': 318.0, 'y': 115.99803921568628}]
-//     }],
-// };
-
+/* data example:
+{
+  labelRects: [
+    {
+      id: "Rect-Example",
+      rect: {
+        x: 697.2371134020618,
+        y: 454.26804123711344,
+        width: 717.0309278350516,
+        height: 492.1237113402062,
+      },
+    },
+  ],
+  labelPolygons: [
+    {
+      id: `Poly-Example`,
+      vertices: [
+        { x: 623.7525773195875, y: 440.9072164948454 },
+        { x: 1331.8762886597938, y: 305.07216494845363 },
+        { x: 1641.4020618556701, y: 732.6185567010309 },
+        { x: 882.0618556701031, y: 790.5154639175258 },
+      ],
+    },
+  ],
+}
+*/
 
 const ZOOM_STEP = 0.1;
 
@@ -43,56 +63,49 @@ const Canvas = () => {
   //   (state) => state.Tools.classification?.files?.[0]
   // );
 
-    const imageFile = useSelector(
-        (state) => state.Images.container?.[0]
-    );
+  const imageFile = useSelector((state) => state.Images.container?.[0]);
 
-    let selectedImage;
-    let canvasDOM;
-    let canvasWidth;
-    let canvasHeight;
-    let imageWidthFactor;
-    let imageHeightFactor;
-    useEffect(()=>{
-        if(imageFile){
-            selectedImage=new Image();
-            selectedImage.src=imageFile.preview;
-            selectedImage.onload=()=>{
-                canvasDOM=document.getElementsByClassName("main-canvas")[0];
-                canvasWidth=canvasDOM.offsetWidth;
-                canvasHeight=canvasDOM.offsetHeight;
-                imageWidthFactor=canvasWidth/selectedImage.width;
-                imageHeightFactor=canvasHeight/selectedImage.height;
-            }
-        }
-    },imageFile);
-
-
-
-
+  let selectedImage;
+  let canvasDOM;
+  let canvasWidth;
+  let canvasHeight;
+  let imageWidthFactor;
+  let imageHeightFactor;
+  useEffect(() => {
+    if (imageFile) {
+      selectedImage = new Image();
+      selectedImage.src = imageFile.preview;
+      selectedImage.onload = () => {
+        canvasDOM = document.getElementsByClassName("main-canvas")[0];
+        canvasWidth = canvasDOM.offsetWidth;
+        canvasHeight = canvasDOM.offsetHeight;
+        imageWidthFactor = canvasWidth / selectedImage.width;
+        imageHeightFactor = canvasHeight / selectedImage.height;
+      };
+    }
+  }, imageFile);
 
   console.log("currentSelector:", currentSelector);
   console.log("bound is sel", boundingBoxIsSelected);
   console.log("pol is sel", polygonIsSelected);
   console.log("classification is sel", classificationIsSelected);
 
+  let defaultSelector = LABEL_TYPE.RECTANGLE;
+  useEffect(() => {
+    switch (currentSelector) {
+      case "boundingBox":
+        defaultSelector = LABEL_TYPE.RECTANGLE;
+      case "polygon":
+        defaultSelector = LABEL_TYPE.POLYGON;
+      default:
+        defaultSelector = LABEL_TYPE.RECTANGLE;
+    }
+  }, []);
 
-    let defaultSelector=LABEL_TYPE.RECTANGLE;
-    useEffect(()=>{
-        switch (currentSelector) {
-            case "boundingBox":
-                defaultSelector=LABEL_TYPE.RECTANGLE;
-            case "polygon":
-                defaultSelector=LABEL_TYPE.POLYGON;
-            default:
-                defaultSelector=LABEL_TYPE.RECTANGLE;
-        }
-    },[]);
-
-  const [newLabelCurds,setNewLabelCurds]=useState({top:60,left:0}) ;
+  const [newLabelCurds, setNewLabelCurds] = useState({ top: 60, left: 0 });
   const [labels, setLabels] = useState(labelsDataDefault);
-    // const [annotationType, setAnnotationType] = useState(LABEL_TYPE.RECTANGLE);
-    const [annotationType, setAnnotationType] = useState(defaultSelector);
+  // const [annotationType, setAnnotationType] = useState(LABEL_TYPE.RECTANGLE);
+  const [annotationType, setAnnotationType] = useState(defaultSelector);
   const [isImageDrag, toggleDragMode] = useReducer((p) => !p, false);
 
   const [zoom, setZoom] = useState(1);
@@ -114,19 +127,37 @@ const Canvas = () => {
     <div className="main-canvas">
       <CommonHeader>
         <div className="main-toolbar">
-          <ToolBarItem tool="redo" flip="true" type="redo.svg" tooltip="Undo"></ToolBarItem>
+          <ToolBarItem
+            tool="redo"
+            flip="true"
+            type="redo.svg"
+            tooltip="Undo"
+          ></ToolBarItem>
           <ToolBarItem tool="undo" type="redo.svg" tooltip="Redo"></ToolBarItem>
-          <ToolBarItem tool="zoomin" type="zoomIn.svg" tooltip="Zoom In"></ToolBarItem>
-          <ToolBarItem tool="zoomout" flip="true" type="zoomOut.svg" tooltip="Zoom Out"></ToolBarItem>
+          <ToolBarItem
+            tool="zoomin"
+            type="zoomIn.svg"
+            tooltip="Zoom In"
+          ></ToolBarItem>
+          <ToolBarItem
+            tool="zoomout"
+            flip="true"
+            type="zoomOut.svg"
+            tooltip="Zoom Out"
+          ></ToolBarItem>
           <ToolBarItem tool="move" type="hand.svg" tooltip="Move"></ToolBarItem>
-          <ToolBarItem tool="pointer" type="cursor.svg" tooltip="Pointer"></ToolBarItem>
+          <ToolBarItem
+            tool="pointer"
+            type="cursor.svg"
+            tooltip="Pointer"
+          ></ToolBarItem>
           <Selectors>
-                  <SelectorItem
-                      selector="boundingBox"
-                      isSelected={boundingBoxIsSelected}
-                      type="bounding-box.svg"
-                      tooltip="Bounding Box"
-                  ></SelectorItem>
+            <SelectorItem
+              selector="boundingBox"
+              isSelected={boundingBoxIsSelected}
+              type="bounding-box.svg"
+              tooltip="Bounding Box"
+            ></SelectorItem>
             <SelectorItem
               selector="polygon"
               isSelected={polygonIsSelected}
@@ -148,20 +179,27 @@ const Canvas = () => {
           zoom={zoom}
           imageFile={imageFile}
           labels={labels}
-          onChange={(data)=>{
-              console.log("data",data);
-              dispatch(actions.setCanvasLabelCurds(imageHeightFactor*data.labelRects[data.labelRects.length-1].rect.y,
-                  0.9*imageWidthFactor*data.labelRects[data.labelRects.length-1].rect.x));
-              dispatch(actions.addCanvasLabel());
+          onChange={(data) => {
+            console.log("data", data);
+            dispatch(
+              actions.setCanvasLabelCurds(
+                imageHeightFactor *
+                  data.labelRects[data.labelRects.length - 1].rect.y,
+                0.9 *
+                  imageWidthFactor *
+                  data.labelRects[data.labelRects.length - 1].rect.x
+              )
+            );
+            dispatch(actions.addCanvasLabel());
           }}
           annotationType={annotationType}
           isImageDrag={isImageDrag}
         />
       )}
 
-          <CanvasLabel/>
+      <CanvasLabel />
 
-          <CanvasSuggestion/>
+      <CanvasSuggestion />
 
       <button
         className={
