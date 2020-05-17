@@ -19,8 +19,16 @@ const AddFileBtn = (props) => {
                     preview: URL.createObjectURL(file)
                 })));
             // dispatch(actions.loadFiles(files));
-            if (props.accept.indexOf("json") >= 0)
-                dispatch(actions.loadLabels(acceptedFiles));
+            if (props.accept.indexOf("json") >= 0){
+                fetch(acceptedFiles[0].preview)
+                    .then(res => res.json())
+                    .then(
+                        result => {
+                                dispatch(actions.loadLabels(result));
+                            }
+                    );
+                // dispatch(actions.loadLabels(acceptedFiles));
+            }
             else if(props.accept.indexOf("svg") >= 0){
 
             }

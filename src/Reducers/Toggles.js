@@ -4,7 +4,7 @@ const initialState = {
   classificationLabelsIsVisible:true,
   boundingBoxLabelsIsVisible:false,
   polygonLabelsIsVisible:false,
-}
+};
 
 const Toggles = (state = initialState, action) => {
   switch (action.type) {

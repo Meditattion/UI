@@ -22,21 +22,26 @@ const CustomLabelsContainer = (props) => {
 
     return (
         <>
-
-        <div className="common-labels-container"
-             onClick={()=>{ selectedImage!='' &&
+        <div style={{borderBottom:"1px solid #eeeeee"}}>
+            <div className="common-labels-container"
+                 onClick={()=>{ selectedImage!='' &&
                  dispatch(actions.toggleCustomLabelContainer(props.annotator + 'LabelsIsVisible'))
-             }}>
-            <span >{props.text}</span>
-            {props.isOpen && <span style={{position:"absolute",right:"11px",fontSize:"14px"}}>&nbsp;&#x25B2;</span>}
-            {!props.isOpen && <span style={{position:"absolute",right:"11px",fontSize:"14px"}}>&nbsp;&#x25BC;</span>}
-        </div>
+                 }}>
+                <span >{props.text}</span>
+                {props.isOpen &&
+                <span style={{position:"absolute",right:"11px",fontSize:"14px"}}>&nbsp;&#x25B2;</span>
+                }
+                {!props.isOpen && <span style={{position:"absolute",right:"11px",fontSize:"14px"}}>&nbsp;&#x25BC;</span>}
+            </div>
+            {props.isOpen &&
             <div style={{display:"grid",gridTemplateColumns:"10px 1fr"}}>
                 <div className="blankColumn"></div>
                 <div style={{width:"92.5%"}}>
-                    {props.isOpen && props.children}
+                    {props.children}
                 </div>
             </div>
+            }
+        </div>
 
 
             </>

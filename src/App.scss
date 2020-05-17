@@ -225,7 +225,7 @@ $end-direction: right !default;
     grid-template-columns: 24px 1fr;
     align-items: center;
     border-bottom: 1px solid var(--darkSilver);
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.75);
+    //box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
     position: relative;
     color: var(--silver);
 
@@ -365,7 +365,7 @@ $end-direction: right !default;
     }
 
     &:nth-of-type(1){
-      border-#{$end-direction}:1px solid  #eeeeee;
+      border-#{$end-direction}:1px solid  rgba(238, 238, 238,0.75);
     }
   }
 
@@ -450,7 +450,7 @@ $end-direction: right !default;
   align-items: center;
   font-size: 20px;
   color: var(--silver);
-  border-bottom: 1px solid var(--silver);
+  //border-bottom: 1px solid var(--silver);
   cursor: pointer;
   padding-#{$start-direction}:10px;
 }

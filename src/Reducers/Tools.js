@@ -10,7 +10,7 @@ const initialState = {
     },
     classification: {
         isSelected: true,
-        labels: []
+        labels: {}
     }
 }
 
@@ -19,8 +19,9 @@ const Tools = (state = initialState, action) => {
         case "LOAD_LABELS":
             return Object.assign({}, state, {
                 [state.currentSelector]: Object.assign({}, state[state.currentSelector],
-                    { labels: state[state.currentSelector].labels.concat(action.labels) })
+                    { labels: Object.assign({},state[state.currentSelector].labels,action.labels) })
             });
+
 
         case "SELECTOR_CHANGE":
             return Object.assign({}, state, {

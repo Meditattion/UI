@@ -13,17 +13,25 @@ const store = createStore(rootReducer,
       currentSelector:"classification",
       boundingBox: {
         isSelected: false,
-        labels: []
+        labels: {}
       },
       polygon: {
         isSelected: false,
-        labels: []
+        labels: {}
       },
       classification: {
         isSelected: true,
-        labels: []
+        labels: {}
       }
-    }
+    },
+      Toggles:{
+          imagesVisible: true,
+          labelsVisible: true,
+          classificationLabelsIsVisible:true,
+          boundingBoxLabelsIsVisible:false,
+          polygonLabelsIsVisible:false,
+      }
+
   }
 )
 

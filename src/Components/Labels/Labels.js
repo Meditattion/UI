@@ -28,10 +28,10 @@ const Labels = (props) => {
     const labelsIsVisible = useSelector(state => state.Toggles.labelsVisible);
     // const labelsContainer = useSelector(state => state.Labels.container);
     const currentSelector = useSelector(state => state.Tools.currentSelector);
-    console.log("currentSelector", currentSelector);
+    // console.log("currentSelector", currentSelector);
     // const currentImage = useSelector(state => state.Tools[currentSelector].currentImage);
     const currentImage = useSelector(state => state.Images.currentImage);
-    console.log("currentImage", currentImage);
+    // console.log("currentImage", currentImage);
     const searchQuery = useSelector(state => state.Labels.searchQuery);
     const loadedLabels = useSelector(state => state.Tools[currentSelector].labels);
     console.log("loadedLabels", loadedLabels);
@@ -41,28 +41,15 @@ const Labels = (props) => {
 
 
 
-    if (loadedLabels.length > 0 && !loaded) {
-        fetch(loadedLabels[0].preview)
-            .then(res => res.json())
-            .then(
-                result => { setLabels(Object.assign({}, labels, result));setLoaded(true); console.log("selectorLabels:", labels) }
-            );
-    }
+    // if (Object.keys(loadedLabels).length > 0 && !loaded) {
+    //     fetch(loadedLabels[0].preview)
+    //         .then(res => res.json())
+    //         .then(
+    //             result => { setLabels(Object.assign({}, labels, result));setLoaded(true);
+    //             console.log("selectorLabels:", labels) }
+    //         );
+    // }
 
-    // useEffect(() => {
-    //     if (loadedLabels.length > 0) {
-    //         fetch(loadedLabels[0].preview)
-    //             .then(res => res.json())
-    //             .then(
-    //                 result => { setLabels(Object.assign({}, labels, result)); console.log("selectorLabels:", labels) }
-    //             );
-    //     }else{
-    //         setRendered(!rendered);
-    //     }
-    // },[rendered]);
-
-    // console.log("")
-    // console.log("labelsContainer",labelsContainer);
     const labelsToDisplay = [
 
     ];
@@ -78,15 +65,7 @@ const Labels = (props) => {
                 )
             }
         });
-        // labelsContainer.forEach(label => {
-        //     if(label.text.indexOf(searchQuery)>=0){
-        //         labelsToDisplay.unshift(
-        //             <LabelItem key={label.key} serial={label.key} text={label.text}
-        //                             bgColor={label.bgColor} ></LabelItem>
-        //         )
-        //     }
 
-        // });
     }
 
 
@@ -103,12 +82,17 @@ const Labels = (props) => {
             <LabelsContainer>
                 <CustomLabelsContainer annotator="classification" text="Classification" isOpen={currentImage != '' && classificationLabelsIsVisible}>
                     <AddLabelBtn/>
+                    {labelsToDisplay}
+                    {/*<LabelDummyItem key="-1"></LabelDummyItem>*/}
+                </CustomLabelsContainer>
+                <CustomLabelsContainer annotator="polygon" text="Segmentation" isOpen={currentImage != '' && polygonLabelsIsVisible}>
                     <LabelDummyItem key="-1"></LabelDummyItem>
                 </CustomLabelsContainer>
-                <CustomLabelsContainer annotator="polygon" text="Segmentation" isOpen={currentImage != '' && polygonLabelsIsVisible}/>
-                <CustomLabelsContainer annotator="boundingBox" text="Bounding Box" isOpen={currentImage != '' && boundingBoxLabelsIsVisible}/>
+                <CustomLabelsContainer annotator="boundingBox" text="Bounding Box" isOpen={currentImage != '' && boundingBoxLabelsIsVisible}>
+                    <LabelDummyItem key="-1"></LabelDummyItem>
+                </CustomLabelsContainer>
 
-                {/*{labelsToDisplay}*/}
+
             </LabelsContainer>
         </div>
     )
