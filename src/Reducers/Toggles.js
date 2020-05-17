@@ -35,6 +35,13 @@ const Toggles = (state = initialState, action) => {
       }
       return state;
 
+    case 'OPEN_LABELS_CONTAINER':
+      return Object.assign({},state,
+        {classificationLabelsIsVisible:false,
+                  boundingBoxLabelsIsVisible:false,
+                  polygonLabelsIsVisible:false},
+        {[action.tool]:true}
+        )
     default:
       return state
   }
