@@ -497,6 +497,6 @@ $end-direction: right !default;
 
 .toggle-images {
   @include toggleMenu($end-direction);
-  transform-origin: right ;
-  #{$end-direction}:16px;
+  transform-origin: 0 0 ;
+  #{$end-direction}:-100px;
 }

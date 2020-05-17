@@ -220,7 +220,7 @@ const Canvas = () => {
       </button>
       <button
         className={
-          imagesIsVisible ? "toggle-images rotate270 " : "toggle-images rotate270"
+          imagesIsVisible ? "toggle-images rotate90 " : "toggle-images rotate90"
         }
         onClick={() => dispatch(actions.toggleMenu("images"))}
       >
