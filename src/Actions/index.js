@@ -6,6 +6,10 @@ const actions = {
     type: TOGGLE_MENU,
     menu
   }),
+  toggleCustomLabelContainer:tool=>({
+    type:"TOGGLE_LABEL_CONTAINER",
+    tool
+  }),
   addDummyLabel: () => ({
     type: 'ADD_NEW_DUMMY_LABEL'
   }),

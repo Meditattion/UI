@@ -29,11 +29,16 @@ const Labels = (props) => {
     // const labelsContainer = useSelector(state => state.Labels.container);
     const currentSelector = useSelector(state => state.Tools.currentSelector);
     console.log("currentSelector", currentSelector);
-    const currentImage = useSelector(state => state.Tools[currentSelector].currentImage);
+    // const currentImage = useSelector(state => state.Tools[currentSelector].currentImage);
+    const currentImage = useSelector(state => state.Images.currentImage);
     console.log("currentImage", currentImage);
     const searchQuery = useSelector(state => state.Labels.searchQuery);
     const loadedLabels = useSelector(state => state.Tools[currentSelector].labels);
     console.log("loadedLabels", loadedLabels);
+    const classificationLabelsIsVisible= useSelector(state => state.Toggles.classificationLabelsIsVisible);
+    const boundingBoxLabelsIsVisible= useSelector(state => state.Toggles.boundingBoxLabelsIsVisible);
+    const polygonLabelsIsVisible= useSelector(state => state.Toggles.polygonLabelsIsVisible);
+
 
 
     if (loadedLabels.length > 0 && !loaded) {
@@ -96,12 +101,12 @@ const Labels = (props) => {
             <CommonSearch></CommonSearch>
             {/*<AddLabelBtn></AddLabelBtn>*/}
             <LabelsContainer>
-                <CustomLabelsContainer annotator="classification" text="Classification" isOpen={currentSelector==="classification"}>
+                <CustomLabelsContainer annotator="classification" text="Classification" isOpen={currentImage != '' && classificationLabelsIsVisible}>
                     <AddLabelBtn/>
                     <LabelDummyItem key="-1"></LabelDummyItem>
                 </CustomLabelsContainer>
-                <CustomLabelsContainer annotator="segmentation" text="Segmentation" isOpen={currentSelector==="polygon"}/>
-                <CustomLabelsContainer annotator="boundingBox" text="Bounding Box" isOpen={currentSelector==="boundingBox"}/>
+                <CustomLabelsContainer annotator="segmentation" text="Segmentation" isOpen={currentImage != '' && polygonLabelsIsVisible}/>
+                <CustomLabelsContainer annotator="boundingBox" text="Bounding Box" isOpen={currentImage != '' && boundingBoxLabelsIsVisible}/>
 
                 {/*{labelsToDisplay}*/}
             </LabelsContainer>

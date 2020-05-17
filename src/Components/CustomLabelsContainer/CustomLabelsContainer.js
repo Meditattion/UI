@@ -27,7 +27,14 @@ const CustomLabelsContainer = (props) => {
             {props.isOpen && <span style={{position:"absolute",right:"11px",fontSize:"14px"}}>&nbsp;&#x25B2;</span>}
             {!props.isOpen && <span style={{position:"absolute",right:"11px",fontSize:"14px"}}>&nbsp;&#x25BC;</span>}
         </div>
-            {props.isOpen && props.children}
+            <div style={{display:"grid",gridTemplateColumns:"10px 1fr"}}>
+                <div className="blankColumn"></div>
+                <div style={{width:"92.5%"}}>
+                    {props.isOpen && props.children}
+                </div>
+            </div>
+
+
             </>
     )
 }
