@@ -422,6 +422,20 @@ $end-direction: right !default;
   color: var(--dark)
 }
 
+.common-labels-container{
+  background-color: var(--dark);
+  height: 36px;
+  border-bottom: 1px solid var(--dark25);
+  display: flex;
+  justify-content: center;
+  position: relative;
+  align-items: center;
+  font-size: 20px;
+  color: var(--silver);
+  border-bottom: 1px solid var(--silver);
+  cursor: pointer;
+}
+
 .common-search {
   background-color: var(--dark);
   height: 36px;

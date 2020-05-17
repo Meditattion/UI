@@ -229,8 +229,8 @@ const Canvas = () => {
         }
         {!imagesIsVisible &&
         <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
-          <div>&#9660;</div>
           <div style={{fontSize:"1.2em"}}>Images</div>
+          <div>&#9660;</div>
         </div>
 
         }

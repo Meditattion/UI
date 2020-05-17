@@ -7,6 +7,7 @@ import LabelsContainer from '../LabelsContainer/LabelsContainer'
 import AddLabelBtn from '../AddLabelBtn/AddLabelBtn'
 import LabelItem from '../LabelItem/LabelItem'
 import LabelDummyItem from '../LabelDummyItem/LabelDummyItem'
+import CustomLabelsContainer from "../CustomLabelsContainer/CustomLabelsContainer";
 // import actions from '../../Actions'
 
 const getRandomColor = () => {
@@ -71,7 +72,6 @@ const Labels = (props) => {
                                bgColor={getRandomColor()} ></LabelItem>
                 )
             }
-
         });
         // labelsContainer.forEach(label => {
         //     if(label.text.indexOf(searchQuery)>=0){
@@ -94,9 +94,16 @@ const Labels = (props) => {
             <CommonHeader></CommonHeader>
             <CommonTitle text="Labels"></CommonTitle>
             <CommonSearch></CommonSearch>
-            <AddLabelBtn></AddLabelBtn>
+            {/*<AddLabelBtn></AddLabelBtn>*/}
             <LabelsContainer>
-                {labelsToDisplay}
+                <CustomLabelsContainer annotator="classification" text="Classification" isOpen={currentSelector==="classification"}>
+                    <AddLabelBtn/>
+                    <LabelDummyItem key="-1"></LabelDummyItem>
+                </CustomLabelsContainer>
+                <CustomLabelsContainer annotator="segmentation" text="Segmentation" isOpen={currentSelector==="polygon"}/>
+                <CustomLabelsContainer annotator="boundingBox" text="Bounding Box" isOpen={currentSelector==="boundingBox"}/>
+
+                {/*{labelsToDisplay}*/}
             </LabelsContainer>
         </div>
     )
