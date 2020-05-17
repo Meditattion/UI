@@ -134,16 +134,15 @@ const Canvas = () => {
   useEffect(()=>{
     let labelsToAssign=[];
     let image=currentImage;
-    if(loadedLabels[image]){
+    if(loadedLabels[image] && currentSelector!=="classification"){
       loadedLabels[image].forEach(label=>{
         if(currentImage===image){
           labelsToAssign.push({id:image,rect:{x:label["top_left"][1],y:label["top_left"][0],
               width:label["width"],height:label["height"]}});
         }
       });
+      setLabels(Object.assign({},{labelPolygons:labels["labelPolygons"]},{labelRects:labelsToAssign}));
     }
-
-    setLabels(Object.assign({},{labelPolygons:labels["labelPolygons"]},{labelRects:labelsToAssign}));
 
   },[loadedLabels,currentImage])
 

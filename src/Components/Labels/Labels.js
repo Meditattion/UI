@@ -31,7 +31,7 @@ const Labels = (props) => {
     // console.log("currentSelector", currentSelector);
     // const currentImage = useSelector(state => state.Tools[currentSelector].currentImage);
     const currentImage = useSelector(state => state.Images.currentImage);
-    // console.log("currentImage", currentImage);
+    console.log("currentImage", currentImage);
     const searchQuery = useSelector(state => state.Labels.searchQuery);
     const loadedLabels = useSelector(state => state.Tools[currentSelector].labels);
     console.log("loadedLabels", loadedLabels);
@@ -50,13 +50,13 @@ const Labels = (props) => {
     //         );
     // }
 
-    const labelsToDisplay = [
+    let labelsToDisplay = [
 
     ];
 
 
-    if (currentImage != '' && Object.keys(labels).length > 0 && labels[currentImage]) {
-        labels[currentImage].forEach(label => {
+    if (currentImage != '' && Object.keys(loadedLabels).length > 0 && loadedLabels[currentImage] && currentSelector==="classification") {
+        loadedLabels[currentImage].forEach(label => {
             console.log("label:", label);
             if (label.indexOf(searchQuery) >= 0) {
                 labelsToDisplay.unshift(
