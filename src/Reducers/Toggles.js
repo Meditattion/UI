@@ -1,6 +1,9 @@
 const initialState = {
   imagesVisible: true,
-  labelsVisible: true
+  labelsVisible: true,
+  classificationLabelsIsVisible:true,
+  boundingBoxLabelsIsVisible:false,
+  polygonLabelsIsVisible:false,
 }
 
 const Toggles = (state = initialState, action) => {
@@ -17,6 +20,17 @@ const Toggles = (state = initialState, action) => {
       }
       return state;
 
+    case 'TOGGLE_LABEL_CONTAINER':
+       state[action.tool]=!state[action.tool];
+      return state;
+
+    case 'OPEN_LABELS_CONTAINER':
+      return Object.assign({},state,
+        {classificationLabelsIsVisible:false,
+                  boundingBoxLabelsIsVisible:false,
+                  polygonLabelsIsVisible:false},
+        {[action.tool]:true}
+        )
     default:
       return state
   }

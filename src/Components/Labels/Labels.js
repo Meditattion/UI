@@ -7,6 +7,7 @@ import LabelsContainer from '../LabelsContainer/LabelsContainer'
 import AddLabelBtn from '../AddLabelBtn/AddLabelBtn'
 import LabelItem from '../LabelItem/LabelItem'
 import LabelDummyItem from '../LabelDummyItem/LabelDummyItem'
+import CustomLabelsContainer from "../CustomLabelsContainer/CustomLabelsContainer";
 // import actions from '../../Actions'
 
 const getRandomColor = () => {
@@ -28,11 +29,16 @@ const Labels = (props) => {
     // const labelsContainer = useSelector(state => state.Labels.container);
     const currentSelector = useSelector(state => state.Tools.currentSelector);
     console.log("currentSelector", currentSelector);
-    const currentImage = useSelector(state => state.Tools[currentSelector].currentImage);
+    // const currentImage = useSelector(state => state.Tools[currentSelector].currentImage);
+    const currentImage = useSelector(state => state.Images.currentImage);
     console.log("currentImage", currentImage);
     const searchQuery = useSelector(state => state.Labels.searchQuery);
     const loadedLabels = useSelector(state => state.Tools[currentSelector].labels);
     console.log("loadedLabels", loadedLabels);
+    const classificationLabelsIsVisible= useSelector(state => state.Toggles.classificationLabelsIsVisible);
+    const boundingBoxLabelsIsVisible= useSelector(state => state.Toggles.boundingBoxLabelsIsVisible);
+    const polygonLabelsIsVisible= useSelector(state => state.Toggles.polygonLabelsIsVisible);
+
 
 
     if (loadedLabels.length > 0 && !loaded) {
@@ -71,7 +77,6 @@ const Labels = (props) => {
                                bgColor={getRandomColor()} ></LabelItem>
                 )
             }
-
         });
         // labelsContainer.forEach(label => {
         //     if(label.text.indexOf(searchQuery)>=0){
@@ -94,9 +99,16 @@ const Labels = (props) => {
             <CommonHeader></CommonHeader>
             <CommonTitle text="Labels"></CommonTitle>
             <CommonSearch></CommonSearch>
-            <AddLabelBtn></AddLabelBtn>
+            {/*<AddLabelBtn></AddLabelBtn>*/}
             <LabelsContainer>
-                {labelsToDisplay}
+                <CustomLabelsContainer annotator="classification" text="Classification" isOpen={currentImage != '' && classificationLabelsIsVisible}>
+                    <AddLabelBtn/>
+                    <LabelDummyItem key="-1"></LabelDummyItem>
+                </CustomLabelsContainer>
+                <CustomLabelsContainer annotator="polygon" text="Segmentation" isOpen={currentImage != '' && polygonLabelsIsVisible}/>
+                <CustomLabelsContainer annotator="boundingBox" text="Bounding Box" isOpen={currentImage != '' && boundingBoxLabelsIsVisible}/>
+
+                {/*{labelsToDisplay}*/}
             </LabelsContainer>
         </div>
     )

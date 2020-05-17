@@ -61,6 +61,7 @@ $end-direction: right !default;
   --dark: #222831;
 
   --dark25: rgba(34, 40, 49, 0.25);
+  --dark75: rgba(34, 40, 49, 0.75);
   --turqu25: rgba(0, 173, 181, 0.25);
 }
 
@@ -211,6 +212,7 @@ $end-direction: right !default;
 
   &-container {
     // max-height: calc(100%-174px);
+    background-color: var(--dark75);
     overflow-y: auto;
   }
 
@@ -221,6 +223,7 @@ $end-direction: right !default;
     grid-template-columns: 24px 1fr;
     align-items: center;
     border-bottom: 1px solid var(--darkSilver);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.75);
     position: relative;
     color: var(--silver);
 
@@ -420,6 +423,25 @@ $end-direction: right !default;
   align-items: center;
   font-size: 24px;
   color: var(--dark)
+}
+
+.blankColumn{
+  background-color: var(--dark);
+}
+
+.common-labels-container{
+  background-color: var(--dark);
+  height: 36px;
+  border-bottom: 1px solid var(--dark25);
+  display: flex;
+  //justify-content: center;
+  position: relative;
+  align-items: center;
+  font-size: 20px;
+  color: var(--silver);
+  border-bottom: 1px solid var(--silver);
+  cursor: pointer;
+  padding-#{$start-direction}:10px;
 }
 
 .common-search {
