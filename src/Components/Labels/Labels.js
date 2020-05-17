@@ -105,7 +105,7 @@ const Labels = (props) => {
                     <AddLabelBtn/>
                     <LabelDummyItem key="-1"></LabelDummyItem>
                 </CustomLabelsContainer>
-                <CustomLabelsContainer annotator="segmentation" text="Segmentation" isOpen={currentImage != '' && polygonLabelsIsVisible}/>
+                <CustomLabelsContainer annotator="polygon" text="Segmentation" isOpen={currentImage != '' && polygonLabelsIsVisible}/>
                 <CustomLabelsContainer annotator="boundingBox" text="Bounding Box" isOpen={currentImage != '' && boundingBoxLabelsIsVisible}/>
 
                 {/*{labelsToDisplay}*/}

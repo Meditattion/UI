@@ -21,18 +21,7 @@ const Toggles = (state = initialState, action) => {
       return state;
 
     case 'TOGGLE_LABEL_CONTAINER':
-      switch (action.tool) {
-        case 'classification':
-          state.classificationLabelsIsVisible = !state.classificationLabelsIsVisible;
-          break;
-        case 'boundingBox':
-          state.boundingBoxLabelsIsVisible = !state.boundingBoxLabelsIsVisible;
-          break;
-        case 'polygon':
-          state.polygonLabelsIsVisible = !state.polygonLabelsIsVisible;
-          break;
-        default:
-      }
+       state[action.tool]=!state[action.tool];
       return state;
 
     case 'OPEN_LABELS_CONTAINER':

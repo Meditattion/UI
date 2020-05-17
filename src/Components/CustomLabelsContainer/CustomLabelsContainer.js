@@ -18,11 +18,15 @@ const CustomLabelsContainer = (props) => {
     let dispatch = useDispatch();
     const currentLabelCountID = useSelector(state => state.LabelsCounterID);
     const newDummyLabelIsVisible = useSelector(state => state.Labels.dummyNewLabel);
+    const selectedImage=useSelector(state=>state.Images.currentImage);
 
     return (
         <>
 
-        <div className="common-labels-container">
+        <div className="common-labels-container"
+             onClick={()=>{ selectedImage!='' &&
+                 dispatch(actions.toggleCustomLabelContainer(props.annotator + 'LabelsIsVisible'))
+             }}>
             <span >{props.text}</span>
             {props.isOpen && <span style={{position:"absolute",right:"11px",fontSize:"14px"}}>&nbsp;&#x25B2;</span>}
             {!props.isOpen && <span style={{position:"absolute",right:"11px",fontSize:"14px"}}>&nbsp;&#x25BC;</span>}
