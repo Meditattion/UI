@@ -48,9 +48,12 @@ const ImagesContainer = (props) => {
     return (
         <div className="main-images-container">
             <div style={{position:"sticky",top:0,backgroundColor:"white",zIndex:10}}>
-            <AddFileBtn index="0" accept="image/*" text="Add new image"></AddFileBtn>
-            <AddFileBtn index="1" accept={currentSelector==="polygon" ? ".png" :".json"}
-                        text={currentSelector==="polygon"?"Add new mask" :"Add new json"}></AddFileBtn>
+                <div style={{display:"flex",flexDirection:"row"}}>
+                    <AddFileBtn index="0" accept="image/*" text="Add new image"></AddFileBtn>
+                    <AddFileBtn index="1" accept={currentSelector==="polygon" ? ".png" :".json"}
+                                text={currentSelector==="polygon"?"Add new mask" :"Add new json"}></AddFileBtn>
+                </div>
+
             </div>
             <div>
                 {thumbs}
