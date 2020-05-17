@@ -19,8 +19,16 @@ const AddFileBtn = (props) => {
                     preview: URL.createObjectURL(file)
                 })));
             // dispatch(actions.loadFiles(files));
-            if (props.accept.indexOf("json") >= 0)
-                dispatch(actions.loadLabels(acceptedFiles));
+            if (props.accept.indexOf("json") >= 0){
+                fetch(acceptedFiles[0].preview)
+                    .then(res => res.json())
+                    .then(
+                        result => {
+                                dispatch(actions.loadLabels(result));
+                            }
+                    );
+                // dispatch(actions.loadLabels(acceptedFiles));
+            }
             else if(props.accept.indexOf("svg") >= 0){
 
             }
@@ -33,7 +41,11 @@ const AddFileBtn = (props) => {
 
 
     return (
-        <div {...getRootProps({ className: 'main-images-dropZone' })} style={{top:props.index*50}}>
+        <div {...getRootProps({ className: 'main-images-dropZone' })}
+             // style={{top:props.index*50}}
+             // style={{width:"50%",borderRight:"1px solid  #eeeeee"}}
+             style={{width:"50%"}}
+        >
             <input {...getInputProps()} />
             {/* <p>Drag 'n' drop some files here, or click to select files</p> */}
             <span>{props.text}</span>

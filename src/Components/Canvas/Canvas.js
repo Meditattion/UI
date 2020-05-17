@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useReducer, useState } from "react";
+import React, { useEffect, useMemo, useReducer, useState,useRef } from "react";
 import { LABEL_TYPE, ReactCanvasAnnotation } from "react-canvas-annotation";
 import { useDispatch, useSelector } from "react-redux";
 import actions from "../../Actions/index";
@@ -13,6 +13,14 @@ const labelsDataDefault = {
   labelRects: [],
   labelPolygons: [],
 };
+
+function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}
 
 /* data example:
 {
@@ -48,6 +56,9 @@ const Canvas = () => {
 
   const labelsIsVisible = useSelector((state) => state.Toggles.labelsVisible);
   const imagesIsVisible = useSelector((state) => state.Toggles.imagesVisible);
+  const classificationLabelsIsVisible= useSelector(state => state.Toggles.classificationLabelsIsVisible);
+  const boundingBoxLabelsIsVisible= useSelector(state => state.Toggles.boundingBoxLabelsIsVisible);
+  const polygonLabelsIsVisible= useSelector(state => state.Toggles.polygonLabelsIsVisible);
   const boundingBoxIsSelected = useSelector(
     (state) => state.Tools.boundingBox.isSelected
   );
@@ -58,12 +69,30 @@ const Canvas = () => {
     (state) => state.Tools.classification.isSelected
   );
   const currentSelector = useSelector((state) => state.Tools.currentSelector);
+  const currentImage = useSelector(state => state.Images.currentImage);
+  console.log(`currentImage:${currentImage}`);
+
+  const loadedLabels = useSelector(state => state.Tools[currentSelector].labels);
 
   // const imageFile = useSelector(
   //   (state) => state.Tools.classification?.files?.[0]
   // );
 
-  const imageFile = useSelector((state) => state.Images.container?.[0]);
+  // let imageFile = useSelector((state) => state.Images.container?.[0]);
+  let imageFiles = useSelector((state) => state.Images.container);
+  const [imageFile,setImageFile]=useState("");
+  useEffect(()=>{
+    for (let image in imageFiles){
+      console.log(`image:${imageFiles[image].name}`);
+      console.log(`image sub${imageFiles[image].name.substring(0,imageFiles[image].name.indexOf("."))}`);
+      if(imageFiles[image].name.substring(0,imageFiles[image].name.indexOf("."))===currentImage){
+        // imageFile=imageFiles[image];
+        setImageFile(imageFiles[image]);
+        break;
+      }
+    }
+  },[imageFiles,currentImage]);
+
 
   let selectedImage;
   let canvasDOM;
@@ -72,7 +101,7 @@ const Canvas = () => {
   let imageWidthFactor;
   let imageHeightFactor;
   useEffect(() => {
-    if (imageFile) {
+    if (imageFile!=="") {
       selectedImage = new Image();
       selectedImage.src = imageFile.preview;
       selectedImage.onload = () => {
@@ -83,12 +112,12 @@ const Canvas = () => {
         imageHeightFactor = canvasHeight / selectedImage.height;
       };
     }
-  }, imageFile);
+  }, [imageFile]);
 
-  console.log("currentSelector:", currentSelector);
-  console.log("bound is sel", boundingBoxIsSelected);
-  console.log("pol is sel", polygonIsSelected);
-  console.log("classification is sel", classificationIsSelected);
+  // console.log("currentSelector:", currentSelector);
+  // console.log("bound is sel", boundingBoxIsSelected);
+  // console.log("pol is sel", polygonIsSelected);
+  // console.log("classification is sel", classificationIsSelected);
 
   let defaultSelector = LABEL_TYPE.RECTANGLE;
   useEffect(() => {
@@ -102,8 +131,25 @@ const Canvas = () => {
     }
   }, []);
 
+  useEffect(()=>{
+    let labelsToAssign=[];
+    let image=currentImage;
+    if(loadedLabels[image] && currentSelector!=="classification"){
+      loadedLabels[image].forEach(label=>{
+        if(currentImage===image){
+          labelsToAssign.push({id:image,rect:{x:label["top_left"][1],y:label["top_left"][0],
+              width:label["width"],height:label["height"]}});
+        }
+      });
+      setLabels(Object.assign({},{labelPolygons:labels["labelPolygons"]},{labelRects:labelsToAssign}));
+    }
+
+  },[loadedLabels,currentImage])
+
   const [newLabelCurds, setNewLabelCurds] = useState({ top: 60, left: 0 });
   const [labels, setLabels] = useState(labelsDataDefault);
+  const [labelsRectLength,setLabelsRectLength]=useState(0);
+  const [labelsPolygonLength,setLabelsPolygonLength]=useState(0);
   // const [annotationType, setAnnotationType] = useState(LABEL_TYPE.RECTANGLE);
   const [annotationType, setAnnotationType] = useState(defaultSelector);
   const [isImageDrag, toggleDragMode] = useReducer((p) => !p, false);
@@ -121,7 +167,50 @@ const Canvas = () => {
     []
   );
 
-  console.log(`imageFile`, imageFile);
+
+
+  const handleCanvasOnChange=(data)=>{
+    console.log("data", data);
+    console.log(`LabelRects length:${data["labelRects"].length}`);
+    console.log(`LabelPolygons length:${data["labelPolygons"].length}`);
+    if(!labelsIsVisible){
+      dispatch(
+          actions.setCanvasLabelCurds(
+              imageHeightFactor *
+              data.labelRects[data.labelRects.length - 1].rect.y,
+              0.9 *
+              imageWidthFactor *
+              data.labelRects[data.labelRects.length - 1].rect.x
+          )
+      );
+      dispatch(actions.addCanvasLabel());
+    }else{
+      console.log("new rect or pol");
+      console.log(`labels.Rects length:${labels["labelRects"].length}`);
+      console.log(`labels.Polys length:${labels["labelPolygons"].length}`);
+      if(labelsRectLength<data["labelRects"].length){
+        console.log("new rect");
+        if(!boundingBoxLabelsIsVisible){
+          dispatch(actions.openLabelsContainer("boundingBoxLabelsIsVisible"));
+          setLabelsRectLength(prevState => prevState+1);
+        }
+      }else if(labelsPolygonLength<data["labelPolygons"].length){
+        console.log("new pol");
+
+        if(!polygonLabelsIsVisible){
+          dispatch(actions.openLabelsContainer("polygonLabelsIsVisible"));
+          setLabelsRectLength(prevState => prevState+1);
+        }
+      }
+
+    }
+
+    // setLabels(Object.assign({},labels,{data}));
+
+
+
+  }
+
 
   return (
     <div className="main-canvas">
@@ -174,24 +263,12 @@ const Canvas = () => {
         </div>
       </CommonHeader>
 
-      {imageFile && (
+      {imageFile!=="" && (
         <ReactCanvasAnnotation
           zoom={zoom}
           imageFile={imageFile}
           labels={labels}
-          onChange={(data) => {
-            console.log("data", data);
-            dispatch(
-              actions.setCanvasLabelCurds(
-                imageHeightFactor *
-                  data.labelRects[data.labelRects.length - 1].rect.y,
-                0.9 *
-                  imageWidthFactor *
-                  data.labelRects[data.labelRects.length - 1].rect.x
-              )
-            );
-            dispatch(actions.addCanvasLabel());
-          }}
+          onChange={(data) => handleCanvasOnChange(data)}
           annotationType={annotationType}
           isImageDrag={isImageDrag}
         />
