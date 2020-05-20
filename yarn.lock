@@ -9076,10 +9076,10 @@ react-app-polyfill@^1.0.6:
     regenerator-runtime "^0.13.3"
     whatwg-fetch "^3.0.0"
 
-react-canvas-annotation@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/react-canvas-annotation/-/react-canvas-annotation-1.0.3.tgz#835a8f6f015227b095ac6a0427800e8d127bddd0"
-  integrity sha512-yEGjYr2PSuchvDcBtWERJFRa4H63/B6gXLvea4k3HNxy3GPzXg1u7dN1WjZf9BAD9EczYezgpQXpvgTsE6mV+Q==
+react-canvas-annotation@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/react-canvas-annotation/-/react-canvas-annotation-1.0.5.tgz#0548218da1a3121b577fe8c467dd9a90bff0153b"
+  integrity sha512-T1jERAjC0kJ8gzU+31VhBmX7mrD6W8wExhsBqF2QwioAlCMW8mSMaqWPVrD5EwrQEKOeL+4B6l+/fXLmLP1toA==
   dependencies:
     lodash.filter "^4.6.0"
     lodash.find "^4.6.0"
@@ -9089,7 +9089,7 @@ react-canvas-annotation@^1.0.3:
     redux "^4.0.5"
     styled-components "^5.1.0"
     styled-tools "^1.7.1"
-    twin.macro "^1.0.0-alpha.10"
+    twin.macro "^1.1.0"
 
 react-custom-scrollbars@^4.2.1:
   version "4.2.1"
@@ -10894,10 +10894,10 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   resolved "https://registry.yarnpkg.com/tweetnacl/-/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
   integrity sha1-WuaBd/GS1EViadEIr6k/+HQ/T2Q=
 
-twin.macro@^1.0.0-alpha.10:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/twin.macro/-/twin.macro-1.0.0.tgz#9d58311c0f8f05b8ccad19f6e7d0ec379f2ececc"
-  integrity sha512-POnHFrm12h0uJ+Mhu5Lv/8q0euX4DP+o3tGq/wpolDEzRpn5PNBEd5qDL3hyuPSpxyn63MoKeoFI3j6uOf2uDg==
+twin.macro@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/twin.macro/-/twin.macro-1.1.0.tgz#41b4ae13b995128faa40a6ec330878bd68cda2c6"
+  integrity sha512-1bSItXg2qdaV5vNHV/ZMwaXHfoyfGwJO2bo65+QVfZKGBOV1eTsxrOtlnJXIOLKkl8lzZPDRJZX4YcgSmXvAug==
   dependencies:
     "@babel/parser" "^7.9.4"
     babel-plugin-macros "^2.8.0"
