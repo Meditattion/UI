@@ -1,14 +1,12 @@
-import React, { useEffect, useMemo, useReducer, useState,useRef } from "react";
+import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { LABEL_TYPE, ReactCanvasAnnotation } from "react-canvas-annotation";
 import { useDispatch, useSelector } from "react-redux";
 import actions from "../../Actions/index";
 import CanvasLabel from "../CanvasLabel/CanvasLabel";
-import CanvasSuggestion from "../CanvasSuggestion/CanvasSuggestion";
 import CommonHeader from "../CommonHeader/CommonHeader";
 import SelectorItem from "../SelectorItem/SelectorItem";
 import Selectors from "../Selectors/Selectors";
 import ToolBarItem from "../ToolBarItem/ToolBarItem";
-
 const labelsDataDefault = {
   labelRects: [],
   labelPolygons: [],
@@ -56,9 +54,15 @@ const Canvas = () => {
 
   const labelsIsVisible = useSelector((state) => state.Toggles.labelsVisible);
   const imagesIsVisible = useSelector((state) => state.Toggles.imagesVisible);
-  const classificationLabelsIsVisible= useSelector(state => state.Toggles.classificationLabelsIsVisible);
-  const boundingBoxLabelsIsVisible= useSelector(state => state.Toggles.boundingBoxLabelsIsVisible);
-  const polygonLabelsIsVisible= useSelector(state => state.Toggles.polygonLabelsIsVisible);
+  const classificationLabelsIsVisible = useSelector(
+    (state) => state.Toggles.classificationLabelsIsVisible
+  );
+  const boundingBoxLabelsIsVisible = useSelector(
+    (state) => state.Toggles.boundingBoxLabelsIsVisible
+  );
+  const polygonLabelsIsVisible = useSelector(
+    (state) => state.Toggles.polygonLabelsIsVisible
+  );
   const boundingBoxIsSelected = useSelector(
     (state) => state.Tools.boundingBox.isSelected
   );
@@ -69,10 +73,12 @@ const Canvas = () => {
     (state) => state.Tools.classification.isSelected
   );
   const currentSelector = useSelector((state) => state.Tools.currentSelector);
-  const currentImage = useSelector(state => state.Images.currentImage);
+  const currentImage = useSelector((state) => state.Images.currentImage);
   console.log(`currentImage:${currentImage}`);
 
-  const loadedLabels = useSelector(state => state.Tools[currentSelector].labels);
+  const loadedLabels = useSelector(
+    (state) => state.Tools[currentSelector].labels
+  );
 
   // const imageFile = useSelector(
   //   (state) => state.Tools.classification?.files?.[0]
@@ -80,19 +86,28 @@ const Canvas = () => {
 
   // let imageFile = useSelector((state) => state.Images.container?.[0]);
   let imageFiles = useSelector((state) => state.Images.container);
-  const [imageFile,setImageFile]=useState("");
-  useEffect(()=>{
-    for (let image in imageFiles){
+  const [imageFile, setImageFile] = useState("");
+  useEffect(() => {
+    for (let image in imageFiles) {
       console.log(`image:${imageFiles[image].name}`);
-      console.log(`image sub${imageFiles[image].name.substring(0,imageFiles[image].name.indexOf("."))}`);
-      if(imageFiles[image].name.substring(0,imageFiles[image].name.indexOf("."))===currentImage){
+      console.log(
+        `image sub${imageFiles[image].name.substring(
+          0,
+          imageFiles[image].name.indexOf(".")
+        )}`
+      );
+      if (
+        imageFiles[image].name.substring(
+          0,
+          imageFiles[image].name.indexOf(".")
+        ) === currentImage
+      ) {
         // imageFile=imageFiles[image];
         setImageFile(imageFiles[image]);
         break;
       }
     }
-  },[imageFiles,currentImage]);
-
+  }, [imageFiles, currentImage]);
 
   let selectedImage;
   let canvasDOM;
@@ -101,7 +116,7 @@ const Canvas = () => {
   let imageWidthFactor;
   let imageHeightFactor;
   useEffect(() => {
-    if (imageFile!=="") {
+    if (imageFile !== "") {
       selectedImage = new Image();
       selectedImage.src = imageFile.preview;
       selectedImage.onload = () => {
@@ -131,25 +146,37 @@ const Canvas = () => {
     }
   }, []);
 
-  useEffect(()=>{
-    let labelsToAssign=[];
-    let image=currentImage;
-    if(loadedLabels[image] && currentSelector!=="classification"){
-      loadedLabels[image].forEach(label=>{
-        if(currentImage===image){
-          labelsToAssign.push({id:image,rect:{x:label["top_left"][1],y:label["top_left"][0],
-              width:label["width"],height:label["height"]}});
+  useEffect(() => {
+    let labelsToAssign = [];
+    let image = currentImage;
+    if (loadedLabels[image] && currentSelector !== "classification") {
+      loadedLabels[image].forEach((label) => {
+        if (currentImage === image) {
+          labelsToAssign.push({
+            id: image,
+            rect: {
+              x: label["top_left"][1],
+              y: label["top_left"][0],
+              width: label["width"],
+              height: label["height"],
+            },
+          });
         }
       });
-      setLabels(Object.assign({},{labelPolygons:labels["labelPolygons"]},{labelRects:labelsToAssign}));
+      setLabels(
+        Object.assign(
+          {},
+          { labelPolygons: labels["labelPolygons"] },
+          { labelRects: labelsToAssign }
+        )
+      );
     }
-
-  },[loadedLabels,currentImage])
+  }, [loadedLabels, currentImage, currentSelector, labels]);
 
   const [newLabelCurds, setNewLabelCurds] = useState({ top: 60, left: 0 });
   const [labels, setLabels] = useState(labelsDataDefault);
-  const [labelsRectLength,setLabelsRectLength]=useState(0);
-  const [labelsPolygonLength,setLabelsPolygonLength]=useState(0);
+  const [labelsRectLength, setLabelsRectLength] = useState(0);
+  const [labelsPolygonLength, setLabelsPolygonLength] = useState(0);
   // const [annotationType, setAnnotationType] = useState(LABEL_TYPE.RECTANGLE);
   const [annotationType, setAnnotationType] = useState(defaultSelector);
   const [isImageDrag, toggleDragMode] = useReducer((p) => !p, false);
@@ -167,50 +194,43 @@ const Canvas = () => {
     []
   );
 
-
-
-  const handleCanvasOnChange=(data)=>{
+  const handleCanvasOnChange = (data) => {
     console.log("data", data);
     console.log(`LabelRects length:${data["labelRects"].length}`);
     console.log(`LabelPolygons length:${data["labelPolygons"].length}`);
-    if(!labelsIsVisible){
+    if (!labelsIsVisible) {
       dispatch(
-          actions.setCanvasLabelCurds(
-              imageHeightFactor *
-              data.labelRects[data.labelRects.length - 1].rect.y,
-              0.9 *
-              imageWidthFactor *
-              data.labelRects[data.labelRects.length - 1].rect.x
-          )
+        actions.setCanvasLabelCurds(
+          imageHeightFactor *
+            data.labelRects[data.labelRects.length - 1].rect.y,
+          0.9 *
+            imageWidthFactor *
+            data.labelRects[data.labelRects.length - 1].rect.x
+        )
       );
       dispatch(actions.addCanvasLabel());
-    }else{
+    } else {
       console.log("new rect or pol");
       console.log(`labels.Rects length:${labels["labelRects"].length}`);
       console.log(`labels.Polys length:${labels["labelPolygons"].length}`);
-      if(labelsRectLength<data["labelRects"].length){
+      if (labelsRectLength < data["labelRects"].length) {
         console.log("new rect");
-        if(!boundingBoxLabelsIsVisible){
+        if (!boundingBoxLabelsIsVisible) {
           dispatch(actions.openLabelsContainer("boundingBoxLabelsIsVisible"));
-          setLabelsRectLength(prevState => prevState+1);
+          setLabelsRectLength((prevState) => prevState + 1);
         }
-      }else if(labelsPolygonLength<data["labelPolygons"].length){
+      } else if (labelsPolygonLength < data["labelPolygons"].length) {
         console.log("new pol");
 
-        if(!polygonLabelsIsVisible){
+        if (!polygonLabelsIsVisible) {
           dispatch(actions.openLabelsContainer("polygonLabelsIsVisible"));
-          setLabelsRectLength(prevState => prevState+1);
+          setLabelsRectLength((prevState) => prevState + 1);
         }
       }
-
     }
 
     // setLabels(Object.assign({},labels,{data}));
-
-
-
-  }
-
+  };
 
   return (
     <div className="main-canvas">
@@ -262,15 +282,21 @@ const Canvas = () => {
           </Selectors>
         </div>
       </CommonHeader>
-
-      {imageFile!=="" && (
+      {/* https://denvash.github.io/react-canvas-annotation/ */}
+      {/* https://github.com/denvash/react-canvas-annotation */}
+      {imageFile !== "" && (
         <ReactCanvasAnnotation
           zoom={zoom}
           imageFile={imageFile}
           labels={labels}
-          onChange={(data) => handleCanvasOnChange(data)}
+          onChange={(data) => {
+            handleCanvasOnChange(data);
+            console.log(`onChange`, data);
+          }}
           annotationType={annotationType}
           isImageDrag={isImageDrag}
+          onHover={(id) => console.log(`onHover`, id)}
+          onClick={(id) => console.log(`onClick`, id)}
         />
       )}
 
@@ -280,20 +306,25 @@ const Canvas = () => {
 
       <button
         className={
-          labelsIsVisible ? "toggle-labels flipHorizontal rotate90" : "toggle-labels rotate90 labelsPad  "
+          labelsIsVisible
+            ? "toggle-labels flipHorizontal rotate90"
+            : "toggle-labels rotate90 labelsPad  "
         }
         onClick={() => dispatch(actions.toggleMenu("labels"))}
       >
-        {labelsIsVisible &&
-        <span>&#9660;</span>
-        }
-        {!labelsIsVisible &&
-            <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
-              <div>&#9650;</div>
-              <div style={{fontSize:"1.2em"}}>Labels</div>
-            </div>
-
-        }
+        {labelsIsVisible && <span>&#9660;</span>}
+        {!labelsIsVisible && (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <div>&#9650;</div>
+            <div style={{ fontSize: "1.2em" }}>Labels</div>
+          </div>
+        )}
       </button>
       <button
         className={
@@ -301,16 +332,19 @@ const Canvas = () => {
         }
         onClick={() => dispatch(actions.toggleMenu("images"))}
       >
-        {imagesIsVisible &&
-        <span>&#9650;</span>
-        }
-        {!imagesIsVisible &&
-        <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
-          <div style={{fontSize:"1.2em"}}>Images</div>
-          <div>&#9660;</div>
-        </div>
-
-        }
+        {imagesIsVisible && <span>&#9650;</span>}
+        {!imagesIsVisible && (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <div style={{ fontSize: "1.2em" }}>Images</div>
+            <div>&#9660;</div>
+          </div>
+        )}
       </button>
     </div>
   );
