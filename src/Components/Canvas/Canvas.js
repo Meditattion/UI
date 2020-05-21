@@ -113,18 +113,22 @@ const Canvas = () => {
   let canvasDOM;
   let canvasWidth;
   let canvasHeight;
-  let imageWidthFactor;
-  let imageHeightFactor;
+  let [imageWidthFactor,setImageWidthFactor]=useState(0);
+  let [imageHeightFactor,setImageHeightFactor]=useState(0);
   useEffect(() => {
     if (imageFile !== "") {
+      console.log(`image file prev:${imageFile.preview}`);
       selectedImage = new Image();
       selectedImage.src = imageFile.preview;
       selectedImage.onload = () => {
         canvasDOM = document.getElementsByClassName("main-canvas")[0];
         canvasWidth = canvasDOM.offsetWidth;
         canvasHeight = canvasDOM.offsetHeight;
-        imageWidthFactor = canvasWidth / selectedImage.width;
-        imageHeightFactor = canvasHeight / selectedImage.height;
+        setImageWidthFactor(imageWidthFactor = canvasWidth / selectedImage.width);
+        setImageHeightFactor(canvasHeight / selectedImage.height);
+        // imageWidthFactor = canvasWidth / selectedImage.width;
+        // imageHeightFactor = canvasHeight / selectedImage.height;
+        // console.log(`image h factor:${canvasHeight / selectedImage.height}`);
       };
     }
   }, [imageFile]);
@@ -146,6 +150,18 @@ const Canvas = () => {
     }
   }, []);
 
+
+
+  const [newLabelCurds, setNewLabelCurds] = useState({ top: 60, left: 0 });
+  const [labels, setLabels] = useState(labelsDataDefault);
+  const [labelsRectLength, setLabelsRectLength] = useState(0);
+  const [labelsPolygonLength, setLabelsPolygonLength] = useState(0);
+  // const [annotationType, setAnnotationType] = useState(LABEL_TYPE.RECTANGLE);
+  const [annotationType, setAnnotationType] = useState(defaultSelector);
+  const [isImageDrag, toggleDragMode] = useReducer((p) => !p, false);
+
+  const [zoom, setZoom] = useState(1);
+
   useEffect(() => {
     let labelsToAssign = [];
     let image = currentImage;
@@ -164,24 +180,14 @@ const Canvas = () => {
         }
       });
       setLabels(
-        Object.assign(
-          {},
-          { labelPolygons: labels["labelPolygons"] },
-          { labelRects: labelsToAssign }
-        )
+          Object.assign(
+              {},
+              { labelPolygons: labels["labelPolygons"] },
+              { labelRects: labelsToAssign }
+          )
       );
     }
-  }, [loadedLabels, currentImage, currentSelector, labels]);
-
-  const [newLabelCurds, setNewLabelCurds] = useState({ top: 60, left: 0 });
-  const [labels, setLabels] = useState(labelsDataDefault);
-  const [labelsRectLength, setLabelsRectLength] = useState(0);
-  const [labelsPolygonLength, setLabelsPolygonLength] = useState(0);
-  // const [annotationType, setAnnotationType] = useState(LABEL_TYPE.RECTANGLE);
-  const [annotationType, setAnnotationType] = useState(defaultSelector);
-  const [isImageDrag, toggleDragMode] = useReducer((p) => !p, false);
-
-  const [zoom, setZoom] = useState(1);
+  }, [loadedLabels, currentImage, currentSelector]);
 
   // can be used on icons
   const zoomAction = useMemo(
@@ -199,6 +205,10 @@ const Canvas = () => {
     console.log(`LabelRects length:${data["labelRects"].length}`);
     console.log(`LabelPolygons length:${data["labelPolygons"].length}`);
     if (!labelsIsVisible) {
+      console.log(`factor H:${imageHeightFactor}`);
+      console.log(`factor W:${imageWidthFactor}`);
+      console.log(`y:${data.labelRects[data.labelRects.length - 1].rect.y}`);
+      console.log(`x:${data.labelRects[data.labelRects.length - 1].rect.x}`);
       dispatch(
         actions.setCanvasLabelCurds(
           imageHeightFactor *

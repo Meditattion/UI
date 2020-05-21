@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import actions from '../../Actions'
 
@@ -20,6 +20,9 @@ const CanvasLabel = (props) => {
     const newCanvasLabelIsVisible = useSelector(state => state.Labels.newCanvasLabel);
     const newCanvasCurds=useSelector(state=>state.Labels.canvasLabelCurds);
 
+useEffect(()=>{
+    console.log(`new canvas curds x :${newCanvasCurds.x}`);
+},[newCanvasCurds]);
     return (
         <div className="main-labels-item shadowCenter" style={{
             position:"absolute",
