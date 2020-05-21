@@ -31,7 +31,7 @@ const Labels = (props) => {
     const currentImage = useSelector(state => state.Images.currentImage);
     console.log("currentImage", currentImage);
     const searchQuery = useSelector(state => state.Labels.searchQuery);
-    const loadedLabels = useSelector(state => state.Tools[currentSelector].labels);
+    const loadedLabels = useSelector(state => state.Tools["classification"].labels);
     const userLabels = useSelector(state => state.Tools[currentSelector].userLabels);
     console.log("loadedLabels", loadedLabels);
     console.log("userLabels", userLabels);
@@ -44,24 +44,12 @@ const Labels = (props) => {
     const polygonLabels=useSelector(state=>state.Tools.polygon.userLabels);
 
 
-
-
-    // if (Object.keys(loadedLabels).length > 0 && !loaded) {
-    //     fetch(loadedLabels[0].preview)
-    //         .then(res => res.json())
-    //         .then(
-    //             result => { setLabels(Object.assign({}, labels, result));setLoaded(true);
-    //             console.log("selectorLabels:", labels) }
-    //         );
-    // }
-
     let loadedLabelsToDisplay = [];
     let boundingBoxLabelsToDisplay=[];
     let polygonLabelsToDisplay=[];
 
 
-    if (currentImage != '' && Object.keys(loadedLabels).length > 0 && loadedLabels[currentImage] &&
-                                                                                currentSelector==="classification") {
+    if (currentImage != '' && Object.keys(loadedLabels).length > 0 && loadedLabels[currentImage]) {
         loadedLabels[currentImage].forEach(label => {
             console.log("label:", label);
             if (label.indexOf(searchQuery) >= 0) {
@@ -82,17 +70,24 @@ const Labels = (props) => {
             console.log("label:", label);
             if (label.text.indexOf(searchQuery) >= 0) {
                 boundingBoxLabelsToDisplay.unshift(
-                    <LabelItem key={label} serial={label.key} text={label.text}
+                    <LabelItem key={label.key} serial={label.key} text={label.text}
                                bgColor={label.bgColor} ></LabelItem>
                 )
             }
         });
     }
 
-
-
-
-
+    if(currentImage!=="" && polygonLabels[currentImage]){
+        polygonLabels[currentImage].forEach(label => {
+            console.log("label:", label);
+            if (label.text.indexOf(searchQuery) >= 0) {
+                polygonLabelsToDisplay.unshift(
+                    <LabelItem key={label.key} serial={label.key} text={label.text}
+                               bgColor={label.bgColor} ></LabelItem>
+                )
+            }
+        });
+    }
 
 
     return (
@@ -109,6 +104,7 @@ const Labels = (props) => {
                 </CustomLabelsContainer>
                 <CustomLabelsContainer annotator="polygon" text="Segmentation" isOpen={currentImage != '' && polygonLabelsIsVisible}>
                     <LabelDummyItem keyID={currentNewLabelID}></LabelDummyItem>
+                    {polygonLabelsToDisplay}
                 </CustomLabelsContainer>
                 <CustomLabelsContainer annotator="boundingBox" text="Bounding Box" isOpen={currentImage != '' && boundingBoxLabelsIsVisible}>
                     <LabelDummyItem keyID={currentNewLabelID}></LabelDummyItem>

@@ -42,7 +42,7 @@ const Tools = (state = initialState, action) => {
             });
 
         case ADD_LABEL:
-            if(!(action.image in state[state.currentSelector].userLabels)){
+            if(!(action.imageID in state[state.currentSelector].userLabels)){
                 return Object.assign({}, state, {
                     [state.currentSelector]: Object.assign({}, state[state.currentSelector],
                         { userLabels: Object.assign({},state[state.currentSelector].userLabels,
