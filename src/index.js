@@ -8,20 +8,23 @@ import rootReducer from './Reducers'
 const store = createStore(rootReducer,
   {
     Images:{container: [],currentImage: ""},
-    Labels: { container: [], searchQuery: '', dummyNewLabel: true,newCanvasLabel:false , canvasLabelCurds:{top:60,left:0}},
+    Labels: { container: [], searchQuery: '', dummyNewLabel: true,newCanvasLabel:false ,currentNewLabelID:0, canvasLabelCurds:{top:60,left:0}},
     Tools: {
       currentSelector:"classification",
       boundingBox: {
         isSelected: false,
-        labels: {}
+        labels: {},
+          userLabels:{}
       },
       polygon: {
         isSelected: false,
-        labels: {}
+        labels: {},
+          userLabels:{}
       },
       classification: {
         isSelected: true,
-        labels: {}
+        labels: {},
+          userLabels:{}
       }
     },
       Toggles:{

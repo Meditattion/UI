@@ -18,6 +18,8 @@ const LabelDummyItem = (props) => {
     let dispatch = useDispatch();
     const currentLabelCountID = useSelector(state => state.LabelsCounterID);
     const newDummyLabelIsVisible = useSelector(state => state.Labels.dummyNewLabel);
+    const currentImage = useSelector(state => state.Images.currentImage);
+    console.log(`currentImage":${currentImage}`);
 
     return (
         <div className="main-labels-item" style={{
@@ -26,13 +28,12 @@ const LabelDummyItem = (props) => {
         }}>
             <div className="main-labels-item-blank" >&nbsp;</div>
             <div style={{ display: "flex", flexDirection: "row", paddingLeft: "5px", alignItems: "center", height: "100%" }}>
-                {/* <span>{props.text}</span> */}
                 <input type="text" placeholder="Enter label's name"
                     value={newLabelName} onChange={e => setNewLabelName(e.target.value)} ></input>
                 <img alt="" src={process.env.PUBLIC_URL + "/Images/complete.png"}
                     style={{ cursor: "pointer" }}
                     onClick={() => {
-                        dispatch(actions.addLabel({ text: newLabelName, key: currentLabelCountID, bgColor: bgColor },"dummyNewLabel"))
+                        dispatch(actions.addLabel({ text: newLabelName, key: currentLabelCountID, bgColor: bgColor },currentImage));
                         setNewLabelName('');
                         setbgColor(getRandomColor);
                     }}></img>

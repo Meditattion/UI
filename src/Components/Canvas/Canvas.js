@@ -218,7 +218,7 @@ const Canvas = () => {
             data.labelRects[data.labelRects.length - 1].rect.x
         )
       );
-      dispatch(actions.addCanvasLabel());
+
     } else {
       console.log("new rect or pol");
       console.log(`labels.Rects length:${labels["labelRects"].length}`);
@@ -238,8 +238,7 @@ const Canvas = () => {
         }
       }
     }
-
-    // setLabels(Object.assign({},labels,{data}));
+    dispatch(actions.addCanvasLabel(data.labelRects[data.labelRects.length - 1].id));
   };
 
   return (
