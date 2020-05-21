@@ -65,6 +65,11 @@ const actions = {
     type:'CANVAS_LABELS_CURDS',
     top,
     left
+  }),
+  addPendingLabel:(label,imageID)=>({
+    type:'ADD_PENDING_LABEL',
+    label,
+    imageID
   })
 }
 

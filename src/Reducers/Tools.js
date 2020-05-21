@@ -5,17 +5,19 @@ const initialState = {
     boundingBox: {
         isSelected: false,
         labels: {},
-        userLabels:{}
+        userLabels:{},
+        pendingLabels:{}
     },
     polygon: {
         isSelected: false,
         labels: {},
-        userLabels:{}
+        userLabels:{},
+        pendingLabels:{}
     },
     classification: {
         isSelected: true,
         labels: {},
-        userLabels:{}
+        userLabels:{},
     }
 }
 
@@ -24,8 +26,9 @@ const Tools = (state = initialState, action) => {
         case "LOAD_LABELS":
             let newUserLabels={};
             for(let image in action.labels){
-                if(!(image in state[state.currentSelector].userLabels))
-                newUserLabels[image]=[];
+                if(!(image in state[state.currentSelector].userLabels)){
+                    newUserLabels[image]=[];
+                }
             }
             return Object.assign({}, state, {
                 [state.currentSelector]: Object.assign({}, state[state.currentSelector],
@@ -55,6 +58,22 @@ const Tools = (state = initialState, action) => {
                                 {[action.imageID]:state[state.currentSelector].userLabels[action.imageID].concat([action.label])}) })
                 });
             }
+
+        case "ADD_PENDING_LABEL":
+            if(!(action.imageID in state[state.currentSelector].pendingLabels)){
+                return Object.assign({}, state, {
+                    [state.currentSelector]: Object.assign({}, state[state.currentSelector],
+                        { pendingLabels: Object.assign({},state[state.currentSelector].pendingLabels,
+                                {[action.imageID]:[action.label]}) })
+                });
+            }else{
+                return Object.assign({}, state, {
+                    [state.currentSelector]: Object.assign({}, state[state.currentSelector],
+                        { pendingLabels: Object.assign({},state[state.currentSelector].pendingLabels,
+                                {[action.imageID]:state[state.currentSelector].pendingLabels[action.imageID].concat([action.label])}) })
+                });
+            }
+
 
         default:
             return state

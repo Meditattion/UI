@@ -221,8 +221,8 @@ const Canvas = () => {
         }
       }
 
-      dispatch(actions.addCanvasLabel(data.labelRects[data.labelRects.length - 1].id));
-
+      // dispatch(actions.addCanvasLabel(data.labelRects[data.labelRects.length - 1].id));
+        dispatch(actions.addPendingLabel({id:data.labelRects[data.labelRects.length - 1].id},currentImage));
     } else if (labelsPolygonLength < data["labelPolygons"].length) {
       console.log("new pol");
 
@@ -230,7 +230,8 @@ const Canvas = () => {
         dispatch(actions.openLabelsContainer("polygonLabelsIsVisible"));
         setLabelsPolygonLength((prevState) => prevState + 1);
       }
-      dispatch(actions.addCanvasLabel(data.labelPolygons[data.labelPolygons.length - 1].id));
+      // dispatch(actions.addCanvasLabel(data.labelPolygons[data.labelPolygons.length - 1].id));
+      dispatch(actions.addPendingLabel({id:data.labelPolygons[data.labelPolygons.length - 1].id},currentImage));
     }
   };
 

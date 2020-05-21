@@ -41,12 +41,23 @@ const Labels = (props) => {
     const currentNewLabelID=useSelector(state=>state.Labels.currentNewLabelID);
     const classificationLabels=useSelector(state=>state.Tools.classification.userLabels);
     const boundingBoxLabels=useSelector(state=>state.Tools.boundingBox.userLabels);
+    const boundingBoxPendingLabels=useSelector(state=>state.Tools.boundingBox.pendingLabels);
     const polygonLabels=useSelector(state=>state.Tools.polygon.userLabels);
+    const polygonPendingLabels=useSelector(state=>state.Tools.polygon.pendingLabels);
 
 
     let loadedLabelsToDisplay = [];
+    let classificationLabelsToDisplay=[];
     let boundingBoxLabelsToDisplay=[];
     let polygonLabelsToDisplay=[];
+
+    // const [classificationPendingLabelsToDisplay,setClassificationPendingLabelsToDisplay]=useState([]);
+    // const [boundingBoxPendingLabelsToDisplay,setBoundingBoxPendingLabelsToDisplay]=useState([]);
+    // const [polygonPendingLabelsToDisplay,setPolygonPendingLabelsToDisplay]=useState([]);
+
+    const classificationPendingLabelsToDisplay=[];
+    const boundingBoxPendingLabelsToDisplay=[];
+    const polygonPendingLabelsToDisplay=[];
 
 
     if (currentImage != '' && Object.keys(loadedLabels).length > 0 && loadedLabels[currentImage]) {
@@ -61,6 +72,9 @@ const Labels = (props) => {
         });
 
     }
+    // useEffect(()=>{
+    // setBoundingBoxPendingLabelsToDisplay(prevState => )
+    // },[boundingBoxPendingLabels[currentImage]]);
         loadedLabelsToDisplay.unshift(
             <LabelDummyItem tool={currentSelector} keyID="-1"></LabelDummyItem>
         );
@@ -77,6 +91,14 @@ const Labels = (props) => {
         });
     }
 
+    if(currentImage!=="" && boundingBoxPendingLabels[currentImage]){
+        boundingBoxPendingLabels[currentImage].forEach(label => {
+                boundingBoxPendingLabelsToDisplay.unshift(
+                    <LabelDummyItem tool={currentSelector} keyID={label.id}></LabelDummyItem>
+                )
+        });
+    }
+
     if(currentImage!=="" && polygonLabels[currentImage]){
         polygonLabels[currentImage].forEach(label => {
             console.log("label:", label);
@@ -89,6 +111,14 @@ const Labels = (props) => {
         });
     }
 
+    if(currentImage!=="" && polygonPendingLabels[currentImage]){
+        polygonPendingLabels[currentImage].forEach(label => {
+            polygonPendingLabelsToDisplay.unshift(
+                <LabelDummyItem tool={currentSelector} keyID={label.id}></LabelDummyItem>
+            )
+        });
+    }
+
 
     return (
         <div className={labelsIsVisible ? 'main-labels' : 'main-labels hide'}>
@@ -97,17 +127,25 @@ const Labels = (props) => {
             <CommonSearch></CommonSearch>
             {/*<AddLabelBtn></AddLabelBtn>*/}
             <LabelsContainer>
-                <CustomLabelsContainer annotator="classification" text="Classification" isOpen={currentImage != '' && classificationLabelsIsVisible}>
+                <CustomLabelsContainer annotator="classification" text="Classification"
+                                       isOpen={currentImage != '' && classificationLabelsIsVisible}
+                                       numberOfChildren={loadedLabelsToDisplay.length + classificationLabelsToDisplay.length}>
                     <AddLabelBtn/>
                     { loadedLabelsToDisplay}
                     {/*<LabelDummyItem key="-1"></LabelDummyItem>*/}
                 </CustomLabelsContainer>
-                <CustomLabelsContainer annotator="polygon" text="Segmentation" isOpen={currentImage != '' && polygonLabelsIsVisible}>
-                    <LabelDummyItem keyID={currentNewLabelID}></LabelDummyItem>
+                <CustomLabelsContainer annotator="polygon" text="Segmentation"
+                                       isOpen={currentImage != '' && polygonLabelsIsVisible}
+                                       numberOfChildren={polygonLabelsToDisplay.length + polygonPendingLabelsToDisplay.length}>
+                    {/*<LabelDummyItem keyID={currentNewLabelID}></LabelDummyItem>*/}
+                    {polygonPendingLabelsToDisplay}
                     {polygonLabelsToDisplay}
                 </CustomLabelsContainer>
-                <CustomLabelsContainer annotator="boundingBox" text="Bounding Box" isOpen={currentImage != '' && boundingBoxLabelsIsVisible}>
-                    <LabelDummyItem keyID={currentNewLabelID}></LabelDummyItem>
+                <CustomLabelsContainer annotator="boundingBox" text="Bounding Box"
+                                       isOpen={currentImage != '' && boundingBoxLabelsIsVisible}
+                                       numberOfChildren={boundingBoxLabelsToDisplay.length +boundingBoxPendingLabelsToDisplay.length}>
+                    {/*<LabelDummyItem keyID={currentNewLabelID}></LabelDummyItem>*/}
+                    {boundingBoxPendingLabelsToDisplay}
                     {boundingBoxLabelsToDisplay}
                 </CustomLabelsContainer>
 
