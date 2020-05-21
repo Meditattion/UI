@@ -74,7 +74,7 @@ const Labels = (props) => {
 
     }
         loadedLabelsToDisplay.unshift(
-            <LabelDummyItem tool={currentSelector} key="-1"></LabelDummyItem>
+            <LabelDummyItem tool={currentSelector} keyID="-1"></LabelDummyItem>
         );
 
     if(currentImage!=="" && boundingBoxLabels[currentImage]){
@@ -108,10 +108,10 @@ const Labels = (props) => {
                     {/*<LabelDummyItem key="-1"></LabelDummyItem>*/}
                 </CustomLabelsContainer>
                 <CustomLabelsContainer annotator="polygon" text="Segmentation" isOpen={currentImage != '' && polygonLabelsIsVisible}>
-                    <LabelDummyItem key={currentNewLabelID}></LabelDummyItem>
+                    <LabelDummyItem keyID={currentNewLabelID}></LabelDummyItem>
                 </CustomLabelsContainer>
                 <CustomLabelsContainer annotator="boundingBox" text="Bounding Box" isOpen={currentImage != '' && boundingBoxLabelsIsVisible}>
-                    <LabelDummyItem key={currentNewLabelID}></LabelDummyItem>
+                    <LabelDummyItem keyID={currentNewLabelID}></LabelDummyItem>
                     {boundingBoxLabelsToDisplay}
                 </CustomLabelsContainer>
 

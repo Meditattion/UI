@@ -33,7 +33,7 @@ const LabelDummyItem = (props) => {
                 <img alt="" src={process.env.PUBLIC_URL + "/Images/complete.png"}
                     style={{ cursor: "pointer" }}
                     onClick={() => {
-                        dispatch(actions.addLabel({ text: newLabelName, key: currentLabelCountID, bgColor: bgColor },currentImage));
+                        dispatch(actions.addLabel({ text: newLabelName, key:props.keyID==="-1"? currentLabelCountID:props.keyID, bgColor: bgColor },currentImage));
                         setNewLabelName('');
                         setbgColor(getRandomColor);
                     }}></img>
