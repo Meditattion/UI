@@ -113,18 +113,23 @@ const Canvas = () => {
   let canvasDOM;
   let canvasWidth;
   let canvasHeight;
-  let imageWidthFactor;
-  let imageHeightFactor;
+  let [imageWidthFactor,setImageWidthFactor]=useState(0);
+  let [imageHeightFactor,setImageHeightFactor]=useState(0);
+
   useEffect(() => {
     if (imageFile !== "") {
+      console.log(`image file prev:${imageFile.preview}`);
       selectedImage = new Image();
       selectedImage.src = imageFile.preview;
       selectedImage.onload = () => {
         canvasDOM = document.getElementsByClassName("main-canvas")[0];
         canvasWidth = canvasDOM.offsetWidth;
         canvasHeight = canvasDOM.offsetHeight;
-        imageWidthFactor = canvasWidth / selectedImage.width;
-        imageHeightFactor = canvasHeight / selectedImage.height;
+        setImageWidthFactor(imageWidthFactor = canvasWidth / selectedImage.width);
+        setImageHeightFactor(canvasHeight / selectedImage.height);
+        // imageWidthFactor = canvasWidth / selectedImage.width;
+        // imageHeightFactor = canvasHeight / selectedImage.height;
+        // console.log(`image h factor:${canvasHeight / selectedImage.height}`);
       };
     }
   }, [imageFile]);
@@ -135,16 +140,26 @@ const Canvas = () => {
   // console.log("classification is sel", classificationIsSelected);
 
   let defaultSelector = LABEL_TYPE.RECTANGLE;
+
+  const [newLabelCurds, setNewLabelCurds] = useState({ top: 60, left: 0 });
+  const [labels, setLabels] = useState(labelsDataDefault);
+  const [labelsRectLength, setLabelsRectLength] = useState(0);
+  const [labelsPolygonLength, setLabelsPolygonLength] = useState(0);
+  const [annotationType, setAnnotationType] = useState(defaultSelector);
+  const [isImageDrag, toggleDragMode] = useReducer((p) => !p, false);
+
+  const [zoom, setZoom] = useState(1);
+
   useEffect(() => {
     switch (currentSelector) {
-      case "boundingBox":
-        defaultSelector = LABEL_TYPE.RECTANGLE;
       case "polygon":
-        defaultSelector = LABEL_TYPE.POLYGON;
+        setAnnotationType(LABEL_TYPE.POLYGON);
+        break;
       default:
-        defaultSelector = LABEL_TYPE.RECTANGLE;
+        setAnnotationType(LABEL_TYPE.RECTANGLE);
+        break;
     }
-  }, []);
+  }, [currentSelector]);
 
   useEffect(() => {
     let labelsToAssign = [];
@@ -164,24 +179,14 @@ const Canvas = () => {
         }
       });
       setLabels(
-        Object.assign(
-          {},
-          { labelPolygons: labels["labelPolygons"] },
-          { labelRects: labelsToAssign }
-        )
+          Object.assign(
+              {},
+              { labelPolygons: labels["labelPolygons"] },
+              { labelRects: labelsToAssign }
+          )
       );
     }
-  }, [loadedLabels, currentImage, currentSelector, labels]);
-
-  const [newLabelCurds, setNewLabelCurds] = useState({ top: 60, left: 0 });
-  const [labels, setLabels] = useState(labelsDataDefault);
-  const [labelsRectLength, setLabelsRectLength] = useState(0);
-  const [labelsPolygonLength, setLabelsPolygonLength] = useState(0);
-  // const [annotationType, setAnnotationType] = useState(LABEL_TYPE.RECTANGLE);
-  const [annotationType, setAnnotationType] = useState(defaultSelector);
-  const [isImageDrag, toggleDragMode] = useReducer((p) => !p, false);
-
-  const [zoom, setZoom] = useState(1);
+  }, [loadedLabels, currentImage, currentSelector]);
 
   // can be used on icons
   const zoomAction = useMemo(
@@ -198,38 +203,36 @@ const Canvas = () => {
     console.log("data", data);
     console.log(`LabelRects length:${data["labelRects"].length}`);
     console.log(`LabelPolygons length:${data["labelPolygons"].length}`);
-    if (!labelsIsVisible) {
-      dispatch(
-        actions.setCanvasLabelCurds(
-          imageHeightFactor *
-            data.labelRects[data.labelRects.length - 1].rect.y,
-          0.9 *
-            imageWidthFactor *
-            data.labelRects[data.labelRects.length - 1].rect.x
-        )
-      );
-      dispatch(actions.addCanvasLabel());
-    } else {
-      console.log("new rect or pol");
-      console.log(`labels.Rects length:${labels["labelRects"].length}`);
-      console.log(`labels.Polys length:${labels["labelPolygons"].length}`);
-      if (labelsRectLength < data["labelRects"].length) {
-        console.log("new rect");
+    if (labelsRectLength < data["labelRects"].length) {
+      if (!labelsIsVisible) {
+        dispatch(
+            actions.setCanvasLabelCurds(
+                imageHeightFactor *
+                data.labelRects[data.labelRects.length - 1].rect.y,
+                0.9 *
+                imageWidthFactor *
+                data.labelRects[data.labelRects.length - 1].rect.x
+            )
+        );
+      }else{
         if (!boundingBoxLabelsIsVisible) {
           dispatch(actions.openLabelsContainer("boundingBoxLabelsIsVisible"));
           setLabelsRectLength((prevState) => prevState + 1);
         }
-      } else if (labelsPolygonLength < data["labelPolygons"].length) {
-        console.log("new pol");
-
-        if (!polygonLabelsIsVisible) {
-          dispatch(actions.openLabelsContainer("polygonLabelsIsVisible"));
-          setLabelsRectLength((prevState) => prevState + 1);
-        }
       }
-    }
 
-    // setLabels(Object.assign({},labels,{data}));
+      // dispatch(actions.addCanvasLabel(data.labelRects[data.labelRects.length - 1].id));
+        dispatch(actions.addPendingLabel({id:data.labelRects[data.labelRects.length - 1].id},currentImage));
+    } else if (labelsPolygonLength < data["labelPolygons"].length) {
+      console.log("new pol");
+
+      if (!polygonLabelsIsVisible) {
+        dispatch(actions.openLabelsContainer("polygonLabelsIsVisible"));
+        setLabelsPolygonLength((prevState) => prevState + 1);
+      }
+      // dispatch(actions.addCanvasLabel(data.labelPolygons[data.labelPolygons.length - 1].id));
+      dispatch(actions.addPendingLabel({id:data.labelPolygons[data.labelPolygons.length - 1].id},currentImage));
+    }
   };
 
   return (
@@ -284,23 +287,27 @@ const Canvas = () => {
       </CommonHeader>
       {/* https://denvash.github.io/react-canvas-annotation/ */}
       {/* https://github.com/denvash/react-canvas-annotation */}
+
       {imageFile !== "" && (
-        <ReactCanvasAnnotation
-          zoom={zoom}
-          imageFile={imageFile}
-          labels={labels}
-          onChange={(data) => {
-            handleCanvasOnChange(data);
-            console.log(`onChange`, data);
-          }}
-          annotationType={annotationType}
-          isImageDrag={isImageDrag}
-          onHover={(id) => console.log(`onHover`, id)}
-          onClick={(id) => console.log(`onClick`, id)}
-        />
+          <div style={{height:"100%",pointerEvents:currentSelector=="classification"?'none':'auto'}}>
+            <ReactCanvasAnnotation
+                zoom={zoom}
+                imageFile={imageFile}
+                labels={labels}
+                onChange={(data) => {
+                  handleCanvasOnChange(data);
+                  console.log(`onChange`, data);
+                }}
+                annotationType={annotationType}
+                isImageDrag={isImageDrag}
+                onHover={(id) => console.log(`onHover`, id)}
+                onClick={(id) => console.log(`onClick`, id)}
+            />
+          </div>
+
       )}
 
-      <CanvasLabel />
+      {!labelsIsVisible && <CanvasLabel />}
 
       {/*<CanvasSuggestion />*/}
 

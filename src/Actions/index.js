@@ -21,17 +21,19 @@ const actions = {
     type: 'CLOSE_DUMMY_LABEL'
   })
   ,
-  addCanvasLabel: () => ({
-    type: 'ADD_NEW_CANVAS_LABEL'
+  addCanvasLabel: (id) => ({
+    type: 'ADD_NEW_CANVAS_LABEL',
+    id
   }),
   closeCanvasLabel: () => ({
     type: 'CLOSE_CANVAS_LABEL'
   })
   ,
-  addLabel: (label,source) => ({
+  addLabel: (label,imageID) => ({
     type: ADD_LABEL,
-    payload: label,
-    source
+    label,
+    imageID
+
 
   }),
   deleteLabel: labelKey => ({
@@ -63,6 +65,11 @@ const actions = {
     type:'CANVAS_LABELS_CURDS',
     top,
     left
+  }),
+  addPendingLabel:(label,imageID)=>({
+    type:'ADD_PENDING_LABEL',
+    label,
+    imageID
   })
 }
 

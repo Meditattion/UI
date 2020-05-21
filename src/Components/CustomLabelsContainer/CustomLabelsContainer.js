@@ -27,7 +27,7 @@ const CustomLabelsContainer = (props) => {
                  onClick={()=>{ selectedImage!='' &&
                  dispatch(actions.toggleCustomLabelContainer(props.annotator + 'LabelsIsVisible'))
                  }}>
-                <span >{props.text}</span>
+                <span >{props.text}&nbsp;({props.numberOfChildren})</span>
                 {props.isOpen &&
                 <span style={{position:"absolute",right:"11px",fontSize:"14px"}}>&nbsp;&#x25B2;</span>
                 }
