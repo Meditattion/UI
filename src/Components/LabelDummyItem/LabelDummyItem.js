@@ -32,7 +32,7 @@ const LabelDummyItem = (props) => {
                 <img alt="" src={process.env.PUBLIC_URL + "/Images/complete.png"}
                     style={{ cursor: "pointer" }}
                     onClick={() => {
-                        dispatch(actions.removePendingLabel(props.currentImage,props.keyID));
+                        dispatch(actions.removePendingLabel(props.currentImage,props.keyID,props.tool));
                         dispatch(actions.addLabel({ text: newLabelName, id:props.keyID==="-1"? currentLabelCountID:props.keyID, bgColor: bgColor },currentImage));
                         setNewLabelName('');
                         setbgColor(getRandomColor);
@@ -41,7 +41,7 @@ const LabelDummyItem = (props) => {
                 <img alt="" src={process.env.PUBLIC_URL + "Images/trashS.svg"}
                     onClick={() => {
                         // dispatch(actions.closeDummyLabel());
-                        dispatch(actions.removePendingLabel(props.currentImage,props.keyID));
+                        dispatch(actions.removePendingLabel(props.currentImage,props.keyID,props.tool));
                         setNewLabelName('');
                         setbgColor(getRandomColor);
                     }}></img>

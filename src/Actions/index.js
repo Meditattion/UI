@@ -69,15 +69,17 @@ const actions = {
     label,
     imageID
   }),
-  removeLabel:(imageID,id)=>({
+  removeLabel:(imageID,id,tool)=>({
     type:'REMOVE_LABEL',
     imageID,
-    id
+    id,
+    tool
   }),
-  removePendingLabel:(imageID,id)=>({
+  removePendingLabel:(imageID,id,tool)=>({
     type:'REMOVE_PENDING_LABEL',
     imageID,
-    id
+    id,
+    tool
   })
 }
 

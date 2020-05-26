@@ -69,7 +69,7 @@ const Labels = (props) => {
             if (label.indexOf(searchQuery) >= 0) {
                 loadedLabelsToDisplay.unshift(
                     <LabelItem key={label} serial={label} text={label} currentImage={currentImage}
-                               bgColor={getRandomColor()} ></LabelItem>
+                               bgColor={getRandomColor()} tool={currentSelector} ></LabelItem>
                 )
             }
         });
@@ -88,7 +88,7 @@ const Labels = (props) => {
             if (label.text.indexOf(searchQuery) >= 0) {
                 boundingBoxLabelsToDisplay.unshift(
                     <LabelItem key={label.id} serial={label.id} text={label.text} currentImage={currentImage}
-                               bgColor={label.bgColor} ></LabelItem>
+                               bgColor={label.bgColor} tool="boundingBox" ></LabelItem>
                 )
             }
         });
@@ -97,7 +97,7 @@ const Labels = (props) => {
     if(currentImage!=="" && boundingBoxPendingLabels[currentImage]){
         boundingBoxPendingLabels[currentImage].forEach(label => {
                 boundingBoxPendingLabelsToDisplay.unshift(
-                    <LabelDummyItem key="-1" tool={currentSelector} keyID={label.id}
+                    <LabelDummyItem key="-1" tool="boundingBox" keyID={label.id}
                                         currentImage={currentImage}></LabelDummyItem>
                 )
         });
@@ -109,7 +109,7 @@ const Labels = (props) => {
             if (label.text.indexOf(searchQuery) >= 0) {
                 polygonLabelsToDisplay.unshift(
                     <LabelItem key={label.id} serial={label.id} text={label.text} currentImage={currentImage}
-                               bgColor={label.bgColor} ></LabelItem>
+                               bgColor={label.bgColor} tool="polygon" ></LabelItem>
                 )
             }
         });
@@ -118,7 +118,7 @@ const Labels = (props) => {
     if(currentImage!=="" && polygonPendingLabels[currentImage]){
         polygonPendingLabels[currentImage].forEach(label => {
             polygonPendingLabelsToDisplay.unshift(
-                <LabelDummyItem tool={currentSelector} keyID={label.id}
+                <LabelDummyItem key="-1" tool="polygon" keyID={label.id}
                                 currentImage={currentImage}></LabelDummyItem>
             )
         });
