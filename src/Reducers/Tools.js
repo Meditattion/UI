@@ -75,6 +75,26 @@ const Tools = (state = initialState, action) => {
             }
 
 
+        case "REMOVE_LABEL":
+            return {
+                ...state,
+                [state.currentSelector]:{...state[state.currentSelector],
+                    userLabels:{
+                        ...state[state.currentSelector].userLabels,
+                        [action.imageID]:[ ...state[state.currentSelector].userLabels[action.imageID]
+                            .filter((label)=>label.id!==action.id)]}}
+            }
+        case "REMOVE_PENDING_LABEL":
+
+            return {
+                ...state,
+                [state.currentSelector]:{...state[state.currentSelector],
+                    pendingLabels:{
+                        ...state[state.currentSelector].pendingLabels,
+                        [action.imageID]:[ ...state[state.currentSelector].pendingLabels[action.imageID]
+                            .filter((label)=>label.id!==action.id)]}}
+            }
+
         default:
             return state
     }

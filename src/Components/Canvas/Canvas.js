@@ -74,7 +74,7 @@ const Canvas = () => {
   );
   const currentSelector = useSelector((state) => state.Tools.currentSelector);
   const currentImage = useSelector((state) => state.Images.currentImage);
-  console.log(`currentImage:${currentImage}`);
+  // console.log(`currentImage:${currentImage}`);
 
   const loadedLabels = useSelector(
     (state) => state.Tools[currentSelector].labels

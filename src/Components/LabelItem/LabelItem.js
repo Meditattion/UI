@@ -15,7 +15,10 @@ const LabelItem = (props) => {
             <div style={{ display: "flex", flexDirection: "row" }}>
                 <span>{props.text}</span>
                 <img alt="" src={process.env.PUBLIC_URL + "Images/trashS.svg"}
-                    onClick={() => dispatch(actions.deleteLabel(props.serial))}></img>
+    onClick={() => {
+        console.log(`props.currentImage:${props.currentImage},props.serial:${props.serial}`)
+        dispatch(actions.removeLabel(props.currentImage, props.serial));
+    }}/>
             </div>
         </div>
     )

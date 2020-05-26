@@ -29,12 +29,12 @@ const Labels = (props) => {
     // console.log("currentSelector", currentSelector);
     // const currentImage = useSelector(state => state.Tools[currentSelector].currentImage);
     const currentImage = useSelector(state => state.Images.currentImage);
-    console.log("currentImage", currentImage);
+    // console.log("currentImage", currentImage);
     const searchQuery = useSelector(state => state.Labels.searchQuery);
     const loadedLabels = useSelector(state => state.Tools["classification"].labels);
     const userLabels = useSelector(state => state.Tools[currentSelector].userLabels);
     console.log("loadedLabels", loadedLabels);
-    console.log("userLabels", userLabels);
+    // console.log("userLabels", userLabels);
     const classificationLabelsIsVisible= useSelector(state => state.Toggles.classificationLabelsIsVisible);
     const boundingBoxLabelsIsVisible= useSelector(state => state.Toggles.boundingBoxLabelsIsVisible);
     const polygonLabelsIsVisible= useSelector(state => state.Toggles.polygonLabelsIsVisible);
@@ -44,8 +44,11 @@ const Labels = (props) => {
     const boundingBoxPendingLabels=useSelector(state=>state.Tools.boundingBox.pendingLabels);
     const polygonLabels=useSelector(state=>state.Tools.polygon.userLabels);
     const polygonPendingLabels=useSelector(state=>state.Tools.polygon.pendingLabels);
+    console.log(`bb user labels: ${JSON.stringify(boundingBoxLabels)}`);
+    console.log(`bb pending labels: ${JSON.stringify(boundingBoxPendingLabels)}`);
 
-
+// useEffect(()=>{
+// },[boundingBoxLabels]);
     let loadedLabelsToDisplay = [];
     let classificationLabelsToDisplay=[];
     let boundingBoxLabelsToDisplay=[];
@@ -62,10 +65,10 @@ const Labels = (props) => {
 
     if (currentImage != '' && Object.keys(loadedLabels).length > 0 && loadedLabels[currentImage]) {
         loadedLabels[currentImage].forEach(label => {
-            console.log("label:", label);
+            // console.log("label:", label);
             if (label.indexOf(searchQuery) >= 0) {
                 loadedLabelsToDisplay.unshift(
-                    <LabelItem key={label} serial={label} text={label}
+                    <LabelItem key={label} serial={label} text={label} currentImage={currentImage}
                                bgColor={getRandomColor()} ></LabelItem>
                 )
             }
@@ -76,15 +79,15 @@ const Labels = (props) => {
     // setBoundingBoxPendingLabelsToDisplay(prevState => )
     // },[boundingBoxPendingLabels[currentImage]]);
         loadedLabelsToDisplay.unshift(
-            <LabelDummyItem tool={currentSelector} keyID="-1"></LabelDummyItem>
+            <LabelDummyItem key="-1" tool={currentSelector} keyID="-1"></LabelDummyItem>
         );
 
     if(currentImage!=="" && boundingBoxLabels[currentImage]){
         boundingBoxLabels[currentImage].forEach(label => {
-            console.log("label:", label);
+            // console.log("label:", label);
             if (label.text.indexOf(searchQuery) >= 0) {
                 boundingBoxLabelsToDisplay.unshift(
-                    <LabelItem key={label.key} serial={label.key} text={label.text}
+                    <LabelItem key={label.id} serial={label.id} text={label.text} currentImage={currentImage}
                                bgColor={label.bgColor} ></LabelItem>
                 )
             }
@@ -94,17 +97,18 @@ const Labels = (props) => {
     if(currentImage!=="" && boundingBoxPendingLabels[currentImage]){
         boundingBoxPendingLabels[currentImage].forEach(label => {
                 boundingBoxPendingLabelsToDisplay.unshift(
-                    <LabelDummyItem tool={currentSelector} keyID={label.id}></LabelDummyItem>
+                    <LabelDummyItem key="-1" tool={currentSelector} keyID={label.id}
+                                        currentImage={currentImage}></LabelDummyItem>
                 )
         });
     }
 
     if(currentImage!=="" && polygonLabels[currentImage]){
         polygonLabels[currentImage].forEach(label => {
-            console.log("label:", label);
+            // console.log("label:", label);
             if (label.text.indexOf(searchQuery) >= 0) {
                 polygonLabelsToDisplay.unshift(
-                    <LabelItem key={label.key} serial={label.key} text={label.text}
+                    <LabelItem key={label.id} serial={label.id} text={label.text} currentImage={currentImage}
                                bgColor={label.bgColor} ></LabelItem>
                 )
             }
@@ -114,7 +118,8 @@ const Labels = (props) => {
     if(currentImage!=="" && polygonPendingLabels[currentImage]){
         polygonPendingLabels[currentImage].forEach(label => {
             polygonPendingLabelsToDisplay.unshift(
-                <LabelDummyItem tool={currentSelector} keyID={label.id}></LabelDummyItem>
+                <LabelDummyItem tool={currentSelector} keyID={label.id}
+                                currentImage={currentImage}></LabelDummyItem>
             )
         });
     }

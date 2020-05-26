@@ -33,8 +33,6 @@ const actions = {
     type: ADD_LABEL,
     label,
     imageID
-
-
   }),
   deleteLabel: labelKey => ({
     type: DELETE_LABEL,
@@ -70,6 +68,16 @@ const actions = {
     type:'ADD_PENDING_LABEL',
     label,
     imageID
+  }),
+  removeLabel:(imageID,id)=>({
+    type:'REMOVE_LABEL',
+    imageID,
+    id
+  }),
+  removePendingLabel:(imageID,id)=>({
+    type:'REMOVE_PENDING_LABEL',
+    imageID,
+    id
   })
 }
 

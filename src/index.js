@@ -13,20 +13,15 @@ const store = createStore(rootReducer,
       currentSelector:"classification",
       boundingBox: {
         isSelected: false,
-        labels: {},
-          userLabels:{},
-          pendingLabels:{}
+        labels: {}, userLabels: {}, pendingLabels: {}
       },
       polygon: {
         isSelected: false,
-        labels: {},
-          userLabels:{},
-          pendingLabels:{}
+        labels: {}, userLabels:{}, pendingLabels:{}
       },
       classification: {
         isSelected: true,
-        labels: {},
-          userLabels:{}
+        labels: {}, userLabels:{}
       }
     },
       Toggles:{

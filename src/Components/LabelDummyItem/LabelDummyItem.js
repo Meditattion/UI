@@ -19,7 +19,6 @@ const LabelDummyItem = (props) => {
     const currentLabelCountID = useSelector(state => state.LabelsCounterID);
     const newDummyLabelIsVisible = useSelector(state => state.Labels.dummyNewLabel);
     const currentImage = useSelector(state => state.Images.currentImage);
-    console.log(`currentImage":${currentImage}`);
 
     return (
         <div className="main-labels-item" style={{
@@ -33,14 +32,16 @@ const LabelDummyItem = (props) => {
                 <img alt="" src={process.env.PUBLIC_URL + "/Images/complete.png"}
                     style={{ cursor: "pointer" }}
                     onClick={() => {
-                        dispatch(actions.addLabel({ text: newLabelName, key:props.keyID==="-1"? currentLabelCountID:props.keyID, bgColor: bgColor },currentImage));
+                        dispatch(actions.removePendingLabel(props.currentImage,props.keyID));
+                        dispatch(actions.addLabel({ text: newLabelName, id:props.keyID==="-1"? currentLabelCountID:props.keyID, bgColor: bgColor },currentImage));
                         setNewLabelName('');
                         setbgColor(getRandomColor);
                     }}></img>
 
                 <img alt="" src={process.env.PUBLIC_URL + "Images/trashS.svg"}
                     onClick={() => {
-                        dispatch(actions.closeDummyLabel());
+                        // dispatch(actions.closeDummyLabel());
+                        dispatch(actions.removePendingLabel(props.currentImage,props.keyID));
                         setNewLabelName('');
                         setbgColor(getRandomColor);
                     }}></img>
