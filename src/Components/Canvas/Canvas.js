@@ -232,8 +232,10 @@ const Canvas = () => {
   const handleCanvasOnChange = (data) => {
     console.log("data", data);
     console.log(`LabelRects length:${data["labelRects"].length}`);
+    console.log(`current pol length:${labelsPolygonLength}`);
     console.log(`LabelPolygons length:${data["labelPolygons"].length}`);
     if (labelsRectLength < data["labelRects"].length) {
+
       if (!labelsIsVisible) {
         dispatch(
             actions.setCanvasLabelCurds(
@@ -246,6 +248,7 @@ const Canvas = () => {
         );
       }else{
         if (!boundingBoxLabelsIsVisible) {
+          console.log("opening bb labels container");
           dispatch(actions.openLabelsContainer("boundingBoxLabelsIsVisible"));
           setLabelsRectLength((prevState) => prevState + 1);
         }
@@ -257,6 +260,7 @@ const Canvas = () => {
       console.log("new pol");
 
       if (!polygonLabelsIsVisible) {
+        console.log("opening pol labels container");
         dispatch(actions.openLabelsContainer("polygonLabelsIsVisible"));
         setLabelsPolygonLength((prevState) => prevState + 1);
       }

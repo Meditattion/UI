@@ -38,14 +38,16 @@ const Labels = (props) => {
     const classificationLabelsIsVisible= useSelector(state => state.Toggles.classificationLabelsIsVisible);
     const boundingBoxLabelsIsVisible= useSelector(state => state.Toggles.boundingBoxLabelsIsVisible);
     const polygonLabelsIsVisible= useSelector(state => state.Toggles.polygonLabelsIsVisible);
+    console.log(`class labels is visible: ${classificationLabelsIsVisible}`);
+    console.log(`bb labels is visible: ${boundingBoxLabelsIsVisible}`);
+    console.log(`pol labels is visible: ${polygonLabelsIsVisible}`);
     const currentNewLabelID=useSelector(state=>state.Labels.currentNewLabelID);
     const classificationLabels=useSelector(state=>state.Tools.classification.userLabels);
     const boundingBoxLabels=useSelector(state=>state.Tools.boundingBox.userLabels);
     const boundingBoxPendingLabels=useSelector(state=>state.Tools.boundingBox.pendingLabels);
     const polygonLabels=useSelector(state=>state.Tools.polygon.userLabels);
     const polygonPendingLabels=useSelector(state=>state.Tools.polygon.pendingLabels);
-    console.log(`bb user labels: ${JSON.stringify(boundingBoxLabels)}`);
-    console.log(`bb pending labels: ${JSON.stringify(boundingBoxPendingLabels)}`);
+
 
 // useEffect(()=>{
 // },[boundingBoxLabels]);
