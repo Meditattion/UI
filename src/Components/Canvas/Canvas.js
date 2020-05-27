@@ -74,15 +74,48 @@ const Canvas = () => {
   );
   const currentSelector = useSelector((state) => state.Tools.currentSelector);
   const currentImage = useSelector((state) => state.Images.currentImage);
-  console.log(`currentImage:${currentImage}`);
+  // console.log(`currentImage:${currentImage}`);
 
   const loadedLabels = useSelector(
     (state) => state.Tools[currentSelector].labels
   );
+  const boundingBoxLabels=useSelector(state=>state.Tools.boundingBox.userLabels);
+  const boundingBoxPendingLabels=useSelector(state=>state.Tools.boundingBox.pendingLabels);
+  const polygonLabels=useSelector(state=>state.Tools.polygon.userLabels);
+  const polygonPendingLabels=useSelector(state=>state.Tools.polygon.pendingLabels);
 
-  // const imageFile = useSelector(
-  //   (state) => state.Tools.classification?.files?.[0]
-  // );
+
+
+  useEffect(()=>{
+    let  bbLabelsToRemoveFromCanvas=[];
+    let isItInPendingLabels=false;
+    let isItInUserLabels=false;
+  labels.labelRects.forEach(bbLabel=>{
+    isItInPendingLabels=boundingBoxPendingLabels[currentImage]?.filter(label=>label.id===bbLabel.id).length>0;
+    isItInUserLabels=boundingBoxLabels[currentImage]?.filter(label=>label.id===bbLabel.id).length>0;
+    if(!isItInPendingLabels && !isItInUserLabels)
+      bbLabelsToRemoveFromCanvas.push(bbLabel.id);
+    isItInPendingLabels=false;
+    isItInUserLabels=false;
+  });
+  setLabels({...labels,labelRects:labels.labelRects.filter(label=>!bbLabelsToRemoveFromCanvas.includes(label.id))});
+  },[boundingBoxLabels,boundingBoxPendingLabels]);
+
+  useEffect(()=>{
+    let  polLabelsToRemoveFromCanvas=[];
+    let isItInPendingLabels=false;
+    let isItInUserLabels=false;
+    labels.labelPolygons.forEach(polLabel=>{
+      isItInPendingLabels=polygonPendingLabels[currentImage]?.filter(label=>label.id===polLabel.id).length>0;
+      isItInUserLabels=polygonLabels[currentImage]?.filter(label=>label.id===polLabel.id).length>0;
+      if(!isItInPendingLabels && !isItInUserLabels)
+        polLabelsToRemoveFromCanvas.push(polLabel.id);
+      isItInPendingLabels=false;
+      isItInUserLabels=false;
+    });
+    setLabels({...labels,labelPolygons:labels.labelPolygons.filter(label=>!polLabelsToRemoveFromCanvas.includes(label.id))});
+  },[polygonLabels,polygonPendingLabels]);
+
 
   // let imageFile = useSelector((state) => state.Images.container?.[0]);
   let imageFiles = useSelector((state) => state.Images.container);
@@ -127,9 +160,6 @@ const Canvas = () => {
         canvasHeight = canvasDOM.offsetHeight;
         setImageWidthFactor(imageWidthFactor = canvasWidth / selectedImage.width);
         setImageHeightFactor(canvasHeight / selectedImage.height);
-        // imageWidthFactor = canvasWidth / selectedImage.width;
-        // imageHeightFactor = canvasHeight / selectedImage.height;
-        // console.log(`image h factor:${canvasHeight / selectedImage.height}`);
       };
     }
   }, [imageFile]);
@@ -202,8 +232,10 @@ const Canvas = () => {
   const handleCanvasOnChange = (data) => {
     console.log("data", data);
     console.log(`LabelRects length:${data["labelRects"].length}`);
+    console.log(`current pol length:${labelsPolygonLength}`);
     console.log(`LabelPolygons length:${data["labelPolygons"].length}`);
     if (labelsRectLength < data["labelRects"].length) {
+
       if (!labelsIsVisible) {
         dispatch(
             actions.setCanvasLabelCurds(
@@ -216,6 +248,7 @@ const Canvas = () => {
         );
       }else{
         if (!boundingBoxLabelsIsVisible) {
+          console.log("opening bb labels container");
           dispatch(actions.openLabelsContainer("boundingBoxLabelsIsVisible"));
           setLabelsRectLength((prevState) => prevState + 1);
         }
@@ -227,6 +260,7 @@ const Canvas = () => {
       console.log("new pol");
 
       if (!polygonLabelsIsVisible) {
+        console.log("opening pol labels container");
         dispatch(actions.openLabelsContainer("polygonLabelsIsVisible"));
         setLabelsPolygonLength((prevState) => prevState + 1);
       }
