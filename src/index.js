@@ -30,8 +30,11 @@ const store = createStore(rootReducer,
           classificationLabelsIsVisible:true,
           boundingBoxLabelsIsVisible:false,
           polygonLabelsIsVisible:false,
-      }
-
+      },
+      Output:{
+        currentSelector: "classification",
+          container:{}
+    }
   }
 )
 

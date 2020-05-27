@@ -85,6 +85,10 @@ const Canvas = () => {
   const polygonPendingLabels=useSelector(state=>state.Tools.polygon.pendingLabels);
 
 
+  const output=useSelector(state=>state.Output.container);
+  console.log(`the final out put: ${JSON.stringify(output)}`);
+
+
 
   useEffect(()=>{
     let  bbLabelsToRemoveFromCanvas=[];
@@ -235,7 +239,6 @@ const Canvas = () => {
     console.log(`current pol length:${labelsPolygonLength}`);
     console.log(`LabelPolygons length:${data["labelPolygons"].length}`);
     if (labelsRectLength < data["labelRects"].length) {
-
       if (!labelsIsVisible) {
         dispatch(
             actions.setCanvasLabelCurds(
@@ -253,9 +256,12 @@ const Canvas = () => {
           setLabelsRectLength((prevState) => prevState + 1);
         }
       }
-
-      // dispatch(actions.addCanvasLabel(data.labelRects[data.labelRects.length - 1].id));
-        dispatch(actions.addPendingLabel({id:data.labelRects[data.labelRects.length - 1].id},currentImage));
+       dispatch(actions.addPendingLabel({
+              id:data.labelRects[data.labelRects.length - 1].id,
+              top_left:[data.labelRects[data.labelRects.length - 1].y,data.labelRects[data.labelRects.length - 1].x],
+              height:data.labelRects[data.labelRects.length - 1].height,
+              width:data.labelRects[data.labelRects.length - 1].width},
+            currentImage,currentSelector));
     } else if (labelsPolygonLength < data["labelPolygons"].length) {
       console.log("new pol");
 
@@ -265,7 +271,10 @@ const Canvas = () => {
         setLabelsPolygonLength((prevState) => prevState + 1);
       }
       // dispatch(actions.addCanvasLabel(data.labelPolygons[data.labelPolygons.length - 1].id));
-      dispatch(actions.addPendingLabel({id:data.labelPolygons[data.labelPolygons.length - 1].id},currentImage));
+      dispatch(actions.addPendingLabel({
+        id:data.labelPolygons[data.labelPolygons.length - 1].id,
+          vertices:data.labelPolygons[data.labelPolygons.length-1].vertices}
+        ,currentImage,currentSelector));
     }
   };
 
@@ -273,13 +282,13 @@ const Canvas = () => {
     <div className="main-canvas">
       <CommonHeader>
         <div className="main-toolbar">
-          <ToolBarItem
-            tool="redo"
-            flip="true"
-            type="redo.svg"
-            tooltip="Undo"
-          ></ToolBarItem>
-          <ToolBarItem tool="undo" type="redo.svg" tooltip="Redo"></ToolBarItem>
+          {/*<ToolBarItem*/}
+          {/*  tool="redo"*/}
+          {/*  flip="true"*/}
+          {/*  type="redo.svg"*/}
+          {/*  tooltip="Undo"*/}
+          {/*></ToolBarItem>*/}
+          {/*<ToolBarItem tool="undo" type="redo.svg" tooltip="Redo"></ToolBarItem>*/}
           <ToolBarItem
             tool="zoomin"
             type="zoomIn.svg"
@@ -296,6 +305,11 @@ const Canvas = () => {
             tool="pointer"
             type="cursor.svg"
             tooltip="Pointer"
+          ></ToolBarItem>
+          <ToolBarItem
+              tool="export"
+              type="export.svg"
+              tooltip="Export Output"
           ></ToolBarItem>
           <Selectors>
             <SelectorItem
@@ -341,7 +355,7 @@ const Canvas = () => {
 
       )}
 
-      {!labelsIsVisible && <CanvasLabel />}
+      {!labelsIsVisible && <CanvasLabel tool={currentSelector}/>}
 
       {/*<CanvasSuggestion />*/}
 

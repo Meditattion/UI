@@ -32,8 +32,37 @@ const LabelDummyItem = (props) => {
                 <img alt="" src={process.env.PUBLIC_URL + "/Images/complete.png"}
                     style={{ cursor: "pointer" }}
                     onClick={() => {
+                        let labelToAdd;
+                        switch (props.tool) {
+                            case "classification":
+                                labelToAdd={
+                                    text:newLabelName,
+                                    id:props.keyID==="-1"? currentLabelCountID:props.keyID,
+                                    bgColor: bgColor};
+                                break;
+                            case "boundingBox":
+                                labelToAdd={
+                                    text: newLabelName,
+                                    id:props.keyID==="-1"? currentLabelCountID:props.keyID,
+                                    bgColor: bgColor,
+                                    top_left:props.topLeft,
+                                    width:props.width,
+                                    height:props.height
+                                };
+                                break;
+                            case "polygon":
+                                labelToAdd={
+                                    id:props.keyID==="-1"? currentLabelCountID:props.keyID,
+                                    text:newLabelName,
+                                    vertices:props.vertices,
+                                    bgColor: bgColor
+                                };
+                                break;
+
+                        }
+
                         dispatch(actions.removePendingLabel(props.currentImage,props.keyID,props.tool));
-                        dispatch(actions.addLabel({ text: newLabelName, id:props.keyID==="-1"? currentLabelCountID:props.keyID, bgColor: bgColor },currentImage));
+                        dispatch(actions.addLabel({ text: newLabelName, id:props.keyID==="-1"? currentLabelCountID:props.keyID, bgColor: bgColor },currentImage,props.tool));
                         setNewLabelName('');
                         setbgColor(getRandomColor);
                     }}></img>

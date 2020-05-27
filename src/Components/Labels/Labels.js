@@ -81,7 +81,8 @@ const Labels = (props) => {
     // setBoundingBoxPendingLabelsToDisplay(prevState => )
     // },[boundingBoxPendingLabels[currentImage]]);
         loadedLabelsToDisplay.unshift(
-            <LabelDummyItem key="-1" tool={currentSelector} keyID="-1"></LabelDummyItem>
+            <LabelDummyItem key="-1" tool={currentSelector} keyID="-1"
+                            topLeft="" width="" height="" vertices=""></LabelDummyItem>
         );
 
     if(currentImage!=="" && boundingBoxLabels[currentImage]){
@@ -99,8 +100,9 @@ const Labels = (props) => {
     if(currentImage!=="" && boundingBoxPendingLabels[currentImage]){
         boundingBoxPendingLabels[currentImage].forEach(label => {
                 boundingBoxPendingLabelsToDisplay.unshift(
-                    <LabelDummyItem key="-1" tool="boundingBox" keyID={label.id}
-                                        currentImage={currentImage}></LabelDummyItem>
+                    <LabelDummyItem key="-1" tool="boundingBox" keyID={label.id} currentImage={currentImage}
+                                    topLeft={label.top_left} width={label.width} height={label.height}
+                                        vertices=""></LabelDummyItem>
                 )
         });
     }
@@ -120,8 +122,8 @@ const Labels = (props) => {
     if(currentImage!=="" && polygonPendingLabels[currentImage]){
         polygonPendingLabels[currentImage].forEach(label => {
             polygonPendingLabelsToDisplay.unshift(
-                <LabelDummyItem key="-1" tool="polygon" keyID={label.id}
-                                currentImage={currentImage}></LabelDummyItem>
+                <LabelDummyItem key="-1" tool="polygon" keyID={label.id} currentImage={currentImage}
+                                topLeft="" width="" height="" vertices={label.vertices}></LabelDummyItem>
             )
         });
     }
