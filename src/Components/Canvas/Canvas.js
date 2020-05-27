@@ -85,8 +85,21 @@ const Canvas = () => {
   const polygonPendingLabels=useSelector(state=>state.Tools.polygon.pendingLabels);
 
 
-  const output=useSelector(state=>state.Output.container);
-  console.log(`the final out put: ${JSON.stringify(output)}`);
+  const rawOutput=useSelector(state=>state.Output.container);
+  useEffect(()=>{
+  for(let image in rawOutput){
+    rawOutput[image].classification && rawOutput[image].classification.map(label=>[label.text]);
+    rawOutput[image].boundingBox && rawOutput[image].boundingBox.map(label=>{
+      return {text:label.text,top_left:label.top_left,width:label.width,height:label.height};
+    });
+    rawOutput[image].polygon && rawOutput[image].polygon.map(label=>{
+      return {text:label.text,vertices:label.vertices};
+    });
+  }
+    console.log(`the final out put: ${JSON.stringify(rawOutput)}`);
+  setOutput(rawOutput);
+  },[rawOutput])
+
 
 
 
@@ -181,6 +194,7 @@ const Canvas = () => {
   const [labelsPolygonLength, setLabelsPolygonLength] = useState(0);
   const [annotationType, setAnnotationType] = useState(defaultSelector);
   const [isImageDrag, toggleDragMode] = useReducer((p) => !p, false);
+  const [output,setOutput]=useState({});
 
   const [zoom, setZoom] = useState(1);
 
