@@ -35,12 +35,6 @@ const ImagesContainer = (props) => {
 
 
 
-
-    // const [files,setFiles]=useState(useSelector(state=>state.Tools[currentSelector].files));
-
-    // const getFiles=()=>useSelector(state => state.Tools[currentSelector].files,[]);
-
-
     const thumbs = images.filter(image => image.type.indexOf("image") >= 0).map((image,imageIndex) => (
         <ImageItem key={imageIndex+image.name} name={image.name} source={image.preview} completed="false"></ImageItem>
     ));

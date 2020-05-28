@@ -83,6 +83,11 @@ const actions = {
     imageID,
     id,
     tool
+  }),
+  removeLoadedLabel:(tool,id)=>({
+    type:'REMOVE_LOADED_LABEL',
+    tool,
+    id
   })
 }
 
