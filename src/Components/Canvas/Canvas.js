@@ -85,7 +85,11 @@ const Canvas = () => {
   //   (state) => state.Tools[currentSelector].labels
   // );
   const boundingBoxLabels=useSelector(state=>state.Tools.boundingBox.userLabels);
+  console.log(`boundingBoxLabels.currentImage: ${JSON.stringify(boundingBoxLabels[currentImage])}`)
+
   const boundingBoxPendingLabels=useSelector(state=>state.Tools.boundingBox.pendingLabels);
+  console.log(`boundingBoxPending.currentImage: ${JSON.stringify(boundingBoxPendingLabels[currentImage])}`)
+
   const polygonLabels=useSelector(state=>state.Tools.polygon.userLabels);
   const polygonPendingLabels=useSelector(state=>state.Tools.polygon.pendingLabels);
 
@@ -249,15 +253,21 @@ const Canvas = () => {
   },[boundingBoxSuggestions])
 
   useEffect(() => {
-      if(boundingBoxSuggestions[currentImage]){
+    if(!boundingBoxSuggestions[currentImage])
+      boundingBoxSuggestions[currentImage]=[];
+    if(!boundingBoxLabels[currentImage])
+      boundingBoxLabels[currentImage]=[];
+    if(!boundingBoxPendingLabels[currentImage])
+      boundingBoxPendingLabels[currentImage]=[];
         setLabels(
             Object.assign(
                 {},
                 { labelPolygons: labels["labelPolygons"] },
-                { labelRects: boundingBoxSuggestions[currentImage] }
+                { labelRects: boundingBoxSuggestions[currentImage]
+                      .concat(boundingBoxLabels[currentImage],boundingBoxPendingLabels[currentImage]) }
             )
         );
-      }
+
   }, [currentImage, currentSelector]);
 
   // render suggestions on labels change
@@ -265,7 +275,6 @@ const Canvas = () => {
     if(boundingBoxSuggestions[currentImage]){
       let labelsSugges=[];
       // console.log(`rect labels : ${JSON.stringify(labels)}`)
-
       labels.labelRects.forEach(label=>{
         console.log(`label : ${JSON.stringify(label)}`);
       if(label.isSuggestion){
@@ -318,9 +327,16 @@ const Canvas = () => {
       }
        dispatch(actions.addPendingLabel({
               id:data.labelRects[data.labelRects.length - 1].id,
-              top_left:[data.labelRects[data.labelRects.length - 1].y,data.labelRects[data.labelRects.length - 1].x],
-              height:data.labelRects[data.labelRects.length - 1].height,
-              width:data.labelRects[data.labelRects.length - 1].width},
+              top_left:[data.labelRects[data.labelRects.length - 1].rect.y,data.labelRects[data.labelRects.length - 1].rect.x],
+              height:data.labelRects[data.labelRects.length - 1].rect.height,
+              width:data.labelRects[data.labelRects.length - 1].rect.width,
+             rect:{
+                x:data.labelRects[data.labelRects.length - 1].rect.x,
+               y:data.labelRects[data.labelRects.length - 1].rect.y,
+               width:data.labelRects[data.labelRects.length - 1].rect.width,
+               height:data.labelRects[data.labelRects.length - 1].rect.height
+              }
+           },
             currentImage,currentSelector));
       setLabelsRectLength((prevState) => prevState + 1);
     } else if (labelsPolygonLength < data["labelPolygons"].length) {

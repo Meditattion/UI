@@ -101,7 +101,7 @@ const Labels = (props) => {
         boundingBoxPendingLabels[currentImage].forEach(label => {
                 boundingBoxPendingLabelsToDisplay.unshift(
                     <LabelDummyItem key="-1" tool="boundingBox" keyID={label.id} currentImage={currentImage}
-                                    topLeft={label.top_left} width={label.width} height={label.height}
+                                    topLeft={label.top_left} width={label.width} height={label.height} rect={label.rect}
                                         vertices=""></LabelDummyItem>
                 )
         });

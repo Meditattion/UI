@@ -47,7 +47,8 @@ const LabelDummyItem = (props) => {
                                     bgColor: bgColor,
                                     top_left:props.topLeft,
                                     width:props.width,
-                                    height:props.height
+                                    height:props.height,
+                                    rect:props.rect
                                 };
                                 break;
                             case "polygon":
@@ -62,7 +63,7 @@ const LabelDummyItem = (props) => {
                         }
 
                         dispatch(actions.removePendingLabel(props.currentImage,props.keyID,props.tool));
-                        dispatch(actions.addLabel({ text: newLabelName, id:props.keyID==="-1"? currentLabelCountID:props.keyID, bgColor: bgColor },currentImage,props.tool));
+                        dispatch(actions.addLabel(labelToAdd,currentImage,props.tool));
                         setNewLabelName('');
                         setbgColor(getRandomColor);
                     }}></img>
