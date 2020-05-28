@@ -35,20 +35,31 @@ const CanvasSuggestion = (props) => {
             <img alt="" src={process.env.PUBLIC_URL + "/Images/complete.png"}
                  style={{ cursor: "pointer" }}
                  onClick={() => {
-                     dispatch(actions.addLabel({ text: newLabelName, key: currentLabelCountID, bgColor: bgColor },"newCanvasLabel"))
-                     setNewLabelName('');
-                     setbgColor(getRandomColor);
+                     // dispatch(actions.addLabel({ text: newLabelName, key: currentLabelCountID, bgColor: bgColor },"newCanvasLabel"))
+                     // setNewLabelName('');
+                     // setbgColor(getRandomColor);
+                     props.setLabels(oldState=>Object.assign({},{labelPolygons:oldState.labelPolygons},
+                         {labelRects:oldState.labelRects.map(label=>{
+                             let dummy;
+                             if(label.id===props.id){
+                                 dummy=label;
+                                 dummy.isSuggestion=false;
+                                 return dummy;
+                             }else{
+                                 return label;
+                             }
+
+                             })}))
                  }}></img>
 
             <img alt="" src={process.env.PUBLIC_URL + "Images/trashS.svg"}
                  onClick={() => {
-                     console.log(`selected label, props.left=${props.left} , props.top:${props.top}`)
                      switch (props.tool){
                          case "boundingBox":
-                             // props.setBoundigBoxSuggestions(oldState=>Object.assign({},oldState,
-                             //     {[props.currentImage]:oldState[props.currentImage].filter(label=>label.id!==props.id)}));
-                             props.setLabels(oldState=>Object.assign({},oldState,
-                                 {labelRects:oldState.labelRects.filter(label=>label.id!==props.id)}));
+                             props.setBoundigBoxSuggestions(oldState=>Object.assign({},oldState,
+                                 {[props.currentImage]:oldState[props.currentImage].filter(label=>label.id!==props.id)}));
+                             // props.setLabels(oldState=>Object.assign({},oldState,
+                             //     {labelRects:oldState.labelRects.filter(label=>label.id!==props.id)}));
                              break;
                          default:
                              break;
