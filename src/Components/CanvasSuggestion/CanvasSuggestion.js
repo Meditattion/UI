@@ -42,12 +42,14 @@ const CanvasSuggestion = (props) => {
 
             <img alt="" src={process.env.PUBLIC_URL + "Images/trashS.svg"}
                  onClick={() => {
-                     console.log(`selected label, props.x=${props.x} , props.y:${props.y}`)
+                     console.log(`selected label, props.left=${props.left} , props.top:${props.top}`)
                      switch (props.tool){
                          case "boundingBox":
-                             // props.setLabels(oldState=>Object.assign({},oldState,
-                             //     {labelRects:oldState.labelRects.filter(rect=>rect.id!==props.id)}));
-                             dispatch(actions.removeLoadedLabel(props.tool,props.id));
+                             // props.setBoundigBoxSuggestions(oldState=>Object.assign({},oldState,
+                             //     {[props.currentImage]:oldState[props.currentImage].filter(label=>label.id!==props.id)}));
+                             props.setLabels(oldState=>Object.assign({},oldState,
+                                 {labelRects:oldState.labelRects.filter(label=>label.id!==props.id)}));
+                             break;
                          default:
                              break;
 

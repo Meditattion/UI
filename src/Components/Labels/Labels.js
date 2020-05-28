@@ -136,21 +136,21 @@ const Labels = (props) => {
             <CommonSearch></CommonSearch>
             {/*<AddLabelBtn></AddLabelBtn>*/}
             <LabelsContainer>
-                <CustomLabelsContainer annotator="classification" text="Classification"
+                <CustomLabelsContainer key="-1" annotator="classification" text="Classification"
                                        isOpen={currentImage != '' && classificationLabelsIsVisible}
                                        numberOfChildren={loadedLabelsToDisplay.length + classificationLabelsToDisplay.length}>
                     <AddLabelBtn/>
                     { loadedLabelsToDisplay}
                     {/*<LabelDummyItem key="-1"></LabelDummyItem>*/}
                 </CustomLabelsContainer>
-                <CustomLabelsContainer annotator="polygon" text="Segmentation"
+                <CustomLabelsContainer key="-2" annotator="polygon" text="Segmentation"
                                        isOpen={currentImage != '' && polygonLabelsIsVisible}
                                        numberOfChildren={polygonLabelsToDisplay.length + polygonPendingLabelsToDisplay.length}>
                     {/*<LabelDummyItem keyID={currentNewLabelID}></LabelDummyItem>*/}
                     {polygonPendingLabelsToDisplay}
                     {polygonLabelsToDisplay}
                 </CustomLabelsContainer>
-                <CustomLabelsContainer annotator="boundingBox" text="Bounding Box"
+                <CustomLabelsContainer key="-3" annotator="boundingBox" text="Bounding Box"
                                        isOpen={currentImage != '' && boundingBoxLabelsIsVisible}
                                        numberOfChildren={boundingBoxLabelsToDisplay.length +boundingBoxPendingLabelsToDisplay.length}>
                     {/*<LabelDummyItem keyID={currentNewLabelID}></LabelDummyItem>*/}

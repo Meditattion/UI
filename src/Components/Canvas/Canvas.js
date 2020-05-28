@@ -112,13 +112,16 @@ const Canvas = () => {
     let  bbLabelsToRemoveFromCanvas=[];
     let isItInPendingLabels=false;
     let isItInUserLabels=false;
+    let isItInSuggestion=false;
   labels.labelRects.forEach(bbLabel=>{
     isItInPendingLabels=boundingBoxPendingLabels[currentImage]?.filter(label=>label.id===bbLabel.id).length>0;
     isItInUserLabels=boundingBoxLabels[currentImage]?.filter(label=>label.id===bbLabel.id).length>0;
-    if(!isItInPendingLabels && !isItInUserLabels)
+    isItInSuggestion=boundingBoxSuggestions[currentImage]?.filter(label=>label.id===bbLabel.id).length>0;
+    if(!isItInPendingLabels && !isItInUserLabels && !isItInSuggestion)
       bbLabelsToRemoveFromCanvas.push(bbLabel.id);
     isItInPendingLabels=false;
     isItInUserLabels=false;
+    isItInSuggestion=false;
   });
   setLabels({...labels,labelRects:labels.labelRects.filter(label=>!bbLabelsToRemoveFromCanvas.includes(label.id))});
   },[boundingBoxLabels,boundingBoxPendingLabels]);
@@ -127,13 +130,16 @@ const Canvas = () => {
     let  polLabelsToRemoveFromCanvas=[];
     let isItInPendingLabels=false;
     let isItInUserLabels=false;
+    let isItInSuggestion=false;
     labels.labelPolygons.forEach(polLabel=>{
       isItInPendingLabels=polygonPendingLabels[currentImage]?.filter(label=>label.id===polLabel.id).length>0;
       isItInUserLabels=polygonLabels[currentImage]?.filter(label=>label.id===polLabel.id).length>0;
+
       if(!isItInPendingLabels && !isItInUserLabels)
         polLabelsToRemoveFromCanvas.push(polLabel.id);
       isItInPendingLabels=false;
       isItInUserLabels=false;
+      isItInSuggestion=false;
     });
     setLabels({...labels,labelPolygons:labels.labelPolygons.filter(label=>!polLabelsToRemoveFromCanvas.includes(label.id))});
   },[polygonLabels,polygonPendingLabels]);
@@ -220,7 +226,7 @@ const Canvas = () => {
     for (let image in loadedBoundingBoxLabels){
       boundingBoxSuggestionsToAssign[image]=loadedBoundingBoxLabels[image].map((label,labelIndex) => {
         return {
-          id: image+labelIndex,
+          id:currentImage+labelIndex,
           isSuggestion:true,
           rect: {
             x: label["top_left"][1],
@@ -236,56 +242,45 @@ const Canvas = () => {
 
   //add bb sugges to total labels
   useEffect(()=>{
-    if(Object.keys(boundingBoxSuggestions).length!=0){
+    if(boundingBoxSuggestions[currentImage]){
       setLabels(oldLabels=>Object.assign({},{labelPolygons: oldLabels.labelPolygons},
-          {labelRects: oldLabels.labelRects.concat(boundingBoxSuggestions[currentImage])}));
+          {labelRects: [...boundingBoxSuggestions[currentImage],...boundingBoxLabels[currentImage]]}));
     }
-
   },[boundingBoxSuggestions])
 
-  // useEffect(() => {
-  //   let labelsToAssign = [];
-  //   let image = currentImage;
-  //   if (loadedLabels[image] && currentSelector !== "classification") {
-  //     loadedLabels[image].forEach((label,labelIndex) => {
-  //       if (currentImage === image) {
-  //         labelsToAssign.push({
-  //           id: image+labelIndex,
-  //           isSuggestion:true,
-  //           rect: {
-  //             x: label["top_left"][1],
-  //             y: label["top_left"][0],
-  //             width: label["width"],
-  //             height: label["height"],
-  //           },
-  //         });
-  //
-  //       }
-  //     });
-  //     setLabels(
-  //         Object.assign(
-  //             {},
-  //             { labelPolygons: labels["labelPolygons"] },
-  //             { labelRects: labelsToAssign }
-  //         )
-  //     );
-  //   }
-  // }, [loadedLabels, currentImage, currentSelector]);
+  useEffect(() => {
+      if(boundingBoxSuggestions[currentImage]){
+        setLabels(
+            Object.assign(
+                {},
+                { labelPolygons: labels["labelPolygons"] },
+                { labelRects: boundingBoxSuggestions[currentImage] }
+            )
+        );
+      }
+  }, [currentImage, currentSelector]);
 
   // render suggestions on labels change
   useEffect(()=>{
-    let labelsSugges=[];
-    // console.log(`rect labels : ${JSON.stringify(labels)}`)
-    labels.labelRects.forEach(label=>{
-      console.log(`label : ${JSON.stringify(label)}`);
-      labelsSugges.push(<CanvasSuggestion key={label.id} id={label.id}
-                                          top={imageWidthFactor*label.rect.y + "px"}
-                                          left={imageWidthFactor*label.rect.x+ label.rect.width/2 + "px"}
-                                          tool={currentSelector}
-                                           setLabels={setLabels}/>);
-    });
-    setLabelsSuggestions(labelsSugges);
+    if(boundingBoxSuggestions[currentImage]){
+      let labelsSugges=[];
+      // console.log(`rect labels : ${JSON.stringify(labels)}`)
 
+      labels.labelRects.forEach(label=>{
+        console.log(`label : ${JSON.stringify(label)}`);
+      if(label.isSuggestion){
+        labelsSugges.push(<CanvasSuggestion key={label.id} id={label.id}
+                                            top={imageWidthFactor*label.rect.y + "px"}
+                                            left={imageWidthFactor*label.rect.x+ label.rect.width/2 + "px"}
+                                            tool={currentSelector}
+                                            setLabels={setLabels}
+                                            setBoundigBoxSuggestions={setBoundingBoxSuggestion}
+                                            currentImage={currentImage}/>);
+      }
+
+      });
+      setLabelsSuggestions(labelsSugges);
+    }
   },[labels])
 
   // can be used on icons
@@ -319,7 +314,6 @@ const Canvas = () => {
         if (!boundingBoxLabelsIsVisible) {
           console.log("opening bb labels container");
           dispatch(actions.openLabelsContainer("boundingBoxLabelsIsVisible"));
-          setLabelsRectLength((prevState) => prevState + 1);
         }
       }
        dispatch(actions.addPendingLabel({
@@ -328,19 +322,20 @@ const Canvas = () => {
               height:data.labelRects[data.labelRects.length - 1].height,
               width:data.labelRects[data.labelRects.length - 1].width},
             currentImage,currentSelector));
+      setLabelsRectLength((prevState) => prevState + 1);
     } else if (labelsPolygonLength < data["labelPolygons"].length) {
       console.log("new pol");
 
       if (!polygonLabelsIsVisible) {
         console.log("opening pol labels container");
         dispatch(actions.openLabelsContainer("polygonLabelsIsVisible"));
-        setLabelsPolygonLength((prevState) => prevState + 1);
       }
       // dispatch(actions.addCanvasLabel(data.labelPolygons[data.labelPolygons.length - 1].id));
       dispatch(actions.addPendingLabel({
         id:data.labelPolygons[data.labelPolygons.length - 1].id,
           vertices:data.labelPolygons[data.labelPolygons.length-1].vertices}
         ,currentImage,currentSelector));
+      setLabelsPolygonLength((prevState) => prevState + 1);
     }
   };
 
