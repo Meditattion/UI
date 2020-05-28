@@ -95,6 +95,14 @@ const Tools = (state = initialState, action) => {
                             .filter((label)=>label.id!==action.id)]}}
             }
 
+        case "REMOVE_LOADED_LABEL":
+            return{
+                ...state,
+                [action.tool]:{...state[action.tool],
+                labels:state[action.tool].labels.filter(label=>label.index!==action.id)
+                }
+            }
+
         default:
             return state
     }

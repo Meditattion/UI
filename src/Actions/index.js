@@ -29,10 +29,12 @@ const actions = {
     type: 'CLOSE_CANVAS_LABEL'
   })
   ,
-  addLabel: (label,imageID) => ({
+  addLabel: (label,imageID,tool,props={}) => ({
     type: ADD_LABEL,
     label,
-    imageID
+    imageID,
+    tool,
+    props
   }),
   deleteLabel: labelKey => ({
     type: DELETE_LABEL,
@@ -64,10 +66,11 @@ const actions = {
     top,
     left
   }),
-  addPendingLabel:(label,imageID)=>({
+  addPendingLabel:(label,imageID,tool)=>({
     type:'ADD_PENDING_LABEL',
     label,
-    imageID
+    imageID,
+    tool
   }),
   removeLabel:(imageID,id,tool)=>({
     type:'REMOVE_LABEL',
@@ -80,6 +83,11 @@ const actions = {
     imageID,
     id,
     tool
+  }),
+  removeLoadedLabel:(tool,id)=>({
+    type:'REMOVE_LOADED_LABEL',
+    tool,
+    id
   })
 }
 

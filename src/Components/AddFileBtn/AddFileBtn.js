@@ -15,8 +15,8 @@ const AddFileBtn = (props) => {
         accept: props.accept,
         onDrop: acceptedFiles => {
             acceptedFiles = files.concat(
-                acceptedFiles.map(file => Object.assign(file, {
-                    preview: URL.createObjectURL(file)
+                acceptedFiles.map((file,fileIndex) => Object.assign(file, {
+                    preview: URL.createObjectURL(file),index:fileIndex
                 })));
             // dispatch(actions.loadFiles(files));
             if (props.accept.indexOf("json") >= 0){
@@ -29,10 +29,6 @@ const AddFileBtn = (props) => {
                     );
                 // dispatch(actions.loadLabels(acceptedFiles));
             }
-            else if(props.accept.indexOf("svg") >= 0){
-
-            }
-
             else 
                 dispatch(actions.loadImages(acceptedFiles));
             // setFiles(acceptedFiles);

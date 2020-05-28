@@ -25,12 +25,12 @@ const CanvasSuggestion = (props) => {
             borderRadius:"5px",
             borderBottom:"none",
             zIndex:"100",
-            top:newCanvasCurds.top,
-            left:newCanvasCurds.left,
+            top:props.top,
+            left:props.left,
 
         }}>
 
-            suggestion :
+            suggestion
 
             <img alt="" src={process.env.PUBLIC_URL + "/Images/complete.png"}
                  style={{ cursor: "pointer" }}
@@ -42,9 +42,18 @@ const CanvasSuggestion = (props) => {
 
             <img alt="" src={process.env.PUBLIC_URL + "Images/trashS.svg"}
                  onClick={() => {
-                     dispatch(actions.closeCanvasLabel());
-                     setNewLabelName('');
-                     setbgColor(getRandomColor);
+                     console.log(`selected label, props.left=${props.left} , props.top:${props.top}`)
+                     switch (props.tool){
+                         case "boundingBox":
+                             // props.setBoundigBoxSuggestions(oldState=>Object.assign({},oldState,
+                             //     {[props.currentImage]:oldState[props.currentImage].filter(label=>label.id!==props.id)}));
+                             props.setLabels(oldState=>Object.assign({},oldState,
+                                 {labelRects:oldState.labelRects.filter(label=>label.id!==props.id)}));
+                             break;
+                         default:
+                             break;
+
+                     }
                  }}></img>
         </div>
     )
