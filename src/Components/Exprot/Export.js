@@ -6,13 +6,15 @@ import ReactTooltip from "react-tooltip";
 const Export = (props) => {
     return (
         <>
-            <a data-tip data-for={props.tool}>
+            <a data-tip data-for={props.tool}
+               href={props.jsonURL}
+               download={`meditattion ${new Date().getDate()}/${new Date().getMonth()+1}/${new Date().getFullYear()}`}>
         <div className={props.flip?"main-toolbar-tool flipHorizontal":"main-toolbar-tool"}
         >
-            <a href={props.jsonURL} download>
+
                 <img alt="" src={process.env.PUBLIC_URL + `Images/${props.type}`}>
                 </img>
-            </a>
+
 
         </div>
             </a>

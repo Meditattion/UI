@@ -5,6 +5,7 @@ const initState = {
     newCanvasLabel:false,
     currentNewLabelID:0,
     currentHover:{tool:"",id:""},
+    currentMouseOut:{tool:"",id:""},
     canvasLabelCurds:{top:60,left:0}
 };
 
@@ -50,7 +51,11 @@ const Labels = (state = initState, action) => {
         case 'INC_LABEL_ID':
             return Object.assign({},state,{currentNewLabelID:state.currentNewLabelID+1})
         case 'CURRENT_HOVER_ID':
-            return Object.assign({},state,{currentHover: {tool:action.tool,id:action.id}})
+            return Object.assign({},state,{currentHover: {tool:action.tool,id:action.id},
+                                                        currentMouseOut:{tool:"",id:""}})
+        case 'CURRENT_MOUSEOUT_ID':
+            return Object.assign({},state,{currentHover:{tool:"",id:""},
+                                                            currentMouseOut: {tool:action.tool,id:action.id}})
         default:
             return state
     }

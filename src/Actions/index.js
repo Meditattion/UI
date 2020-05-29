@@ -96,6 +96,11 @@ const actions = {
     type:'CURRENT_HOVER_ID',
     tool,
     id
+  }),
+  currentMouseOutId:(tool,id)=>({
+    type:'CURRENT_MOUSEOUT_ID',
+    tool,
+    id
   })
 }
 

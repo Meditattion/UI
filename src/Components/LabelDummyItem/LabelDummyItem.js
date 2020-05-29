@@ -18,7 +18,7 @@ function random_rgba() {
     let randG=o(r()*s);
     let randB=o(r()*s);
     return {
-        regular:`rgba(${randR},${randG},${randB},0.7)`,
+        regular:`rgba(${randR},${randG},${randB},0.5)`,
         onHover:`rgba(${randR},${randG},${randB},1)`
     };
 
@@ -34,7 +34,12 @@ const LabelDummyItem = (props) => {
 
     return (
         <div className="main-labels-item" style={{
-            backgroundColor:props.currentHover===props.keyID?bgColor.onHover: bgColor.regular,
+            backgroundColor:(props.currentMouseOut===props.keyID || props.currentHover!==props.keyID)?
+                bgColor.regular:
+                bgColor.onHover,
+            border:(props.currentMouseOut===props.keyID || props.currentHover!==props.keyID)?
+                'initial':
+                '1px solid black',
             display: newDummyLabelIsVisible ? 'grid' : 'none'
         }}>
             <div className="main-labels-item-blank" >&nbsp;</div>

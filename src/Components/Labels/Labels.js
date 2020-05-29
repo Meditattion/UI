@@ -49,6 +49,15 @@ const Labels = (props) => {
     const polygonLabels=useSelector(state=>state.Tools.polygon.userLabels);
     const polygonPendingLabels=useSelector(state=>state.Tools.polygon.pendingLabels);
     const currentHover=useSelector(state=>state.Labels.currentHover);
+    const currentMouseOut=useSelector(state=>state.Labels.currentMouseOut);
+
+    useEffect(()=>{
+        console.log(`hovered on :${JSON.stringify(currentHover)}`);
+    },[currentHover])
+
+    useEffect(()=>{
+        console.log(`mouseOut from :${JSON.stringify(currentMouseOut)}`);
+    },[currentMouseOut])
 
 
 // useEffect(()=>{
@@ -74,7 +83,8 @@ const Labels = (props) => {
                 loadedLabelsToDisplay.unshift(
                     <LabelItem key={label} serial={label} text={label} currentImage={currentImage}
                                bgColor={getRandomColor()} tool={currentSelector}
-                            currentHover={currentHover.tool===currentSelector?currentHover.id:-10}></LabelItem>
+                            currentHover={currentHover.tool===currentSelector?currentHover.id:-10}
+                               currentMouseOut={currentMouseOut.tool===currentSelector?currentMouseOut.id:-20}></LabelItem>
                 )
             }
         });
@@ -86,7 +96,8 @@ const Labels = (props) => {
                 classificationLabelsToDisplay.unshift(
                     <LabelItem key={label.id} serial={label.id} text={label.text} currentImage={currentImage}
                                bgColor={label.bgColor} tool="classification"
-                    currentHover={currentHover.tool==="classification"?currentHover.id:-10}></LabelItem>
+                    currentHover={currentHover.tool==="classification"?currentHover.id:-10}
+                               currentMouseOut={currentMouseOut.tool==="classification"?currentMouseOut.id:-20}></LabelItem>
                 )
             }
         });
@@ -97,6 +108,7 @@ const Labels = (props) => {
             classificationPendingLabelsToDisplay.unshift(
                 <LabelDummyItem key={label.id} tool="classification" keyID={label.id} currentImage={currentImage}
                                 currentHover={currentHover.tool==="classification"?currentHover.id:-10}
+                                currentMouseOut={currentMouseOut.tool==="classification"?currentMouseOut.id:-20}
                                 topLeft="" width="" height="" rect=""
                                 vertices=""></LabelDummyItem>
             )
@@ -110,6 +122,7 @@ const Labels = (props) => {
                 boundingBoxLabelsToDisplay.unshift(
                     <LabelItem key={label.id} serial={label.id} text={label.text} currentImage={currentImage}
                                currentHover={currentHover.tool==="boundingBox"?currentHover.id:-10}
+                               currentMouseOut={currentMouseOut.tool==="boundingBox"?currentMouseOut.id:-20}
                                bgColor={label.bgColor} tool="boundingBox" ></LabelItem>
                 )
             }
@@ -121,6 +134,7 @@ const Labels = (props) => {
                 boundingBoxPendingLabelsToDisplay.unshift(
                     <LabelDummyItem key="-1" tool="boundingBox" keyID={label.id} currentImage={currentImage}
                                     currentHover={currentHover.tool==="boundingBox"?currentHover.id:-10}
+                                    currentMouseOut={currentMouseOut.tool==="boundingBox"?currentMouseOut.id:-20}
                                     topLeft={label.top_left} width={label.width} height={label.height} rect={label.rect}
                                         vertices=""></LabelDummyItem>
                 )
@@ -134,6 +148,7 @@ const Labels = (props) => {
                 polygonLabelsToDisplay.unshift(
                     <LabelItem key={label.id} serial={label.id} text={label.text} currentImage={currentImage}
                                currentHover={currentHover.tool==="polygon"?currentHover.id:-10}
+                               currentMouseOut={currentMouseOut.tool==="polygon"?currentMouseOut.id:-20}
                                bgColor={label.bgColor} tool="polygon" ></LabelItem>
                 )
             }
@@ -145,6 +160,7 @@ const Labels = (props) => {
             polygonPendingLabelsToDisplay.unshift(
                 <LabelDummyItem key="-1" tool="polygon" keyID={label.id} currentImage={currentImage}
                                 currentHover={currentHover.tool==="polygon"?currentHover.id:-10}
+                                currentMouseOut={currentMouseOut.tool==="polygon"?currentMouseOut.id:-20}
                                 topLeft="" width="" height="" vertices={label.vertices}></LabelDummyItem>
             )
         });
