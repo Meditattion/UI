@@ -7,7 +7,8 @@ const ToolBarItem = (props) => {
     return (
         <>
             <a data-tip data-for={props.tool}>
-        <div className={props.flip?"main-toolbar-tool flipHorizontal":"main-toolbar-tool"}>
+        <div className={props.flip?"main-toolbar-tool flipHorizontal":"main-toolbar-tool"}
+        onClick={props.onClick}>
             <img alt="" src={process.env.PUBLIC_URL + `Images/${props.type}`}></img>
         </div>
             </a>

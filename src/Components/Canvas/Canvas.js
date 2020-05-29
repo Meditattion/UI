@@ -7,6 +7,7 @@ import CommonHeader from "../CommonHeader/CommonHeader";
 import SelectorItem from "../SelectorItem/SelectorItem";
 import Selectors from "../Selectors/Selectors";
 import ToolBarItem from "../ToolBarItem/ToolBarItem";
+import Export from "../Exprot/Export"
 import CanvasSuggestion from "../CanvasSuggestion/CanvasSuggestion";
 const labelsDataDefault = {
   labelRects: [],
@@ -84,10 +85,10 @@ const Canvas = () => {
   const [polygonSuggestions,setPolygonSuggestion]=useState([]);
 
   const boundingBoxLabels=useSelector(state=>state.Tools.boundingBox.userLabels);
-  console.log(`boundingBoxLabels.currentImage: ${JSON.stringify(boundingBoxLabels[currentImage])}`)
+  // console.log(`boundingBoxLabels.currentImage: ${JSON.stringify(boundingBoxLabels[currentImage])}`)
 
   const boundingBoxPendingLabels=useSelector(state=>state.Tools.boundingBox.pendingLabels);
-  console.log(`boundingBoxPending.currentImage: ${JSON.stringify(boundingBoxPendingLabels[currentImage])}`)
+  // console.log(`boundingBoxPending.currentImage: ${JSON.stringify(boundingBoxPendingLabels[currentImage])}`)
 
   const polygonLabels=useSelector(state=>state.Tools.polygon.userLabels);
   const polygonPendingLabels=useSelector(state=>state.Tools.polygon.pendingLabels);
@@ -96,19 +97,19 @@ const Canvas = () => {
   const rawOutput=useSelector(state=>state.Output.container);
   useEffect(()=>{
   for(let image in rawOutput){
-    rawOutput[image].classification && rawOutput[image].classification.map(label=>[label.text]);
-    rawOutput[image].boundingBox && rawOutput[image].boundingBox.map(label=>{
+    if (rawOutput[image].classification)  rawOutput[image].classification=
+        rawOutput[image].classification.map(label=>label.text);
+    if (rawOutput[image].boundingBox) rawOutput[image].boundingBox=
+        rawOutput[image].boundingBox.map(label=>{
       return {text:label.text,top_left:label.top_left,width:label.width,height:label.height};
     });
-    rawOutput[image].polygon && rawOutput[image].polygon.map(label=>{
+    if (rawOutput[image].polygon)  rawOutput[image].polygon=rawOutput[image].polygon.map(label=>{
       return {text:label.text,vertices:label.vertices};
     });
   }
     console.log(`the final out put: ${JSON.stringify(rawOutput)}`);
   setOutput(rawOutput);
-  },[rawOutput])
-
-
+  },[rawOutput]);
 
 
   useEffect(()=>{
@@ -210,8 +211,14 @@ const Canvas = () => {
   const [annotationType, setAnnotationType] = useState(defaultSelector);
   const [isImageDrag, toggleDragMode] = useReducer((p) => !p, false);
   const [output,setOutput]=useState({});
+  const [jsonURL,setJsonURL]=useState("");
 
   const [zoom, setZoom] = useState(1);
+
+  useEffect(()=>{
+    handleExport();
+  },[output])
+
 
   useEffect(() => {
     switch (currentSelector) {
@@ -423,39 +430,49 @@ const Canvas = () => {
   const handleCanvasOnHover=(id)=>{
     dispatch(actions.currentHoverId(currentSelector,id));
   }
+
+  const handleExport=()=>{
+    let jsonse = JSON.stringify(output);
+    let blob = new Blob([jsonse], {type: "application/json"});
+    setJsonURL(URL.createObjectURL(blob));
+  }
   return (
     <div className="main-canvas">
       <CommonHeader>
         <div className="main-toolbar">
-          {/*<ToolBarItem*/}
+          {/*<Export*/}
           {/*  tool="redo"*/}
           {/*  flip="true"*/}
           {/*  type="redo.svg"*/}
           {/*  tooltip="Undo"*/}
-          {/*></ToolBarItem>*/}
-          {/*<ToolBarItem tool="undo" type="redo.svg" tooltip="Redo"></ToolBarItem>*/}
+          {/*></Export>*/}
+          {/*<Export tool="undo" type="redo.svg" tooltip="Redo"></Export>*/}
           <ToolBarItem
             tool="zoomin"
             type="zoomIn.svg"
             tooltip="Zoom In"
+            onClick={()=>zoomAction.zoom(true)}
           ></ToolBarItem>
           <ToolBarItem
             tool="zoomout"
             flip="true"
             type="zoomOut.svg"
             tooltip="Zoom Out"
+            onClick={()=>zoomAction.zoom(false)}
           ></ToolBarItem>
           <ToolBarItem tool="move" type="hand.svg" tooltip="Move"></ToolBarItem>
           <ToolBarItem
             tool="pointer"
             type="cursor.svg"
             tooltip="Pointer"
+            onClick={()=>console.log('')}
           ></ToolBarItem>
-          <ToolBarItem
+          <Export
               tool="export"
               type="export.svg"
               tooltip="Export Output"
-          ></ToolBarItem>
+              jsonURL={jsonURL}
+          ></Export>
           <Selectors>
             <SelectorItem
               selector="boundingBox"
@@ -503,6 +520,7 @@ const Canvas = () => {
                 isImageDrag={isImageDrag}
                 onHover={(id) => handleCanvasOnHover(id)}
                 onClick={(id) => console.log(`onClick`, id)}
+                onMouseOut={(data)=>console.log(`onMouseOut: ${data} `)}
             />
 
       )}
