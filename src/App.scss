@@ -194,6 +194,11 @@ $end-direction: right !default;
     display: flex;
     margin: 0 12px;
     cursor: pointer;
+    align-items: center;
+
+    a{
+      margin:0 auto;
+    }
 
     img {
       width: 30px;
