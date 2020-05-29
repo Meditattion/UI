@@ -98,13 +98,13 @@ const Canvas = () => {
   useEffect(()=>{
   for(let image in rawOutput){
     if (rawOutput[image].classification)  rawOutput[image].classification=
-        rawOutput[image].classification.map(label=>label.text);
+        rawOutput[image].classification.map(label=>label?.text);
     if (rawOutput[image].boundingBox) rawOutput[image].boundingBox=
         rawOutput[image].boundingBox.map(label=>{
-      return {text:label.text,top_left:label.top_left,width:label.width,height:label.height};
+      return {text:label?.text,top_left:label.top_left,width:label.width,height:label.height};
     });
     if (rawOutput[image].polygon)  rawOutput[image].polygon=rawOutput[image].polygon.map(label=>{
-      return {text:label.text,vertices:label.vertices};
+      return {text:label?.text,vertices:label.vertices};
     });
   }
     console.log(`the final out put: ${JSON.stringify(rawOutput)}`);
@@ -429,7 +429,11 @@ const Canvas = () => {
   };
   const handleCanvasOnHover=(id)=>{
     dispatch(actions.currentHoverId(currentSelector,id));
-  }
+  };
+
+  const handleCanvasOnMouseOut=(id)=>{
+    dispatch(actions.currentMouseOutId(currentSelector,id));
+  };
 
   const handleExport=()=>{
     let jsonse = JSON.stringify(output);
@@ -520,7 +524,7 @@ const Canvas = () => {
                 isImageDrag={isImageDrag}
                 onHover={(id) => handleCanvasOnHover(id)}
                 onClick={(id) => console.log(`onClick`, id)}
-                onMouseOut={(data)=>console.log(`onMouseOut: ${data} `)}
+                onMouseOut={(id) => handleCanvasOnMouseOut(id)}
             />
 
       )}
