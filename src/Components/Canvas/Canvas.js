@@ -274,13 +274,6 @@ const Canvas = () => {
       polygonPendingLabels[currentImage]=[];
 
         setLabels(
-    //         Object.assign(
-    //     {},
-    //     { labelPolygons: labels["labelPolygons"] },
-    //     { labelRects: boundingBoxSuggestions[currentImage]
-    //           .concat(boundingBoxLabels[currentImage],boundingBoxPendingLabels[currentImage]) }
-    // )
-
     Object.assign(
         {},
         { labelPolygons: polygonSuggestions[currentImage]
@@ -289,6 +282,9 @@ const Canvas = () => {
               .concat(boundingBoxLabels[currentImage],boundingBoxPendingLabels[currentImage]) }
     )
         );
+
+        setLabelsRectLength(0);
+        setLabelsPolygonLength(0);
 
   }, [currentImage, currentSelector]);
 
@@ -464,12 +460,12 @@ const Canvas = () => {
             onClick={()=>zoomAction.zoom(false)}
           ></ToolBarItem>
           <ToolBarItem tool="move" type="hand.svg" tooltip="Move"></ToolBarItem>
-          <ToolBarItem
-            tool="pointer"
-            type="cursor.svg"
-            tooltip="Pointer"
-            onClick={()=>console.log('')}
-          ></ToolBarItem>
+          {/*<ToolBarItem*/}
+          {/*  tool="pointer"*/}
+          {/*  type="cursor.svg"*/}
+          {/*  tooltip="Pointer"*/}
+          {/*  onClick={()=>console.log('')}*/}
+          {/*></ToolBarItem>*/}
           <Export
               tool="export"
               type="export.svg"
