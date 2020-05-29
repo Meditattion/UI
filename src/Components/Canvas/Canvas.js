@@ -265,13 +265,29 @@ const Canvas = () => {
       boundingBoxLabels[currentImage]=[];
     if(!boundingBoxPendingLabels[currentImage])
       boundingBoxPendingLabels[currentImage]=[];
+
+    if(!polygonSuggestions[currentImage])
+      polygonSuggestions[currentImage]=[];
+    if(!polygonLabels[currentImage])
+      polygonLabels[currentImage]=[];
+    if(!polygonPendingLabels[currentImage])
+      polygonPendingLabels[currentImage]=[];
+
         setLabels(
-            Object.assign(
-                {},
-                { labelPolygons: labels["labelPolygons"] },
-                { labelRects: boundingBoxSuggestions[currentImage]
-                      .concat(boundingBoxLabels[currentImage],boundingBoxPendingLabels[currentImage]) }
-            )
+    //         Object.assign(
+    //     {},
+    //     { labelPolygons: labels["labelPolygons"] },
+    //     { labelRects: boundingBoxSuggestions[currentImage]
+    //           .concat(boundingBoxLabels[currentImage],boundingBoxPendingLabels[currentImage]) }
+    // )
+
+    Object.assign(
+        {},
+        { labelPolygons: polygonSuggestions[currentImage]
+              .concat(polygonLabels[currentImage],polygonPendingLabels[currentImage]) },
+        { labelRects: boundingBoxSuggestions[currentImage]
+              .concat(boundingBoxLabels[currentImage],boundingBoxPendingLabels[currentImage]) }
+    )
         );
 
   }, [currentImage, currentSelector]);
@@ -325,23 +341,6 @@ const Canvas = () => {
     }
   },[boundingBoxSuggestions])
 
-  useEffect(() => {
-    if(!boundingBoxSuggestions[currentImage])
-      boundingBoxSuggestions[currentImage]=[];
-    if(!boundingBoxLabels[currentImage])
-      boundingBoxLabels[currentImage]=[];
-    if(!boundingBoxPendingLabels[currentImage])
-      boundingBoxPendingLabels[currentImage]=[];
-    setLabels(
-        Object.assign(
-            {},
-            { labelPolygons: labels["labelPolygons"] },
-            { labelRects: boundingBoxSuggestions[currentImage]
-                  .concat(boundingBoxLabels[currentImage],boundingBoxPendingLabels[currentImage]) }
-        )
-    );
-
-  }, [currentImage, currentSelector]);
 
   // render suggestions on labels change
   useEffect(()=>{
