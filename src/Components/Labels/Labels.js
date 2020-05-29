@@ -43,6 +43,7 @@ const Labels = (props) => {
     console.log(`pol labels is visible: ${polygonLabelsIsVisible}`);
     const currentNewLabelID=useSelector(state=>state.Labels.currentNewLabelID);
     const classificationLabels=useSelector(state=>state.Tools.classification.userLabels);
+    const classificationPendingLabels=useSelector(state=>state.Tools.classification.pendingLabels);
     const boundingBoxLabels=useSelector(state=>state.Tools.boundingBox.userLabels);
     const boundingBoxPendingLabels=useSelector(state=>state.Tools.boundingBox.pendingLabels);
     const polygonLabels=useSelector(state=>state.Tools.polygon.userLabels);
@@ -77,13 +78,26 @@ const Labels = (props) => {
         });
 
     }
-    // useEffect(()=>{
-    // setBoundingBoxPendingLabelsToDisplay(prevState => )
-    // },[boundingBoxPendingLabels[currentImage]]);
-        loadedLabelsToDisplay.unshift(
-            <LabelDummyItem key="-1" tool={currentSelector} keyID="-1"
-                            topLeft="" width="" height="" vertices=""></LabelDummyItem>
-        );
+    if(currentImage!=="" && classificationLabels[currentImage]){
+        classificationLabels[currentImage].forEach(label => {
+            if (label.text.indexOf(searchQuery) >= 0) {
+                classificationLabelsToDisplay.unshift(
+                    <LabelItem key={label.id} serial={label.id} text={label.text} currentImage={currentImage}
+                               bgColor={label.bgColor} tool="classification" ></LabelItem>
+                )
+            }
+        });
+    }
+
+    if(currentImage!=="" && classificationPendingLabels[currentImage]){
+        classificationPendingLabels[currentImage].forEach(label => {
+            classificationPendingLabelsToDisplay.unshift(
+                <LabelDummyItem key={label.id} tool="classification" keyID={label.id} currentImage={currentImage}
+                                topLeft="" width="" height="" rect=""
+                                vertices=""></LabelDummyItem>
+            )
+        });
+    }
 
     if(currentImage!=="" && boundingBoxLabels[currentImage]){
         boundingBoxLabels[currentImage].forEach(label => {
@@ -138,10 +152,11 @@ const Labels = (props) => {
             <LabelsContainer>
                 <CustomLabelsContainer key="-1" annotator="classification" text="Classification"
                                        isOpen={currentImage != '' && classificationLabelsIsVisible}
-                                       numberOfChildren={loadedLabelsToDisplay.length + classificationLabelsToDisplay.length}>
+                                       numberOfChildren={loadedLabelsToDisplay.length + classificationLabelsToDisplay.length+classificationPendingLabelsToDisplay.length}>
                     <AddLabelBtn/>
                     { loadedLabelsToDisplay}
-                    {/*<LabelDummyItem key="-1"></LabelDummyItem>*/}
+                    {classificationPendingLabelsToDisplay}
+                    {classificationLabelsToDisplay}
                 </CustomLabelsContainer>
                 <CustomLabelsContainer key="-2" annotator="polygon" text="Segmentation"
                                        isOpen={currentImage != '' && polygonLabelsIsVisible}

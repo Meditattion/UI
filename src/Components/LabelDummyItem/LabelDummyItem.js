@@ -37,7 +37,7 @@ const LabelDummyItem = (props) => {
                             case "classification":
                                 labelToAdd={
                                     text:newLabelName,
-                                    id:props.keyID==="-1"? currentLabelCountID:props.keyID,
+                                    id:props.keyID,
                                     bgColor: bgColor};
                                 break;
                             case "boundingBox":
