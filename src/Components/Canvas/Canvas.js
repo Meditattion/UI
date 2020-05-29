@@ -7,6 +7,7 @@ import CommonHeader from "../CommonHeader/CommonHeader";
 import SelectorItem from "../SelectorItem/SelectorItem";
 import Selectors from "../Selectors/Selectors";
 import ToolBarItem from "../ToolBarItem/ToolBarItem";
+import Export from "../Exprot/Export"
 import CanvasSuggestion from "../CanvasSuggestion/CanvasSuggestion";
 const labelsDataDefault = {
   labelRects: [],
@@ -81,15 +82,13 @@ const Canvas = () => {
   const loadedBoundingBoxLabels=useSelector(state=>state.Tools.boundingBox.labels);
   const [boundingBoxSuggestions,setBoundingBoxSuggestion]=useState([]);
   const loadedPolygonLabels=useSelector(state=>state.Tools.polygon.labels);
+  const [polygonSuggestions,setPolygonSuggestion]=useState([]);
 
-  // const loadedLabels = useSelector(
-  //   (state) => state.Tools[currentSelector].labels
-  // );
   const boundingBoxLabels=useSelector(state=>state.Tools.boundingBox.userLabels);
-  console.log(`boundingBoxLabels.currentImage: ${JSON.stringify(boundingBoxLabels[currentImage])}`)
+  // console.log(`boundingBoxLabels.currentImage: ${JSON.stringify(boundingBoxLabels[currentImage])}`)
 
   const boundingBoxPendingLabels=useSelector(state=>state.Tools.boundingBox.pendingLabels);
-  console.log(`boundingBoxPending.currentImage: ${JSON.stringify(boundingBoxPendingLabels[currentImage])}`)
+  // console.log(`boundingBoxPending.currentImage: ${JSON.stringify(boundingBoxPendingLabels[currentImage])}`)
 
   const polygonLabels=useSelector(state=>state.Tools.polygon.userLabels);
   const polygonPendingLabels=useSelector(state=>state.Tools.polygon.pendingLabels);
@@ -98,19 +97,19 @@ const Canvas = () => {
   const rawOutput=useSelector(state=>state.Output.container);
   useEffect(()=>{
   for(let image in rawOutput){
-    rawOutput[image].classification && rawOutput[image].classification.map(label=>[label.text]);
-    rawOutput[image].boundingBox && rawOutput[image].boundingBox.map(label=>{
+    if (rawOutput[image].classification)  rawOutput[image].classification=
+        rawOutput[image].classification.map(label=>label.text);
+    if (rawOutput[image].boundingBox) rawOutput[image].boundingBox=
+        rawOutput[image].boundingBox.map(label=>{
       return {text:label.text,top_left:label.top_left,width:label.width,height:label.height};
     });
-    rawOutput[image].polygon && rawOutput[image].polygon.map(label=>{
+    if (rawOutput[image].polygon)  rawOutput[image].polygon=rawOutput[image].polygon.map(label=>{
       return {text:label.text,vertices:label.vertices};
     });
   }
     console.log(`the final out put: ${JSON.stringify(rawOutput)}`);
   setOutput(rawOutput);
-  },[rawOutput])
-
-
+  },[rawOutput]);
 
 
   useEffect(()=>{
@@ -212,8 +211,14 @@ const Canvas = () => {
   const [annotationType, setAnnotationType] = useState(defaultSelector);
   const [isImageDrag, toggleDragMode] = useReducer((p) => !p, false);
   const [output,setOutput]=useState({});
+  const [jsonURL,setJsonURL]=useState("");
 
   const [zoom, setZoom] = useState(1);
+
+  useEffect(()=>{
+    handleExport();
+  },[output])
+
 
   useEffect(() => {
     switch (currentSelector) {
@@ -291,7 +296,74 @@ const Canvas = () => {
       });
       setLabelsSuggestions(labelsSugges);
     }
-  },[labels])
+  },[labels]);
+
+  useEffect(()=>{
+    let polygonSuggestionsToAssign={};
+    for (let image in loadedPolygonLabels){
+      polygonSuggestionsToAssign[image]=loadedPolygonLabels[image].map((label,labelIndex) => {
+        return {
+          id:currentImage+labelIndex,
+          isSuggestion:true,
+          rect: {
+            x: label["top_left"][1],
+            y: label["top_left"][0],
+            width: label["width"],
+            height: label["height"],
+          },
+        };
+      });
+    }
+    setPolygonSuggestion(polygonSuggestionsToAssign);
+  },[loadedPolygonLabels]);
+
+  //add bb sugges to total labels
+  useEffect(()=>{
+    if(boundingBoxSuggestions[currentImage]){
+      setLabels(oldLabels=>Object.assign({},{labelPolygons: oldLabels.labelPolygons},
+          {labelRects: [...boundingBoxSuggestions[currentImage],...boundingBoxLabels[currentImage]]}));
+    }
+  },[boundingBoxSuggestions])
+
+  useEffect(() => {
+    if(!boundingBoxSuggestions[currentImage])
+      boundingBoxSuggestions[currentImage]=[];
+    if(!boundingBoxLabels[currentImage])
+      boundingBoxLabels[currentImage]=[];
+    if(!boundingBoxPendingLabels[currentImage])
+      boundingBoxPendingLabels[currentImage]=[];
+    setLabels(
+        Object.assign(
+            {},
+            { labelPolygons: labels["labelPolygons"] },
+            { labelRects: boundingBoxSuggestions[currentImage]
+                  .concat(boundingBoxLabels[currentImage],boundingBoxPendingLabels[currentImage]) }
+        )
+    );
+
+  }, [currentImage, currentSelector]);
+
+  // render suggestions on labels change
+  useEffect(()=>{
+    if(boundingBoxSuggestions[currentImage]){
+      let labelsSugges=[];
+      // console.log(`rect labels : ${JSON.stringify(labels)}`)
+      labels.labelRects.forEach(label=>{
+        console.log(`label : ${JSON.stringify(label)}`);
+        if(label.isSuggestion){
+          labelsSugges.push(<CanvasSuggestion key={label.id} id={label.id}
+                                              top={imageWidthFactor*label.rect.y + "px"}
+                                              left={imageWidthFactor*label.rect.x+ label.rect.width/2 + "px"}
+                                              tool={currentSelector}
+                                              setLabels={setLabels}
+                                              setBoundigBoxSuggestions={setBoundingBoxSuggestion}
+                                              currentImage={currentImage}/>);
+        }
+
+      });
+      setLabelsSuggestions(labelsSugges);
+    }
+  },[labels]);
 
   // can be used on icons
   const zoomAction = useMemo(
@@ -355,40 +427,52 @@ const Canvas = () => {
       setLabelsPolygonLength((prevState) => prevState + 1);
     }
   };
+  const handleCanvasOnHover=(id)=>{
+    dispatch(actions.currentHoverId(currentSelector,id));
+  }
 
+  const handleExport=()=>{
+    let jsonse = JSON.stringify(output);
+    let blob = new Blob([jsonse], {type: "application/json"});
+    setJsonURL(URL.createObjectURL(blob));
+  }
   return (
     <div className="main-canvas">
       <CommonHeader>
         <div className="main-toolbar">
-          {/*<ToolBarItem*/}
+          {/*<Export*/}
           {/*  tool="redo"*/}
           {/*  flip="true"*/}
           {/*  type="redo.svg"*/}
           {/*  tooltip="Undo"*/}
-          {/*></ToolBarItem>*/}
-          {/*<ToolBarItem tool="undo" type="redo.svg" tooltip="Redo"></ToolBarItem>*/}
+          {/*></Export>*/}
+          {/*<Export tool="undo" type="redo.svg" tooltip="Redo"></Export>*/}
           <ToolBarItem
             tool="zoomin"
             type="zoomIn.svg"
             tooltip="Zoom In"
+            onClick={()=>zoomAction.zoom(true)}
           ></ToolBarItem>
           <ToolBarItem
             tool="zoomout"
             flip="true"
             type="zoomOut.svg"
             tooltip="Zoom Out"
+            onClick={()=>zoomAction.zoom(false)}
           ></ToolBarItem>
           <ToolBarItem tool="move" type="hand.svg" tooltip="Move"></ToolBarItem>
           <ToolBarItem
             tool="pointer"
             type="cursor.svg"
             tooltip="Pointer"
+            onClick={()=>console.log('')}
           ></ToolBarItem>
-          <ToolBarItem
+          <Export
               tool="export"
               type="export.svg"
               tooltip="Export Output"
-          ></ToolBarItem>
+              jsonURL={jsonURL}
+          ></Export>
           <Selectors>
             <SelectorItem
               selector="boundingBox"
@@ -434,8 +518,9 @@ const Canvas = () => {
                 }}
                 annotationType={annotationType}
                 isImageDrag={isImageDrag}
-                onHover={(id) => console.log(`onHover`, id)}
+                onHover={(id) => handleCanvasOnHover(id)}
                 onClick={(id) => console.log(`onClick`, id)}
+                onMouseOut={(data)=>console.log(`onMouseOut: ${data} `)}
             />
 
       )}

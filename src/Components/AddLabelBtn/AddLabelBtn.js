@@ -20,7 +20,7 @@ const AddLabelBtn = (props) => {
                      currentImage,"classification"));
                  dispatch(actions.increaseLabelsId());
              }}>
-            <span>Add new label</span>
+            <span>Add new classification</span>
             <img alt="" src={process.env.PUBLIC_URL + "Images/plusS.svg"}></img>
         </div>
     )

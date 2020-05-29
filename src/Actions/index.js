@@ -91,6 +91,11 @@ const actions = {
   }),
   increaseLabelsId:()=>({
     type:'INC_LABEL_ID'
+  }),
+  currentHoverId:(tool,id)=>({
+    type:'CURRENT_HOVER_ID',
+    tool,
+    id
   })
 }
 

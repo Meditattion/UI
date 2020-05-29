@@ -194,6 +194,11 @@ $end-direction: right !default;
     display: flex;
     margin: 0 12px;
     cursor: pointer;
+    align-items: center;
+
+    a{
+      margin:0 auto;
+    }
 
     img {
       width: 30px;
@@ -242,6 +247,7 @@ $end-direction: right !default;
       height: 60%;
       border-radius: 5px;
       border: 0;
+      filter:brightness(1.0)!important;
 
     }
 
