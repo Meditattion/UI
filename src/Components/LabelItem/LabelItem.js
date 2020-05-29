@@ -10,7 +10,8 @@ const LabelItem = (props) => {
     let dispatch = useDispatch();
 
     return (
-        <div className="main-labels-item" style={{backgroundColor:props.bgColor}}>
+        <div className="main-labels-item"
+             style={{backgroundColor:props.currentHover===props.keyID?props.bgColor.onHover:props.bgColor.regular}}>
             <div className="main-labels-item-blank" >&nbsp;</div>
             <div style={{ display: "flex", flexDirection: "row" }}>
                 <span>{props.text}</span>

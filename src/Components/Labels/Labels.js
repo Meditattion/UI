@@ -48,6 +48,7 @@ const Labels = (props) => {
     const boundingBoxPendingLabels=useSelector(state=>state.Tools.boundingBox.pendingLabels);
     const polygonLabels=useSelector(state=>state.Tools.polygon.userLabels);
     const polygonPendingLabels=useSelector(state=>state.Tools.polygon.pendingLabels);
+    const currentHover=useSelector(state=>state.Labels.currentHover);
 
 
 // useEffect(()=>{
@@ -72,7 +73,8 @@ const Labels = (props) => {
             if (label.indexOf(searchQuery) >= 0) {
                 loadedLabelsToDisplay.unshift(
                     <LabelItem key={label} serial={label} text={label} currentImage={currentImage}
-                               bgColor={getRandomColor()} tool={currentSelector} ></LabelItem>
+                               bgColor={getRandomColor()} tool={currentSelector}
+                            currentHover={currentHover.tool===currentSelector?currentHover.id:-10}></LabelItem>
                 )
             }
         });
@@ -83,7 +85,8 @@ const Labels = (props) => {
             if (label.text.indexOf(searchQuery) >= 0) {
                 classificationLabelsToDisplay.unshift(
                     <LabelItem key={label.id} serial={label.id} text={label.text} currentImage={currentImage}
-                               bgColor={label.bgColor} tool="classification" ></LabelItem>
+                               bgColor={label.bgColor} tool="classification"
+                    currentHover={currentHover.tool==="classification"?currentHover.id:-10}></LabelItem>
                 )
             }
         });
@@ -93,6 +96,7 @@ const Labels = (props) => {
         classificationPendingLabels[currentImage].forEach(label => {
             classificationPendingLabelsToDisplay.unshift(
                 <LabelDummyItem key={label.id} tool="classification" keyID={label.id} currentImage={currentImage}
+                                currentHover={currentHover.tool==="classification"?currentHover.id:-10}
                                 topLeft="" width="" height="" rect=""
                                 vertices=""></LabelDummyItem>
             )
@@ -105,6 +109,7 @@ const Labels = (props) => {
             if (label.text.indexOf(searchQuery) >= 0) {
                 boundingBoxLabelsToDisplay.unshift(
                     <LabelItem key={label.id} serial={label.id} text={label.text} currentImage={currentImage}
+                               currentHover={currentHover.tool==="boundingBox"?currentHover.id:-10}
                                bgColor={label.bgColor} tool="boundingBox" ></LabelItem>
                 )
             }
@@ -115,6 +120,7 @@ const Labels = (props) => {
         boundingBoxPendingLabels[currentImage].forEach(label => {
                 boundingBoxPendingLabelsToDisplay.unshift(
                     <LabelDummyItem key="-1" tool="boundingBox" keyID={label.id} currentImage={currentImage}
+                                    currentHover={currentHover.tool==="boundingBox"?currentHover.id:-10}
                                     topLeft={label.top_left} width={label.width} height={label.height} rect={label.rect}
                                         vertices=""></LabelDummyItem>
                 )
@@ -127,6 +133,7 @@ const Labels = (props) => {
             if (label.text.indexOf(searchQuery) >= 0) {
                 polygonLabelsToDisplay.unshift(
                     <LabelItem key={label.id} serial={label.id} text={label.text} currentImage={currentImage}
+                               currentHover={currentHover.tool==="polygon"?currentHover.id:-10}
                                bgColor={label.bgColor} tool="polygon" ></LabelItem>
                 )
             }
@@ -137,6 +144,7 @@ const Labels = (props) => {
         polygonPendingLabels[currentImage].forEach(label => {
             polygonPendingLabelsToDisplay.unshift(
                 <LabelDummyItem key="-1" tool="polygon" keyID={label.id} currentImage={currentImage}
+                                currentHover={currentHover.tool==="polygon"?currentHover.id:-10}
                                 topLeft="" width="" height="" vertices={label.vertices}></LabelDummyItem>
             )
         });

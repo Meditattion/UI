@@ -12,9 +12,21 @@ const getRandomColor = () => {
 };
 
 
+function random_rgba() {
+    var o = Math.round, r = Math.random, s = 255;
+    let randR=o(r()*s);
+    let randG=o(r()*s);
+    let randB=o(r()*s);
+    return {
+        regular:`rgba(${randR},${randG},${randB},0.7)`,
+        onHover:`rgba(${randR},${randG},${randB},1)`
+    };
+
+}
+
 const LabelDummyItem = (props) => {
     const [newLabelName, setNewLabelName] = useState('');
-    const [bgColor, setbgColor] = useState(getRandomColor);
+    const [bgColor, setbgColor] = useState(random_rgba());
     let dispatch = useDispatch();
     const currentLabelCountID = useSelector(state => state.LabelsCounterID);
     const newDummyLabelIsVisible = useSelector(state => state.Labels.dummyNewLabel);
@@ -22,7 +34,7 @@ const LabelDummyItem = (props) => {
 
     return (
         <div className="main-labels-item" style={{
-            backgroundColor: bgColor,
+            backgroundColor:props.currentHover===props.keyID?bgColor.onHover: bgColor.regular,
             display: newDummyLabelIsVisible ? 'grid' : 'none'
         }}>
             <div className="main-labels-item-blank" >&nbsp;</div>
@@ -65,7 +77,7 @@ const LabelDummyItem = (props) => {
                         dispatch(actions.removePendingLabel(props.currentImage,props.keyID,props.tool));
                         dispatch(actions.addLabel(labelToAdd,currentImage,props.tool));
                         setNewLabelName('');
-                        setbgColor(getRandomColor);
+                        setbgColor(random_rgba());
                     }}></img>
 
                 <img alt="" src={process.env.PUBLIC_URL + "Images/trashS.svg"}
@@ -73,7 +85,7 @@ const LabelDummyItem = (props) => {
                         // dispatch(actions.closeDummyLabel());
                         dispatch(actions.removePendingLabel(props.currentImage,props.keyID,props.tool));
                         setNewLabelName('');
-                        setbgColor(getRandomColor);
+                        setbgColor(random_rgba());
                     }}></img>
             </div>
         </div>

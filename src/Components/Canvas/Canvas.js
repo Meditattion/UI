@@ -81,10 +81,8 @@ const Canvas = () => {
   const loadedBoundingBoxLabels=useSelector(state=>state.Tools.boundingBox.labels);
   const [boundingBoxSuggestions,setBoundingBoxSuggestion]=useState([]);
   const loadedPolygonLabels=useSelector(state=>state.Tools.polygon.labels);
+  const [polygonSuggestions,setPolygonSuggestion]=useState([]);
 
-  // const loadedLabels = useSelector(
-  //   (state) => state.Tools[currentSelector].labels
-  // );
   const boundingBoxLabels=useSelector(state=>state.Tools.boundingBox.userLabels);
   console.log(`boundingBoxLabels.currentImage: ${JSON.stringify(boundingBoxLabels[currentImage])}`)
 
@@ -291,7 +289,74 @@ const Canvas = () => {
       });
       setLabelsSuggestions(labelsSugges);
     }
-  },[labels])
+  },[labels]);
+
+  useEffect(()=>{
+    let polygonSuggestionsToAssign={};
+    for (let image in loadedPolygonLabels){
+      polygonSuggestionsToAssign[image]=loadedPolygonLabels[image].map((label,labelIndex) => {
+        return {
+          id:currentImage+labelIndex,
+          isSuggestion:true,
+          rect: {
+            x: label["top_left"][1],
+            y: label["top_left"][0],
+            width: label["width"],
+            height: label["height"],
+          },
+        };
+      });
+    }
+    setPolygonSuggestion(polygonSuggestionsToAssign);
+  },[loadedPolygonLabels]);
+
+  //add bb sugges to total labels
+  useEffect(()=>{
+    if(boundingBoxSuggestions[currentImage]){
+      setLabels(oldLabels=>Object.assign({},{labelPolygons: oldLabels.labelPolygons},
+          {labelRects: [...boundingBoxSuggestions[currentImage],...boundingBoxLabels[currentImage]]}));
+    }
+  },[boundingBoxSuggestions])
+
+  useEffect(() => {
+    if(!boundingBoxSuggestions[currentImage])
+      boundingBoxSuggestions[currentImage]=[];
+    if(!boundingBoxLabels[currentImage])
+      boundingBoxLabels[currentImage]=[];
+    if(!boundingBoxPendingLabels[currentImage])
+      boundingBoxPendingLabels[currentImage]=[];
+    setLabels(
+        Object.assign(
+            {},
+            { labelPolygons: labels["labelPolygons"] },
+            { labelRects: boundingBoxSuggestions[currentImage]
+                  .concat(boundingBoxLabels[currentImage],boundingBoxPendingLabels[currentImage]) }
+        )
+    );
+
+  }, [currentImage, currentSelector]);
+
+  // render suggestions on labels change
+  useEffect(()=>{
+    if(boundingBoxSuggestions[currentImage]){
+      let labelsSugges=[];
+      // console.log(`rect labels : ${JSON.stringify(labels)}`)
+      labels.labelRects.forEach(label=>{
+        console.log(`label : ${JSON.stringify(label)}`);
+        if(label.isSuggestion){
+          labelsSugges.push(<CanvasSuggestion key={label.id} id={label.id}
+                                              top={imageWidthFactor*label.rect.y + "px"}
+                                              left={imageWidthFactor*label.rect.x+ label.rect.width/2 + "px"}
+                                              tool={currentSelector}
+                                              setLabels={setLabels}
+                                              setBoundigBoxSuggestions={setBoundingBoxSuggestion}
+                                              currentImage={currentImage}/>);
+        }
+
+      });
+      setLabelsSuggestions(labelsSugges);
+    }
+  },[labels]);
 
   // can be used on icons
   const zoomAction = useMemo(
@@ -355,7 +420,9 @@ const Canvas = () => {
       setLabelsPolygonLength((prevState) => prevState + 1);
     }
   };
-
+  const handleCanvasOnHover=(id)=>{
+    dispatch(actions.currentHoverId(currentSelector,id));
+  }
   return (
     <div className="main-canvas">
       <CommonHeader>
@@ -434,7 +501,7 @@ const Canvas = () => {
                 }}
                 annotationType={annotationType}
                 isImageDrag={isImageDrag}
-                onHover={(id) => console.log(`onHover`, id)}
+                onHover={(id) => handleCanvasOnHover(id)}
                 onClick={(id) => console.log(`onClick`, id)}
             />
 
