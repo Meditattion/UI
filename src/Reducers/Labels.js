@@ -45,6 +45,9 @@ const Labels = (state = initState, action) => {
             });
         case 'CANVAS_LABELS_CURDS':
             return Object.assign({},state,{canvasLabelCurds:{top:action.top,left:action.left}})
+
+        case 'INC_LABEL_ID':
+            return Object.assign({},state,{currentNewLabelID:state.currentNewLabelID+1})
         default:
             return state
     }

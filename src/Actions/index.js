@@ -88,6 +88,9 @@ const actions = {
     type:'REMOVE_LOADED_LABEL',
     tool,
     id
+  }),
+  increaseLabelsId:()=>({
+    type:'INC_LABEL_ID'
   })
 }
 

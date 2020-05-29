@@ -18,6 +18,7 @@ const initialState = {
         isSelected: true,
         labels: {},
         userLabels:{},
+        pendingLabels:{}
     }
 }
 
@@ -45,32 +46,32 @@ const Tools = (state = initialState, action) => {
             });
 
         case ADD_LABEL:
-            if(!(action.imageID in state[state.currentSelector].userLabels)){
+            if(!(action.imageID in state[action.tool].userLabels)){
                 return Object.assign({}, state, {
-                    [state.currentSelector]: Object.assign({}, state[state.currentSelector],
-                        { userLabels: Object.assign({},state[state.currentSelector].userLabels,
+                    [action.tool]: Object.assign({}, state[action.tool],
+                        { userLabels: Object.assign({},state[action.tool].userLabels,
                                 {[action.imageID]:[action.label]}) })
                 });
             }else{
                 return Object.assign({}, state, {
-                    [state.currentSelector]: Object.assign({}, state[state.currentSelector],
-                        { userLabels: Object.assign({},state[state.currentSelector].userLabels,
-                                {[action.imageID]:state[state.currentSelector].userLabels[action.imageID].concat([action.label])}) })
+                    [action.tool]: Object.assign({}, state[action.tool],
+                        { userLabels: Object.assign({},state[action.tool].userLabels,
+                                {[action.imageID]:state[action.tool].userLabels[action.imageID].concat([action.label])}) })
                 });
             }
 
         case "ADD_PENDING_LABEL":
-            if(!(action.imageID in state[state.currentSelector].pendingLabels)){
+            if(!(action.imageID in state[action.tool].pendingLabels)){
                 return Object.assign({}, state, {
-                    [state.currentSelector]: Object.assign({}, state[state.currentSelector],
-                        { pendingLabels: Object.assign({},state[state.currentSelector].pendingLabels,
+                    [action.tool]: Object.assign({}, state[action.tool],
+                        { pendingLabels: Object.assign({},state[action.tool].pendingLabels,
                                 {[action.imageID]:[action.label]}) })
                 });
             }else{
                 return Object.assign({}, state, {
-                    [state.currentSelector]: Object.assign({}, state[state.currentSelector],
-                        { pendingLabels: Object.assign({},state[state.currentSelector].pendingLabels,
-                                {[action.imageID]:state[state.currentSelector].pendingLabels[action.imageID].concat([action.label])}) })
+                    [action.tool]: Object.assign({}, state[action.tool],
+                        { pendingLabels: Object.assign({},state[action.tool].pendingLabels,
+                                {[action.imageID]:state[action.tool].pendingLabels[action.imageID].concat([action.label])}) })
                 });
             }
 

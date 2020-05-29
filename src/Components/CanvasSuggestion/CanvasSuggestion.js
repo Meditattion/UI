@@ -29,9 +29,6 @@ const CanvasSuggestion = (props) => {
             left:props.left,
 
         }}>
-
-            suggestion
-
             <img alt="" src={process.env.PUBLIC_URL + "/Images/complete.png"}
                  style={{ cursor: "pointer" }}
                  onClick={() => {

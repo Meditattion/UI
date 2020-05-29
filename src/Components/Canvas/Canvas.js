@@ -75,6 +75,7 @@ const Canvas = () => {
   );
   const currentSelector = useSelector((state) => state.Tools.currentSelector);
   const currentImage = useSelector((state) => state.Images.currentImage);
+  const classificationLabelsId=useSelector((state)=>state.Labels.currentNewLabelID);
   // console.log(`currentImage:${currentImage}`);
 
   const loadedBoundingBoxLabels=useSelector(state=>state.Tools.boundingBox.labels);
@@ -413,8 +414,16 @@ const Canvas = () => {
       {/* https://denvash.github.io/react-canvas-annotation/ */}
       {/* https://github.com/denvash/react-canvas-annotation */}
 
+      {currentSelector==="classification" && <div style={{position:"absolute",height:"100%",width:"100%",zIndex:1000000}}
+                  onClick={()=>{
+                    dispatch(actions.addPendingLabel({
+                            id:classificationLabelsId
+                        },
+                        currentImage,"classification"));
+                    dispatch(actions.increaseLabelsId());
+                  }}></div>}
+
       {imageFile !== "" && (
-          <div style={{height:"100%",pointerEvents:currentSelector=="classification"?'none':'auto'}}>
             <ReactCanvasAnnotation
                 zoom={zoom}
                 imageFile={imageFile}
@@ -428,7 +437,6 @@ const Canvas = () => {
                 onHover={(id) => console.log(`onHover`, id)}
                 onClick={(id) => console.log(`onClick`, id)}
             />
-          </div>
 
       )}
 

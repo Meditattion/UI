@@ -21,7 +21,9 @@ const store = createStore(rootReducer,
       },
       classification: {
         isSelected: true,
-        labels: {}, userLabels:{}
+        labels: {},
+          userLabels:{},
+          pendingLabels:{}
       }
     },
       Toggles:{
