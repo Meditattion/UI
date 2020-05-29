@@ -53,9 +53,10 @@ const actions = {
     type: 'LOAD_IMAGES',
     images
   }),
-  loadLabels: (labels) => ({
+  loadLabels: (labels,tool="classification") => ({
     type: 'LOAD_LABELS',
-    labels
+    labels,
+    tool
   }),
   imageChange: (imageName) => ({
     type: 'IMAGE_CHANGE',

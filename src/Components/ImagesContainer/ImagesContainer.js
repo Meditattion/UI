@@ -13,13 +13,14 @@ const ImagesContainer = (props) => {
     let selectorLabels;
 
 
+
     const [images,setImages]=useState(loadedImages?loadedImages:null);
     useEffect(()=>{
         console.log("loaded Images", loadedImages);
         setImages(loadedImages);
     },[loadedImages]);
 
-    const [labels,setLabels]=useState(loadedLabels?loadedLabels:null);
+    const [labels,setLabels]=useState(loadedLabels?loadedLabels:{});
     useEffect(()=>{
         console.log("loaded Labels", loadedLabels);
         if (loadedLabels.length > 0) {
@@ -29,6 +30,7 @@ const ImagesContainer = (props) => {
                     result => { selectorLabels = result; console.log("selectorLabels:", selectorLabels) }
                 );
         }
+        if(currentSelector==="polygon") delete loadedLabels.undefined;
         setLabels(loadedLabels);
     },[loadedLabels]);
 
@@ -44,8 +46,8 @@ const ImagesContainer = (props) => {
             <div style={{position:"sticky",top:0,backgroundColor:"white",zIndex:10}}>
                 <div style={{display:"flex",flexDirection:"row"}}>
                     <AddFileBtn index="0" accept="image/*" text="Add new image"></AddFileBtn>
-                    <AddFileBtn tool={currentSelector} index="1" accept={currentSelector==="polygon" ? ".png" :".json"}
-                                text={currentSelector==="polygon"?"Add new mask" :"Add new json"}></AddFileBtn>
+                    <AddFileBtn tool={currentSelector} index="1" accept={".json"}
+                                text={"Add new json"}></AddFileBtn>
                 </div>
 
             </div>

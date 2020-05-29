@@ -78,7 +78,7 @@ const Labels = (props) => {
 
     if (currentImage != '' && Object.keys(loadedLabels).length > 0 && loadedLabels[currentImage]) {
         loadedLabels[currentImage].forEach(label => {
-            // console.log("label:", label);
+            console.log("loaded label:", label);
             if (label.indexOf(searchQuery) >= 0) {
                 loadedLabelsToDisplay.unshift(
                     <LabelItem key={label} serial={label} text={label} currentImage={currentImage}

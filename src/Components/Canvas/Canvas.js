@@ -11,30 +11,6 @@ import Export from "../Exprot/Export"
 import CanvasSuggestion from "../CanvasSuggestion/CanvasSuggestion";
 const labelsDataDefault = {
   labelRects: [],
-  labelPolygons: [],
-};
-
-function usePrevious(value) {
-  const ref = useRef();
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
-}
-
-/* data example:
-{
-  labelRects: [
-    {
-      id: "Rect-Example",
-      rect: {
-        x: 697.2371134020618,
-        y: 454.26804123711344,
-        width: 717.0309278350516,
-        height: 492.1237113402062,
-      },
-    },
-  ],
   labelPolygons: [
     {
       id: `Poly-Example`,
@@ -46,8 +22,42 @@ function usePrevious(value) {
       ],
     },
   ],
+};
+
+function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
 }
-*/
+
+//  data example:
+// {
+//   labelRects: [
+//     {
+//       id: "Rect-Example",
+//       rect: {
+//         x: 697.2371134020618,
+//         y: 454.26804123711344,
+//         width: 717.0309278350516,
+//         height: 492.1237113402062,
+//       },
+//     },
+//   ],
+//   labelPolygons: [
+//     {
+//       id: `Poly-Example`,
+//       vertices: [
+//         { x: 623.7525773195875, y: 440.9072164948454 },
+//         { x: 1331.8762886597938, y: 305.07216494845363 },
+//         { x: 1641.4020618556701, y: 732.6185567010309 },
+//         { x: 882.0618556701031, y: 790.5154639175258 },
+//       ],
+//     },
+//   ]
+// }
+
 
 const ZOOM_STEP = 0.1;
 
@@ -247,6 +257,7 @@ const Canvas = () => {
         };
       });
     }
+    console.log(`loaded bb labels: ${JSON.stringify(loadedBoundingBoxLabels)}`)
     setBoundingBoxSuggestion(boundingBoxSuggestionsToAssign);
   },[loadedBoundingBoxLabels]);
 
@@ -256,7 +267,27 @@ const Canvas = () => {
       setLabels(oldLabels=>Object.assign({},{labelPolygons: oldLabels.labelPolygons},
           {labelRects: [...boundingBoxSuggestions[currentImage],...boundingBoxLabels[currentImage]]}));
     }
-  },[boundingBoxSuggestions])
+  },[boundingBoxSuggestions]);
+
+  useEffect(()=>{
+    if(loadedPolygonLabels){
+      // Object.keys(loadedPolygonLabels).forEach(key => delete loadedPolygonLabels[key]; break;);
+      delete loadedPolygonLabels.undefined;
+      console.log(`loaded polygon: ${JSON.stringify(loadedPolygonLabels)}`)
+
+      setPolygonSuggestion(loadedPolygonLabels);
+    }
+
+  },[loadedPolygonLabels]);
+
+  //add bb sugges to total labels
+  useEffect(()=>{
+    if(polygonSuggestions[currentImage]){
+      setLabels(oldLabels=>Object.assign({},
+          {labelPolygons: [...polygonSuggestions[currentImage],...polygonLabels[currentImage]]},
+          {labelRects: oldLabels.labelRects}));
+    }
+  },[polygonSuggestions]);
 
   useEffect(() => {
     if(!boundingBoxSuggestions[currentImage])
@@ -310,32 +341,6 @@ const Canvas = () => {
     }
   },[labels]);
 
-  useEffect(()=>{
-    let polygonSuggestionsToAssign={};
-    for (let image in loadedPolygonLabels){
-      polygonSuggestionsToAssign[image]=loadedPolygonLabels[image].map((label,labelIndex) => {
-        return {
-          id:currentImage+labelIndex,
-          isSuggestion:true,
-          rect: {
-            x: label["top_left"][1],
-            y: label["top_left"][0],
-            width: label["width"],
-            height: label["height"],
-          },
-        };
-      });
-    }
-    setPolygonSuggestion(polygonSuggestionsToAssign);
-  },[loadedPolygonLabels]);
-
-  //add bb sugges to total labels
-  useEffect(()=>{
-    if(boundingBoxSuggestions[currentImage]){
-      setLabels(oldLabels=>Object.assign({},{labelPolygons: oldLabels.labelPolygons},
-          {labelRects: [...boundingBoxSuggestions[currentImage],...boundingBoxLabels[currentImage]]}));
-    }
-  },[boundingBoxSuggestions])
 
 
   // render suggestions on labels change
