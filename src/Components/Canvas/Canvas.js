@@ -11,17 +11,7 @@ import Export from "../Exprot/Export"
 import CanvasSuggestion from "../CanvasSuggestion/CanvasSuggestion";
 const labelsDataDefault = {
   labelRects: [],
-  labelPolygons: [
-    {
-      id: `Poly-Example`,
-      vertices: [
-        { x: 623.7525773195875, y: 440.9072164948454 },
-        { x: 1331.8762886597938, y: 305.07216494845363 },
-        { x: 1641.4020618556701, y: 732.6185567010309 },
-        { x: 882.0618556701031, y: 790.5154639175258 },
-      ],
-    },
-  ],
+  labelPolygons: []
 };
 
 function usePrevious(value) {
