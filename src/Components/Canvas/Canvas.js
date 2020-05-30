@@ -11,7 +11,7 @@ import Export from "../Exprot/Export"
 import CanvasSuggestion from "../CanvasSuggestion/CanvasSuggestion";
 const labelsDataDefault = {
   labelRects: [],
-  labelPolygons: [],
+  labelPolygons: []
 };
 
 function usePrevious(value) {
@@ -22,32 +22,32 @@ function usePrevious(value) {
   return ref.current;
 }
 
-/* data example:
-{
-  labelRects: [
-    {
-      id: "Rect-Example",
-      rect: {
-        x: 697.2371134020618,
-        y: 454.26804123711344,
-        width: 717.0309278350516,
-        height: 492.1237113402062,
-      },
-    },
-  ],
-  labelPolygons: [
-    {
-      id: `Poly-Example`,
-      vertices: [
-        { x: 623.7525773195875, y: 440.9072164948454 },
-        { x: 1331.8762886597938, y: 305.07216494845363 },
-        { x: 1641.4020618556701, y: 732.6185567010309 },
-        { x: 882.0618556701031, y: 790.5154639175258 },
-      ],
-    },
-  ],
-}
-*/
+//  data example:
+// {
+//   labelRects: [
+//     {
+//       id: "Rect-Example",
+//       rect: {
+//         x: 697.2371134020618,
+//         y: 454.26804123711344,
+//         width: 717.0309278350516,
+//         height: 492.1237113402062,
+//       },
+//     },
+//   ],
+//   labelPolygons: [
+//     {
+//       id: `Poly-Example`,
+//       vertices: [
+//         { x: 623.7525773195875, y: 440.9072164948454 },
+//         { x: 1331.8762886597938, y: 305.07216494845363 },
+//         { x: 1641.4020618556701, y: 732.6185567010309 },
+//         { x: 882.0618556701031, y: 790.5154639175258 },
+//       ],
+//     },
+//   ]
+// }
+
 
 const ZOOM_STEP = 0.1;
 
@@ -247,6 +247,7 @@ const Canvas = () => {
         };
       });
     }
+    console.log(`loaded bb labels: ${JSON.stringify(loadedBoundingBoxLabels)}`)
     setBoundingBoxSuggestion(boundingBoxSuggestionsToAssign);
   },[loadedBoundingBoxLabels]);
 
@@ -256,7 +257,27 @@ const Canvas = () => {
       setLabels(oldLabels=>Object.assign({},{labelPolygons: oldLabels.labelPolygons},
           {labelRects: [...boundingBoxSuggestions[currentImage],...boundingBoxLabels[currentImage]]}));
     }
-  },[boundingBoxSuggestions])
+  },[boundingBoxSuggestions]);
+
+  useEffect(()=>{
+    if(loadedPolygonLabels){
+      // Object.keys(loadedPolygonLabels).forEach(key => delete loadedPolygonLabels[key]; break;);
+      delete loadedPolygonLabels.undefined;
+      console.log(`loaded polygon: ${JSON.stringify(loadedPolygonLabels)}`)
+
+      setPolygonSuggestion(loadedPolygonLabels);
+    }
+
+  },[loadedPolygonLabels]);
+
+  //add bb sugges to total labels
+  useEffect(()=>{
+    if(polygonSuggestions[currentImage]){
+      setLabels(oldLabels=>Object.assign({},
+          {labelPolygons: [...polygonSuggestions[currentImage],...polygonLabels[currentImage]]},
+          {labelRects: oldLabels.labelRects}));
+    }
+  },[polygonSuggestions]);
 
   useEffect(() => {
     if(!boundingBoxSuggestions[currentImage])
@@ -265,14 +286,26 @@ const Canvas = () => {
       boundingBoxLabels[currentImage]=[];
     if(!boundingBoxPendingLabels[currentImage])
       boundingBoxPendingLabels[currentImage]=[];
+
+    if(!polygonSuggestions[currentImage])
+      polygonSuggestions[currentImage]=[];
+    if(!polygonLabels[currentImage])
+      polygonLabels[currentImage]=[];
+    if(!polygonPendingLabels[currentImage])
+      polygonPendingLabels[currentImage]=[];
+
         setLabels(
-            Object.assign(
-                {},
-                { labelPolygons: labels["labelPolygons"] },
-                { labelRects: boundingBoxSuggestions[currentImage]
-                      .concat(boundingBoxLabels[currentImage],boundingBoxPendingLabels[currentImage]) }
-            )
+    Object.assign(
+        {},
+        { labelPolygons: polygonSuggestions[currentImage]
+              .concat(polygonLabels[currentImage],polygonPendingLabels[currentImage]) },
+        { labelRects: boundingBoxSuggestions[currentImage]
+              .concat(boundingBoxLabels[currentImage],boundingBoxPendingLabels[currentImage]) }
+    )
         );
+
+        setLabelsRectLength(0);
+        setLabelsPolygonLength(0);
 
   }, [currentImage, currentSelector]);
 
@@ -290,6 +323,7 @@ const Canvas = () => {
                                             tool={currentSelector}
                                             setLabels={setLabels}
                                             setBoundigBoxSuggestions={setBoundingBoxSuggestion}
+                                            zoom={zoom}
                                             currentImage={currentImage}/>);
       }
 
@@ -298,50 +332,7 @@ const Canvas = () => {
     }
   },[labels]);
 
-  useEffect(()=>{
-    let polygonSuggestionsToAssign={};
-    for (let image in loadedPolygonLabels){
-      polygonSuggestionsToAssign[image]=loadedPolygonLabels[image].map((label,labelIndex) => {
-        return {
-          id:currentImage+labelIndex,
-          isSuggestion:true,
-          rect: {
-            x: label["top_left"][1],
-            y: label["top_left"][0],
-            width: label["width"],
-            height: label["height"],
-          },
-        };
-      });
-    }
-    setPolygonSuggestion(polygonSuggestionsToAssign);
-  },[loadedPolygonLabels]);
 
-  //add bb sugges to total labels
-  useEffect(()=>{
-    if(boundingBoxSuggestions[currentImage]){
-      setLabels(oldLabels=>Object.assign({},{labelPolygons: oldLabels.labelPolygons},
-          {labelRects: [...boundingBoxSuggestions[currentImage],...boundingBoxLabels[currentImage]]}));
-    }
-  },[boundingBoxSuggestions])
-
-  useEffect(() => {
-    if(!boundingBoxSuggestions[currentImage])
-      boundingBoxSuggestions[currentImage]=[];
-    if(!boundingBoxLabels[currentImage])
-      boundingBoxLabels[currentImage]=[];
-    if(!boundingBoxPendingLabels[currentImage])
-      boundingBoxPendingLabels[currentImage]=[];
-    setLabels(
-        Object.assign(
-            {},
-            { labelPolygons: labels["labelPolygons"] },
-            { labelRects: boundingBoxSuggestions[currentImage]
-                  .concat(boundingBoxLabels[currentImage],boundingBoxPendingLabels[currentImage]) }
-        )
-    );
-
-  }, [currentImage, currentSelector]);
 
   // render suggestions on labels change
   useEffect(()=>{
@@ -455,22 +446,22 @@ const Canvas = () => {
             tool="zoomin"
             type="zoomIn.svg"
             tooltip="Zoom In"
-            onClick={()=>zoomAction.zoom(true)}
+            onClick={zoomAction.zoom(true)}
           ></ToolBarItem>
           <ToolBarItem
             tool="zoomout"
             flip="true"
             type="zoomOut.svg"
             tooltip="Zoom Out"
-            onClick={()=>zoomAction.zoom(false)}
+            onClick={zoomAction.zoom(false)}
           ></ToolBarItem>
           <ToolBarItem tool="move" type="hand.svg" tooltip="Move"></ToolBarItem>
-          <ToolBarItem
-            tool="pointer"
-            type="cursor.svg"
-            tooltip="Pointer"
-            onClick={()=>console.log('')}
-          ></ToolBarItem>
+          {/*<ToolBarItem*/}
+          {/*  tool="pointer"*/}
+          {/*  type="cursor.svg"*/}
+          {/*  tooltip="Pointer"*/}
+          {/*  onClick={()=>console.log('')}*/}
+          {/*></ToolBarItem>*/}
           <Export
               tool="export"
               type="export.svg"

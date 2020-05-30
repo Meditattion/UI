@@ -27,6 +27,7 @@ const CanvasSuggestion = (props) => {
             zIndex:"100",
             top:props.top,
             left:props.left,
+            transform:`scale(${props.zoom})`
 
         }}>
             <img alt="" src={process.env.PUBLIC_URL + "/Images/complete.png"}
