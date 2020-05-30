@@ -323,6 +323,7 @@ const Canvas = () => {
                                             tool={currentSelector}
                                             setLabels={setLabels}
                                             setBoundigBoxSuggestions={setBoundingBoxSuggestion}
+                                            zoom={zoom}
                                             currentImage={currentImage}/>);
       }
 
@@ -445,14 +446,14 @@ const Canvas = () => {
             tool="zoomin"
             type="zoomIn.svg"
             tooltip="Zoom In"
-            onClick={()=>zoomAction.zoom(true)}
+            onClick={zoomAction.zoom(true)}
           ></ToolBarItem>
           <ToolBarItem
             tool="zoomout"
             flip="true"
             type="zoomOut.svg"
             tooltip="Zoom Out"
-            onClick={()=>zoomAction.zoom(false)}
+            onClick={zoomAction.zoom(false)}
           ></ToolBarItem>
           <ToolBarItem tool="move" type="hand.svg" tooltip="Move"></ToolBarItem>
           {/*<ToolBarItem*/}
