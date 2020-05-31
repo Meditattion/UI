@@ -102,6 +102,9 @@ const actions = {
     type:'CURRENT_MOUSEOUT_ID',
     tool,
     id
+  }),
+  moveToolToggle:()=>({
+    type:'MOVE_TOOL_TOGGLE'
   })
 }
 

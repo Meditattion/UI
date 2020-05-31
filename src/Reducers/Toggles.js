@@ -4,6 +4,7 @@ const initialState = {
   classificationLabelsIsVisible:true,
   boundingBoxLabelsIsVisible:false,
   polygonLabelsIsVisible:false,
+  moveToolIsSelected: false
 };
 
 const Toggles = (state = initialState, action) => {
@@ -31,6 +32,9 @@ const Toggles = (state = initialState, action) => {
                   polygonLabelsIsVisible:false},
         {[action.tool]:true}
         )
+
+    case 'MOVE_TOOL_TOGGLE':
+      return Object.assign({},state,{moveToolIsSelected: !state.moveToolIsSelected});
     default:
       return state
   }

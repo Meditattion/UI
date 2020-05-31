@@ -36,8 +36,6 @@ const Tools = (state = initialState, action) => {
                     { labels: Object.assign({},state[state.currentSelector].labels,action.labels),
                                 userLabels:Object.assign({},state[state.currentSelector].userLabels,newUserLabels)})
             });
-
-
         case "SELECTOR_CHANGE":
             return Object.assign({}, state, {
                 currentSelector: action.newSelector,
