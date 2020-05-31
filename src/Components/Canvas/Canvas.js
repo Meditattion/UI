@@ -54,6 +54,7 @@ const ZOOM_STEP = 0.1;
 const Canvas = () => {
   const dispatch = useDispatch();
   const moveToolIsSelected=useSelector((state)=> state.Toggles.moveToolIsSelected);
+  const pointerToolIsSelected=useSelector((state)=> state.Toggles.pointerToolIsSelected);
   const labelsIsVisible = useSelector((state) => state.Toggles.labelsVisible);
   const imagesIsVisible = useSelector((state) => state.Toggles.imagesVisible);
   const classificationLabelsIsVisible = useSelector(
@@ -462,12 +463,16 @@ const Canvas = () => {
             toggleDragMode(prevState=>!prevState);
             dispatch(actions.moveToolToggle());
           }}></ToolBarItem>
-          {/*<ToolBarItem*/}
-          {/*  tool="pointer"*/}
-          {/*  type="cursor.svg"*/}
-          {/*  tooltip="Pointer"*/}
-          {/*  onClick={()=>console.log('')}*/}
-          {/*></ToolBarItem>*/}
+          <ToolBarItem
+            tool="pointer"
+            type="cursor.svg"
+            tooltip="Pointer"
+            isSelected={pointerToolIsSelected}
+            onClick={()=>{
+              toggleDragMode(prevState=>!prevState);
+              dispatch(actions.moveToolToggle());
+            }}
+          ></ToolBarItem>
           <Export
               tool="export"
               type="export.svg"
