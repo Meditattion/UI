@@ -53,7 +53,7 @@ const ZOOM_STEP = 0.1;
 
 const Canvas = () => {
   const dispatch = useDispatch();
-
+  const moveToolIsSelected=useSelector((state)=> state.Toggles.moveToolIsSelected);
   const labelsIsVisible = useSelector((state) => state.Toggles.labelsVisible);
   const imagesIsVisible = useSelector((state) => state.Toggles.imagesVisible);
   const classificationLabelsIsVisible = useSelector(
@@ -446,6 +446,7 @@ const Canvas = () => {
             tool="zoomin"
             type="zoomIn.svg"
             tooltip="Zoom In"
+            isSelected={false}
             onClick={zoomAction.zoom(true)}
           ></ToolBarItem>
           <ToolBarItem
@@ -453,9 +454,14 @@ const Canvas = () => {
             flip="true"
             type="zoomOut.svg"
             tooltip="Zoom Out"
+            isSelected={false}
             onClick={zoomAction.zoom(false)}
           ></ToolBarItem>
-          <ToolBarItem tool="move" type="hand.svg" tooltip="Move"></ToolBarItem>
+          <ToolBarItem tool="move" type="hand.svg" tooltip="Move" isSelected={moveToolIsSelected}
+          onClick={()=>{
+            toggleDragMode(prevState=>!prevState);
+            dispatch(actions.moveToolToggle());
+          }}></ToolBarItem>
           {/*<ToolBarItem*/}
           {/*  tool="pointer"*/}
           {/*  type="cursor.svg"*/}
@@ -493,7 +499,7 @@ const Canvas = () => {
       {/* https://denvash.github.io/react-canvas-annotation/ */}
       {/* https://github.com/denvash/react-canvas-annotation */}
 
-      {currentSelector==="classification" && <div style={{position:"absolute",height:"100%",width:"100%",zIndex:1000000}}
+      {currentSelector==="classification" &&  isImageDrag===false && <div style={{position:"absolute",height:"100%",width:"100%",zIndex:1000000}}
                   onClick={()=>{
                     dispatch(actions.addPendingLabel({
                             id:classificationLabelsId
