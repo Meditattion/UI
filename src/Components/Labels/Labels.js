@@ -81,7 +81,7 @@ const Labels = (props) => {
             console.log("loaded label:", label);
             if (label.indexOf(searchQuery) >= 0) {
                 loadedLabelsToDisplay.unshift(
-                    <LabelItem key={label} serial={label} text={label} currentImage={currentImage}
+                    <LabelItem key={label} serial={label} text={label} currentImage={currentImage} loaded
                                bgColor={getRandomColor()} tool={currentSelector}
                             currentHover={currentHover.tool===currentSelector?currentHover.id:-10}
                                currentMouseOut={currentMouseOut.tool===currentSelector?currentMouseOut.id:-20}></LabelItem>
@@ -184,7 +184,7 @@ const Labels = (props) => {
                                        isOpen={currentImage != '' && classificationLabelsIsVisible}
                                        numberOfChildren={loadedLabelsToDisplay.length + classificationLabelsToDisplay.length+classificationPendingLabelsToDisplay.length}>
                     <AddLabelBtn/>
-                    { loadedLabelsToDisplay}
+                    {loadedLabelsToDisplay}
                     {classificationPendingLabelsToDisplay}
                     {classificationLabelsToDisplay}
                 </CustomLabelsContainer>
