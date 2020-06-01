@@ -169,8 +169,13 @@ const Labels = (props) => {
 
     return (
         <div className={labelsIsVisible ? 'main-labels' : 'main-labels hide'}>
-            <div stle={{position:"absoulte"}}>MEDITATTION</div>
-            <CommonHeader></CommonHeader>
+            <CommonHeader>
+                <img alt="" src={process.env.PUBLIC_URL + "Images/logo.png"}/>
+                {/*<span className="common-header-logo" style={{color:"#EEEEEE"}}>*/}
+                {/*    MEDITATTION*/}
+                {/*</span>*/}
+
+            </CommonHeader>
             <CommonTitle text="Labels"></CommonTitle>
             <CommonSearch></CommonSearch>
             {/*<AddLabelBtn></AddLabelBtn>*/}
