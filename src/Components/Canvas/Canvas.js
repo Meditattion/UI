@@ -577,6 +577,7 @@ const Canvas = () => {
           </div>
         )}
       </button>
+
     </div>
   );
 };
