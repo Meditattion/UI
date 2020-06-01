@@ -18,12 +18,15 @@ const LabelItem = (props) => {
                         'initial':'1px solid black'}}>
             <div className="main-labels-item-blank" >&nbsp;</div>
             <div style={{ display: "flex", flexDirection: "row" }}>
-                <span>{props.text}</span>
-                <img alt="" src={process.env.PUBLIC_URL + "Images/trashS.svg"}
-    onClick={() => {
-        console.log(`props.currentImage:${props.currentImage},props.serial:${props.serial}`)
-        dispatch(actions.removeLabel(props.currentImage, props.serial,props.tool));
-    }}/>
+                <span>{props.text}{props.loaded && ' (suggestion)'}</span>
+                { !props.loaded &&
+                    <img alt="" src={process.env.PUBLIC_URL + "Images/trashS.svg"}
+                         onClick={() => {
+                             console.log(`props.currentImage:${props.currentImage},props.serial:${props.serial}`)
+                             dispatch(actions.removeLabel(props.currentImage, props.serial,props.tool));
+                         }}/>
+
+                }
             </div>
         </div>
     )

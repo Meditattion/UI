@@ -24,7 +24,7 @@ const CanvasSuggestion = (props) => {
             position:"absolute",
             borderRadius:"5px",
             borderBottom:"none",
-            zIndex:"100",
+            zIndex:"100000000",
             top:props.top,
             left:props.left,
             transform:`scale(${props.zoom})`
@@ -55,6 +55,12 @@ const CanvasSuggestion = (props) => {
                      switch (props.tool){
                          case "boundingBox":
                              props.setBoundigBoxSuggestions(oldState=>Object.assign({},oldState,
+                                 {[props.currentImage]:oldState[props.currentImage].filter(label=>label.id!==props.id)}));
+                             // props.setLabels(oldState=>Object.assign({},oldState,
+                             //     {labelRects:oldState.labelRects.filter(label=>label.id!==props.id)}));
+                             break;
+                         case "polygon":
+                             props.setPolygonSuggestion(oldState=>Object.assign({},oldState,
                                  {[props.currentImage]:oldState[props.currentImage].filter(label=>label.id!==props.id)}));
                              // props.setLabels(oldState=>Object.assign({},oldState,
                              //     {labelRects:oldState.labelRects.filter(label=>label.id!==props.id)}));
