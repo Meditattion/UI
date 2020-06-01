@@ -11,7 +11,16 @@ import Export from "../Exprot/Export"
 import CanvasSuggestion from "../CanvasSuggestion/CanvasSuggestion";
 const labelsDataDefault = {
   labelRects: [],
-  labelPolygons: []
+    labelPolygons: [
+      {
+        id: `Poly-Example`,
+        vertices: [
+          {x: 623.7525773195875, y: 440.9072164948454},
+          {x: 1331.8762886597938, y: 305.07216494845363},
+          {x: 1641.4020618556701, y: 732.6185567010309},
+          {x: 882.0618556701031, y: 790.5154639175258}
+        ]
+      }]
 };
 
 function usePrevious(value) {
@@ -295,13 +304,31 @@ const Canvas = () => {
     if(!polygonPendingLabels[currentImage])
       polygonPendingLabels[currentImage]=[];
 
+    console.log(`labels before setState : ${JSON.stringify(
+        Object.assign(
+            {},
+            { labelPolygons: labelsDataDefault.labelPolygons
+                  .concat(polygonSuggestions[currentImage],polygonLabels[currentImage],polygonPendingLabels[currentImage]) },
+            { labelRects: labelsDataDefault.labelRects
+                  .concat(boundingBoxSuggestions[currentImage],boundingBoxLabels[currentImage],boundingBoxPendingLabels[currentImage]) }
+        )
+    )}`)
+
         setLabels(
+    // Object.assign(
+    //     {},
+    //     { labelPolygons: polygonSuggestions[currentImage]
+    //           .concat(polygonLabels[currentImage],polygonPendingLabels[currentImage]) },
+    //     { labelRects: boundingBoxSuggestions[currentImage]
+    //           .concat(boundingBoxLabels[currentImage],boundingBoxPendingLabels[currentImage]) }
+    // )
+
     Object.assign(
         {},
-        { labelPolygons: polygonSuggestions[currentImage]
-              .concat(polygonLabels[currentImage],polygonPendingLabels[currentImage]) },
-        { labelRects: boundingBoxSuggestions[currentImage]
-              .concat(boundingBoxLabels[currentImage],boundingBoxPendingLabels[currentImage]) }
+        { labelPolygons: labelsDataDefault.labelPolygons
+              .concat(polygonSuggestions[currentImage],polygonLabels[currentImage],polygonPendingLabels[currentImage]) },
+        { labelRects: labelsDataDefault.labelRects
+              .concat(boundingBoxSuggestions[currentImage],boundingBoxLabels[currentImage],boundingBoxPendingLabels[currentImage]) }
     )
         );
 
@@ -311,27 +338,27 @@ const Canvas = () => {
   }, [currentImage, currentSelector]);
 
   // render suggestions on labels change
-  useEffect(()=>{
-    if(boundingBoxSuggestions[currentImage]){
-      let labelsSugges=[];
-      // console.log(`rect labels : ${JSON.stringify(labels)}`)
-      labels.labelRects.forEach(label=>{
-        console.log(`label : ${JSON.stringify(label)}`);
-      if(label.isSuggestion){
-        labelsSugges.push(<CanvasSuggestion key={label.id} id={label.id}
-                                            top={imageWidthFactor*label.rect.y + "px"}
-                                            left={imageWidthFactor*label.rect.x+ label.rect.width/2 + "px"}
-                                            tool={currentSelector}
-                                            setLabels={setLabels}
-                                            setBoundigBoxSuggestions={setBoundingBoxSuggestion}
-                                            zoom={zoom}
-                                            currentImage={currentImage}/>);
-      }
-
-      });
-      setLabelsSuggestions(labelsSugges);
-    }
-  },[labels]);
+  // useEffect(()=>{
+  //   if(boundingBoxSuggestions[currentImage]){
+  //     let labelsSugges=[];
+  //     // console.log(`rect labels : ${JSON.stringify(labels)}`)
+  //     labels.labelRects.forEach(label=>{
+  //       console.log(`label : ${JSON.stringify(label)}`);
+  //     if(label.isSuggestion){
+  //       labelsSugges.push(<CanvasSuggestion key={label.id} id={label.id}
+  //                                           top={imageWidthFactor*label.rect.y + "px"}
+  //                                           left={imageWidthFactor*label.rect.x+ label.rect.width/2 + "px"}
+  //                                           tool={currentSelector}
+  //                                           setLabels={setLabels}
+  //                                           setBoundigBoxSuggestions={setBoundingBoxSuggestion}
+  //                                           zoom={zoom}
+  //                                           currentImage={currentImage}/>);
+  //     }
+  //
+  //     });
+  //     setLabelsSuggestions(labelsSugges);
+  //   }
+  // },[labels]);
 
 
 
