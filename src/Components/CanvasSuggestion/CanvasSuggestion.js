@@ -30,7 +30,7 @@ const CanvasSuggestion = (props) => {
             transform:`scale(${props.zoom})`
 
         }}>
-            <img alt="" src={process.env.PUBLIC_URL + "/Images/complete.png"}
+            <img  alt="" src={process.env.PUBLIC_URL + "/Images/complete.png"}
                  style={{ cursor: "pointer" }}
                  onClick={() => {
                      // dispatch(actions.addLabel({ text: newLabelName, key: currentLabelCountID, bgColor: bgColor },"newCanvasLabel"))
@@ -50,7 +50,7 @@ const CanvasSuggestion = (props) => {
                              })}))
                  }}></img>
 
-            <img alt="" src={process.env.PUBLIC_URL + "Images/trashS.svg"}
+            <img   alt="" src={process.env.PUBLIC_URL + "Images/trashS.svg"}
                  onClick={() => {
                      switch (props.tool){
                          case "boundingBox":

@@ -8,6 +8,7 @@ import AddLabelBtn from '../AddLabelBtn/AddLabelBtn'
 import LabelItem from '../LabelItem/LabelItem'
 import LabelDummyItem from '../LabelDummyItem/LabelDummyItem'
 import CustomLabelsContainer from "../CustomLabelsContainer/CustomLabelsContainer";
+import { v4 as uuidv4 } from 'uuid';
 // import actions from '../../Actions'
 
 const getRandomColor = () => {
@@ -132,7 +133,7 @@ const Labels = (props) => {
     if(currentImage!=="" && boundingBoxPendingLabels[currentImage]){
         boundingBoxPendingLabels[currentImage].forEach(label => {
                 boundingBoxPendingLabelsToDisplay.unshift(
-                    <LabelDummyItem key="-1" tool="boundingBox" keyID={label.id} currentImage={currentImage}
+                    <LabelDummyItem key={uuidv4()} tool="boundingBox" keyID={label.id} currentImage={currentImage}
                                     currentHover={currentHover.tool==="boundingBox"?currentHover.id:-10}
                                     currentMouseOut={currentMouseOut.tool==="boundingBox"?currentMouseOut.id:-20}
                                     topLeft={label.top_left} width={label.width} height={label.height} rect={label.rect}
@@ -158,7 +159,7 @@ const Labels = (props) => {
     if(currentImage!=="" && polygonPendingLabels[currentImage]){
         polygonPendingLabels[currentImage].forEach(label => {
             polygonPendingLabelsToDisplay.unshift(
-                <LabelDummyItem key="-1" tool="polygon" keyID={label.id} currentImage={currentImage}
+                <LabelDummyItem key={uuidv4()} tool="polygon" keyID={label.id} currentImage={currentImage}
                                 currentHover={currentHover.tool==="polygon"?currentHover.id:-10}
                                 currentMouseOut={currentMouseOut.tool==="polygon"?currentMouseOut.id:-20}
                                 topLeft="" width="" height="" vertices={label.vertices}></LabelDummyItem>

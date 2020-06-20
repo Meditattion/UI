@@ -130,7 +130,9 @@ const Canvas = () => {
     isItInUserLabels=false;
     isItInSuggestion=false;
   });
+  let newRectLabelLength={...labels,labelRects:labels.labelRects.filter(label=>!bbLabelsToRemoveFromCanvas.includes(label.id))}.labelRects.length;
   setLabels({...labels,labelRects:labels.labelRects.filter(label=>!bbLabelsToRemoveFromCanvas.includes(label.id))});
+  setLabelsRectLength(newRectLabelLength);
   },[boundingBoxLabels,boundingBoxPendingLabels]);
 
   useEffect(()=>{
@@ -149,8 +151,10 @@ const Canvas = () => {
       isItInUserLabels=false;
       isItInSuggestion=false;
     });
+    let newPolyLength={...labels,labelPolygons:labels.labelPolygons.filter(label=>!polLabelsToRemoveFromCanvas.includes(label.id))}.labelPolygons.length;
     setLabels({...labels,labelPolygons:labels.labelPolygons.filter(label=>!polLabelsToRemoveFromCanvas.includes(label.id))});
-  },[polygonLabels,polygonPendingLabels]);
+    setLabelsPolygonLength(newPolyLength);
+    },[polygonLabels,polygonPendingLabels]);
 
 
   // let imageFile = useSelector((state) => state.Images.container?.[0]);
@@ -305,6 +309,14 @@ const Canvas = () => {
     if(!polygonPendingLabels[currentImage])
       polygonPendingLabels[currentImage]=[];
 
+    let newLabelsState=Object.assign(
+        {},
+        { labelPolygons: labelsDataDefault.labelPolygons
+              .concat(polygonSuggestions[currentImage],polygonLabels[currentImage],polygonPendingLabels[currentImage]) },
+        { labelRects: labelsDataDefault.labelRects
+              .concat(boundingBoxSuggestions[currentImage],boundingBoxLabels[currentImage],boundingBoxPendingLabels[currentImage]) }
+    );
+
     console.log(`labels before setState : ${JSON.stringify(
         Object.assign(
             {},
@@ -325,8 +337,8 @@ const Canvas = () => {
     )
         );
 
-        setLabelsRectLength(0);
-        setLabelsPolygonLength(0);
+        setLabelsRectLength(newLabelsState.labelRects.length);
+        setLabelsPolygonLength(newLabelsState.labelPolygons.length);
 
   }, [currentImage, currentSelector]);
 
@@ -353,24 +365,6 @@ const Canvas = () => {
       setLabelsSuggestions(labelsSugges);
     }
 
-    // if(polygonSuggestions[currentImage]){
-    //   let polygonLabelsSugges=[];
-    //   // console.log(`rect labels : ${JSON.stringify(labels)}`)
-    //   labels.labelPolygons.forEach(label=>{
-    //     console.log(`plabel : ${JSON.stringify(label)}`);
-    //     if(label.isSuggestion){
-    //       polygonLabelsSugges.push(<CanvasSuggestion key={label.id} id={label.id}
-    //                                           top={imageWidthFactor*label.vertices[0].y + "px"}
-    //                                           left={imageWidthFactor*label.vertices[0].x+ "px"}
-    //                                           tool={currentSelector}
-    //                                           setLabels={setLabels}
-    //                                                  setPolygonSuggestion={setPolygonSuggestion}
-    //                                           currentImage={currentImage}/>);
-    //     }
-    //
-    //   });
-    //   setLabelsSuggestions(polygonLabelsSugges);
-    // }
   },[labels]);
 
   // render polygon suggestions on labels change
@@ -553,6 +547,7 @@ const Canvas = () => {
                   }}></div>}
 
       {imageFile !== "" && (
+
             <ReactCanvasAnnotation
                 zoom={zoom}
                 imageFile={imageFile}
@@ -568,12 +563,15 @@ const Canvas = () => {
                 onMouseOut={(id) => handleCanvasOnMouseOut(id)}
             />
 
+
+
       )}
+
 
       {!labelsIsVisible && <CanvasLabel tool={currentSelector}/>}
       {currentSelector==="boundingBox" && labelsSuggestions }
       {currentSelector==="polygon" && polygonLabelsSuggestions }
-      {/*<CanvasSuggestion />*/}
+
 
       <button
         className={

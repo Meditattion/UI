@@ -311,6 +311,12 @@ $end-direction: right !default;
       // #{$end-direction}: 7px;
     }
 
+    img:hover{
+      filter:brightness(2);
+      cursor: pointer;
+    }
+
+
   }
 
 }
