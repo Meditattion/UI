@@ -153,6 +153,7 @@ const Canvas = () => {
 
   // let imageFile = useSelector((state) => state.Images.container?.[0]);
   let imageFiles = useSelector((state) => state.Images.container);
+  const [firstImageUpload,setFirstImageUpload]=useState(true);
   const [imageFile, setImageFile] = useState("");
   useEffect(() => {
     for (let image in imageFiles) {
@@ -163,6 +164,15 @@ const Canvas = () => {
           imageFiles[image].name.indexOf(".")
         )}`
       );
+      if(firstImageUpload){
+        dispatch(actions.imageChange(
+            imageFiles[image].name.substring(
+            0,
+            imageFiles[image].name.indexOf(".")
+        )));
+        setFirstImageUpload(false);
+        break;
+      }
       if (
         imageFiles[image].name.substring(
           0,
