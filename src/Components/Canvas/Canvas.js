@@ -11,6 +11,18 @@ import ToolBarItem from "../ToolBarItem/ToolBarItem";
 import Export from "../Exprot/Export"
 import CanvasSuggestion from "../CanvasSuggestion/CanvasSuggestion";
 
+function random_rgba() {
+  var o = Math.round, r = Math.random, s = 255;
+  let randR=o(r()*s);
+  let randG=o(r()*s);
+  let randB=o(r()*s);
+  return {
+    regular:`rgba(${randR},${randG},${randB},0.5)`,
+    onHover:`rgba(${randR},${randG},${randB},1)`
+  };
+
+}
+
 const labelsDataDefault = {
   labelRects: [],
     labelPolygons: []
@@ -428,6 +440,7 @@ const Canvas = () => {
               top_left:[data.labelRects[data.labelRects.length - 1].rect.y,data.labelRects[data.labelRects.length - 1].rect.x],
               height:data.labelRects[data.labelRects.length - 1].rect.height,
               width:data.labelRects[data.labelRects.length - 1].rect.width,
+         color:random_rgba(),
              rect:{
                 x:data.labelRects[data.labelRects.length - 1].rect.x,
                y:data.labelRects[data.labelRects.length - 1].rect.y,
@@ -446,7 +459,7 @@ const Canvas = () => {
       }
       // dispatch(actions.addCanvasLabel(data.labelPolygons[data.labelPolygons.length - 1].id));
       dispatch(actions.addPendingLabel({
-        id:data.labelPolygons[data.labelPolygons.length - 1].id,
+        id:data.labelPolygons[data.labelPolygons.length - 1].id,color:random_rgba(),
           vertices:data.labelPolygons[data.labelPolygons.length-1].vertices}
         ,currentImage,currentSelector));
       setLabelsPolygonLength((prevState) => prevState + 1);

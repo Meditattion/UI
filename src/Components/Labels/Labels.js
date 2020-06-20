@@ -53,6 +53,10 @@ const Labels = (props) => {
     const currentMouseOut=useSelector(state=>state.Labels.currentMouseOut);
 
     useEffect(()=>{
+        console.log(`bb pending :${JSON.stringify(boundingBoxPendingLabels)}`);
+    },[boundingBoxPendingLabels])
+
+    useEffect(()=>{
         console.log(`hovered on :${JSON.stringify(currentHover)}`);
     },[currentHover])
 
@@ -137,7 +141,7 @@ const Labels = (props) => {
                                     currentHover={currentHover.tool==="boundingBox"?currentHover.id:-10}
                                     currentMouseOut={currentMouseOut.tool==="boundingBox"?currentMouseOut.id:-20}
                                     topLeft={label.top_left} width={label.width} height={label.height} rect={label.rect}
-                                        vertices=""></LabelDummyItem>
+                                      color={label.color}  vertices=""></LabelDummyItem>
                 )
         });
     }
@@ -162,7 +166,7 @@ const Labels = (props) => {
                 <LabelDummyItem key={uuidv4()} tool="polygon" keyID={label.id} currentImage={currentImage}
                                 currentHover={currentHover.tool==="polygon"?currentHover.id:-10}
                                 currentMouseOut={currentMouseOut.tool==="polygon"?currentMouseOut.id:-20}
-                                topLeft="" width="" height="" vertices={label.vertices}></LabelDummyItem>
+                                topLeft="" width="" height="" color={label.color} vertices={label.vertices}></LabelDummyItem>
             )
         });
     }

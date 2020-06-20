@@ -35,8 +35,8 @@ const LabelDummyItem = (props) => {
     return (
         <div className="main-labels-item" style={{
             backgroundColor:(props.currentMouseOut===props.keyID || props.currentHover!==props.keyID)?
-                bgColor.regular:
-                bgColor.onHover,
+                props.color.regular:
+                props.color.onHover,
             border:(props.currentMouseOut===props.keyID || props.currentHover!==props.keyID)?
                 'initial':
                 '1px solid black',
@@ -61,7 +61,7 @@ const LabelDummyItem = (props) => {
                                 labelToAdd={
                                     text: newLabelName,
                                     id:props.keyID==="-1"? currentLabelCountID:props.keyID,
-                                    bgColor: bgColor,
+                                    bgColor: props.color,
                                     top_left:props.topLeft,
                                     width:props.width,
                                     height:props.height,
@@ -73,7 +73,7 @@ const LabelDummyItem = (props) => {
                                     id:props.keyID==="-1"? currentLabelCountID:props.keyID,
                                     text:newLabelName,
                                     vertices:props.vertices,
-                                    bgColor: bgColor
+                                    bgColor: props.color
                                 };
                                 break;
 
