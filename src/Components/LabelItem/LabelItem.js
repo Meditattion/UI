@@ -22,7 +22,7 @@ const LabelItem = (props) => {
                 { !props.loaded &&
                     <img alt="" src={process.env.PUBLIC_URL + "Images/trashS.svg"}
                          onClick={() => {
-                             console.log(`props.currentImage:${props.currentImage},props.serial:${props.serial}`)
+                             // console.log(`props.currentImage:${props.currentImage},props.serial:${props.serial}`)
                              dispatch(actions.removeLabel(props.currentImage, props.serial,props.tool));
                          }}/>
 

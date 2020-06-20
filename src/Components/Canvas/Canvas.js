@@ -122,7 +122,7 @@ const Canvas = () => {
       return {text:label?.text,vertices:label.vertices};
     });
   }
-    console.log(`the final out put: ${JSON.stringify(rawOutput)}`);
+    // console.log(`the final out put: ${JSON.stringify(rawOutput)}`);
   setOutput(rawOutput);
   },[rawOutput]);
 
@@ -213,7 +213,7 @@ const Canvas = () => {
 
   useEffect(() => {
     if (imageFile !== "") {
-      console.log(`image file prev:${imageFile.preview}`);
+      // console.log(`image file prev:${imageFile.preview}`);
       selectedImage = new Image();
       selectedImage.src = imageFile.preview;
       selectedImage.onload = () => {
@@ -274,8 +274,8 @@ const Canvas = () => {
         };
       });
     }
-    console.log(`loaded bb labels: ${JSON.stringify(loadedBoundingBoxLabels)}`)
-    console.log(`sugg to assign: ${JSON.stringify(boundingBoxSuggestionsToAssign)}`)
+    // console.log(`loaded bb labels: ${JSON.stringify(loadedBoundingBoxLabels)}`)
+    // console.log(`sugg to assign: ${JSON.stringify(boundingBoxSuggestionsToAssign)}`)
     setBoundingBoxSuggestion(boundingBoxSuggestionsToAssign);
   },[loadedBoundingBoxLabels]);
 
@@ -291,7 +291,7 @@ const Canvas = () => {
     if(loadedPolygonLabels){
       // Object.keys(loadedPolygonLabels).forEach(key => delete loadedPolygonLabels[key]; break;);
       delete loadedPolygonLabels.undefined;
-      console.log(`loaded polygon: ${JSON.stringify(loadedPolygonLabels)}`)
+      // console.log(`loaded polygon: ${JSON.stringify(loadedPolygonLabels)}`)
 
       setPolygonSuggestion(loadedPolygonLabels);
     }
@@ -329,15 +329,15 @@ const Canvas = () => {
               .concat(boundingBoxSuggestions[currentImage],boundingBoxLabels[currentImage],boundingBoxPendingLabels[currentImage]) }
     );
 
-    console.log(`labels before setState : ${JSON.stringify(
-        Object.assign(
-            {},
-            { labelPolygons: labelsDataDefault.labelPolygons
-                  .concat(polygonSuggestions[currentImage],polygonLabels[currentImage],polygonPendingLabels[currentImage]) },
-            { labelRects: labelsDataDefault.labelRects
-                  .concat(boundingBoxSuggestions[currentImage],boundingBoxLabels[currentImage],boundingBoxPendingLabels[currentImage]) }
-        )
-    )}`)
+    // console.log(`labels before setState : ${JSON.stringify(
+    //     Object.assign(
+    //         {},
+    //         { labelPolygons: labelsDataDefault.labelPolygons
+    //               .concat(polygonSuggestions[currentImage],polygonLabels[currentImage],polygonPendingLabels[currentImage]) },
+    //         { labelRects: labelsDataDefault.labelRects
+    //               .concat(boundingBoxSuggestions[currentImage],boundingBoxLabels[currentImage],boundingBoxPendingLabels[currentImage]) }
+    //     )
+    // )}`)
 
         setLabels(
     Object.assign(
@@ -362,7 +362,7 @@ const Canvas = () => {
       let labelsSugges=[];
       // console.log(`rect labels : ${JSON.stringify(labels)}`)
       labels.labelRects.forEach(label=>{
-        console.log(`label : ${JSON.stringify(label)}`);
+        // console.log(`label : ${JSON.stringify(label)}`);
         if(label.isSuggestion){
           labelsSugges.push(<CanvasSuggestion key={label.id} id={label.id}
                                               top={imageWidthFactor*label.rect.y + "px"}
@@ -386,7 +386,7 @@ const Canvas = () => {
       let polygonLabelsSugges=[];
       // console.log(`rect labels : ${JSON.stringify(labels)}`)
       labels.labelPolygons.forEach(label=>{
-        console.log(`plabel : ${JSON.stringify(label)}`);
+        // console.log(`plabel : ${JSON.stringify(label)}`);
         if(label.isSuggestion){
           polygonLabelsSugges.push(<CanvasSuggestion key={label.id} id={label.id}
                                               top={imageWidthFactor*label["vertices"][0]["y"] + "px"}
@@ -414,10 +414,10 @@ const Canvas = () => {
   );
 
   const handleCanvasOnChange = (data) => {
-    console.log("data", data);
-    console.log(`LabelRects length:${data["labelRects"].length}`);
-    console.log(`current pol length:${labelsPolygonLength}`);
-    console.log(`LabelPolygons length:${data["labelPolygons"].length}`);
+    // console.log("data", data);
+    // console.log(`LabelRects length:${data["labelRects"].length}`);
+    // console.log(`current pol length:${labelsPolygonLength}`);
+    // console.log(`LabelPolygons length:${data["labelPolygons"].length}`);
     if (labelsRectLength < data["labelRects"].length) {
       if (!labelsIsVisible) {
         dispatch(
@@ -431,7 +431,7 @@ const Canvas = () => {
         );
       }else{
         if (!boundingBoxLabelsIsVisible) {
-          console.log("opening bb labels container");
+          // console.log("opening bb labels container");
           dispatch(actions.openLabelsContainer("boundingBoxLabelsIsVisible"));
         }
       }
@@ -451,10 +451,10 @@ const Canvas = () => {
             currentImage,currentSelector));
       setLabelsRectLength((prevState) => prevState + 1);
     } else if (labelsPolygonLength < data["labelPolygons"].length) {
-      console.log("new pol");
+      // console.log("new pol");
 
       if (!polygonLabelsIsVisible) {
-        console.log("opening pol labels container");
+        // console.log("opening pol labels container");
         dispatch(actions.openLabelsContainer("polygonLabelsIsVisible"));
       }
       // dispatch(actions.addCanvasLabel(data.labelPolygons[data.labelPolygons.length - 1].id));
@@ -567,12 +567,12 @@ const Canvas = () => {
                 labels={labels}
                 onChange={(data) => {
                   handleCanvasOnChange(data);
-                  console.log(`onChange`, data);
+                  // console.log(`onChange`, data);
                 }}
                 annotationType={annotationType}
                 isImageDrag={isImageDrag}
                 onHover={(id) => handleCanvasOnHover(id)}
-                onClick={(id) => console.log(`onClick`, id)}
+                onClick={(id)=>console.log(id)}
                 onMouseOut={(id) => handleCanvasOnMouseOut(id)}
             />
 

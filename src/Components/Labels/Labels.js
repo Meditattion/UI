@@ -53,15 +53,15 @@ const Labels = (props) => {
     const currentMouseOut=useSelector(state=>state.Labels.currentMouseOut);
 
     useEffect(()=>{
-        console.log(`bb pending :${JSON.stringify(boundingBoxPendingLabels)}`);
+        // console.log(`bb pending :${JSON.stringify(boundingBoxPendingLabels)}`);
     },[boundingBoxPendingLabels])
 
     useEffect(()=>{
-        console.log(`hovered on :${JSON.stringify(currentHover)}`);
+        // console.log(`hovered on :${JSON.stringify(currentHover)}`);
     },[currentHover])
 
     useEffect(()=>{
-        console.log(`mouseOut from :${JSON.stringify(currentMouseOut)}`);
+        // console.log(`mouseOut from :${JSON.stringify(currentMouseOut)}`);
     },[currentMouseOut])
 
 
@@ -83,7 +83,7 @@ const Labels = (props) => {
 
     if (currentImage != '' && Object.keys(loadedLabels).length > 0 && loadedLabels[currentImage]) {
         loadedLabels[currentImage].forEach(label => {
-            console.log("loaded label:", label);
+            // console.log("loaded label:", label);
             if (label.indexOf(searchQuery) >= 0) {
                 loadedLabelsToDisplay.unshift(
                     <LabelItem key={label} serial={label} text={label} currentImage={currentImage} loaded

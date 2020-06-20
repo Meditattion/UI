@@ -12,12 +12,12 @@ const ImageItem = (props) => {
     return (
         <div className={props.isSelected? "main-images-item selectedImage":"main-images-item"} onClick={()=>{
             // if(thisImageName!==currentImage){
-            console.log(`currentImage ${props.currentImage}`);
-            console.log(`thisImage ${thisImageName}`);
+            // console.log(`currentImage ${props.currentImage}`);
+            // console.log(`thisImage ${thisImageName}`);
                 if(!props.isSelected){
                 dispatch(actions.imageChange(thisImageName));
             }else{
-                    console.log('image is Selected!!')
+                    // console.log('image is Selected!!')
                 }
         }}>
             <img completed={props.completed} alt="" src={process.env.PUBLIC_URL + props.source}></img>
