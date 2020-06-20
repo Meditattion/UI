@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { LABEL_TYPE, ReactCanvasAnnotation } from "react-canvas-annotation";
 import { useDispatch, useSelector } from "react-redux";
-import Hashids from 'hashids';
+import { v4 as uuidv4 } from 'uuid'
 import actions from "../../Actions/index";
 import CanvasLabel from "../CanvasLabel/CanvasLabel";
 import CommonHeader from "../CommonHeader/CommonHeader";
@@ -11,7 +11,6 @@ import ToolBarItem from "../ToolBarItem/ToolBarItem";
 import Export from "../Exprot/Export"
 import CanvasSuggestion from "../CanvasSuggestion/CanvasSuggestion";
 
-const hashids = new Hashids();
 const labelsDataDefault = {
   labelRects: [],
     labelPolygons: []
@@ -248,7 +247,7 @@ const Canvas = () => {
     for (let image in loadedBoundingBoxLabels){
       boundingBoxSuggestionsToAssign[image]=loadedBoundingBoxLabels[image].map((label,labelIndex) => {
         return {
-          id:hashids.encode(1),
+          id:uuidv4(),
           isSuggestion:true,
           rect: {
             x: label["top_left"][1],
