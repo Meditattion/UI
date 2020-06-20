@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { LABEL_TYPE, ReactCanvasAnnotation } from "react-canvas-annotation";
 import { useDispatch, useSelector } from "react-redux";
+import Hashids from 'hashids';
 import actions from "../../Actions/index";
 import CanvasLabel from "../CanvasLabel/CanvasLabel";
 import CommonHeader from "../CommonHeader/CommonHeader";
@@ -9,6 +10,8 @@ import Selectors from "../Selectors/Selectors";
 import ToolBarItem from "../ToolBarItem/ToolBarItem";
 import Export from "../Exprot/Export"
 import CanvasSuggestion from "../CanvasSuggestion/CanvasSuggestion";
+
+const hashids = new Hashids();
 const labelsDataDefault = {
   labelRects: [],
     labelPolygons: []
@@ -157,13 +160,13 @@ const Canvas = () => {
   const [imageFile, setImageFile] = useState("");
   useEffect(() => {
     for (let image in imageFiles) {
-      console.log(`image:${imageFiles[image].name}`);
-      console.log(
-        `image sub${imageFiles[image].name.substring(
-          0,
-          imageFiles[image].name.indexOf(".")
-        )}`
-      );
+      // console.log(`image:${imageFiles[image].name}`);
+      // console.log(
+      //   `image sub${imageFiles[image].name.substring(
+      //     0,
+      //     imageFiles[image].name.indexOf(".")
+      //   )}`
+      // );
       if(firstImageUpload){
         dispatch(actions.imageChange(
             imageFiles[image].name.substring(
@@ -245,7 +248,7 @@ const Canvas = () => {
     for (let image in loadedBoundingBoxLabels){
       boundingBoxSuggestionsToAssign[image]=loadedBoundingBoxLabels[image].map((label,labelIndex) => {
         return {
-          id:currentImage+labelIndex,
+          id:hashids.encode(1),
           isSuggestion:true,
           rect: {
             x: label["top_left"][1],
@@ -257,6 +260,7 @@ const Canvas = () => {
       });
     }
     console.log(`loaded bb labels: ${JSON.stringify(loadedBoundingBoxLabels)}`)
+    console.log(`sugg to assign: ${JSON.stringify(boundingBoxSuggestionsToAssign)}`)
     setBoundingBoxSuggestion(boundingBoxSuggestionsToAssign);
   },[loadedBoundingBoxLabels]);
 
@@ -313,14 +317,6 @@ const Canvas = () => {
     )}`)
 
         setLabels(
-    // Object.assign(
-    //     {},
-    //     { labelPolygons: polygonSuggestions[currentImage]
-    //           .concat(polygonLabels[currentImage],polygonPendingLabels[currentImage]) },
-    //     { labelRects: boundingBoxSuggestions[currentImage]
-    //           .concat(boundingBoxLabels[currentImage],boundingBoxPendingLabels[currentImage]) }
-    // )
-
     Object.assign(
         {},
         { labelPolygons: labelsDataDefault.labelPolygons
