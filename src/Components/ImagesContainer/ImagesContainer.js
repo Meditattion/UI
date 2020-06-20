@@ -8,6 +8,7 @@ import AddFileBtn from '../AddFileBtn/AddFileBtn'
 const ImagesContainer = (props) => {
     let dispatch = useDispatch();
     let currentSelector = useSelector(state => state.Tools.currentSelector);
+    const currentImage = useSelector((state) => state.Images.currentImage);
     let loadedImages = useSelector(state => state.Images.container);
     let loadedLabels = useSelector(state => state.Tools[currentSelector].labels);
     let selectorLabels;
@@ -38,7 +39,8 @@ const ImagesContainer = (props) => {
 
 
     const thumbs = images.filter(image => image.type.indexOf("image") >= 0).map((image,imageIndex) => (
-        <ImageItem key={imageIndex+image.name} name={image.name} source={image.preview} completed="false"></ImageItem>
+        <ImageItem key={imageIndex+image.name} name={image.name} source={image.preview}
+                   isSelected={image.name.substring(0,image.name.lastIndexOf('.'))===currentImage} completed="false"></ImageItem>
     ));
 
     return (
