@@ -33,21 +33,40 @@ const CanvasSuggestion = (props) => {
             <img  alt="" src={process.env.PUBLIC_URL + "/Images/complete.png"}
                  style={{ cursor: "pointer" }}
                  onClick={() => {
-                     // dispatch(actions.addLabel({ text: newLabelName, key: currentLabelCountID, bgColor: bgColor },"newCanvasLabel"))
-                     // setNewLabelName('');
-                     // setbgColor(getRandomColor);
-                     props.setLabels(oldState=>Object.assign({},{labelPolygons:oldState.labelPolygons},
-                         {labelRects:oldState.labelRects.map(label=>{
-                             let dummy;
-                             if(label.id===props.id){
-                                 dummy=label;
-                                 dummy.isSuggestion=false;
-                                 return dummy;
-                             }else{
-                                 return label;
-                             }
+                     switch (props.tool) {
+                         case "boundingBox":
+                             props.setLabels(oldState=>Object.assign({},{labelPolygons:oldState.labelPolygons},
+                                 {labelRects:oldState.labelRects.map(label=>{
+                                         let dummy;
+                                         if(label.id===props.id){
+                                             dummy=label;
+                                             dummy.isSuggestion=false;
+                                             return dummy;
+                                         }else{
+                                             return label;
+                                         }
 
-                             })}))
+                                     })}));
+                             break;
+                         case "polygon":
+                             props.setLabels(oldState=>Object.assign({},
+                                 {labelPolygons:oldState.labelPolygons.map(label=>{
+                                         let dummy;
+                                         if(label.id===props.id){
+                                             dummy=label;
+                                             dummy.isSuggestion=false;
+                                             return dummy;
+                                         }else{
+                                             return label;
+                                         }
+
+                                     })},
+                                 {labelRects:oldState.labelRects}));
+                             break;
+                         default:
+                             break;
+                     }
+
                  }}></img>
 
             <img   alt="" src={process.env.PUBLIC_URL + "Images/trashS.svg"}
