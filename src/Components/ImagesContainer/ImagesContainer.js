@@ -17,18 +17,18 @@ const ImagesContainer = (props) => {
 
     const [images,setImages]=useState(loadedImages?loadedImages:null);
     useEffect(()=>{
-        console.log("loaded Images", loadedImages);
+        // console.log("loaded Images", loadedImages);
         setImages(loadedImages);
     },[loadedImages]);
 
     const [labels,setLabels]=useState(loadedLabels?loadedLabels:{});
     useEffect(()=>{
-        console.log("loaded Labels", loadedLabels);
+        // console.log("loaded Labels", loadedLabels);
         if (loadedLabels.length > 0) {
             fetch(loadedLabels[0].preview)
                 .then(res => res.json())
                 .then(
-                    result => { selectorLabels = result; console.log("selectorLabels:", selectorLabels) }
+                    result => { selectorLabels = result; }
                 );
         }
         if(currentSelector==="polygon") delete loadedLabels.undefined;

@@ -21,7 +21,7 @@ const CanvasLabel = (props) => {
     const newCanvasCurds=useSelector(state=>state.Labels.canvasLabelCurds);
 
 useEffect(()=>{
-    console.log(`new canvas curds x :${newCanvasCurds.x}`);
+    // console.log(`new canvas curds x :${newCanvasCurds.x}`);
 },[newCanvasCurds]);
     return (
         <div className="main-labels-item shadowCenter" style={{
