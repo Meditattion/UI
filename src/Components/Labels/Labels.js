@@ -114,7 +114,7 @@ const Labels = (props) => {
                 <LabelDummyItem key={label.id} tool="classification" keyID={label.id} currentImage={currentImage}
                                 currentHover={currentHover.tool==="classification"?currentHover.id:-10}
                                 currentMouseOut={currentMouseOut.tool==="classification"?currentMouseOut.id:-20}
-                                topLeft="" width="" height="" rect=""
+                                topLeft="" width="" height="" rect="" color={label.color}
                                 vertices=""></LabelDummyItem>
             )
         });

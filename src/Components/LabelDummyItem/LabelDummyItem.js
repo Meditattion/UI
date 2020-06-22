@@ -55,7 +55,7 @@ const LabelDummyItem = (props) => {
                                 labelToAdd={
                                     text:newLabelName,
                                     id:props.keyID,
-                                    bgColor: bgColor};
+                                    bgColor: props.color};
                                 break;
                             case "boundingBox":
                                 labelToAdd={

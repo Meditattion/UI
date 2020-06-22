@@ -553,7 +553,8 @@ const Canvas = () => {
       {currentSelector==="classification" &&  isImageDrag===false && <div style={{position:"absolute",height:"100%",width:"100%",zIndex:1000000}}
                   onClick={()=>{
                     dispatch(actions.addPendingLabel({
-                            id:classificationLabelsId
+                            id:classificationLabelsId,
+                      color:random_rgba()
                         },
                         currentImage,"classification"));
                     dispatch(actions.increaseLabelsId());
